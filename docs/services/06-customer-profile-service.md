@@ -1,5 +1,7 @@
 # Customer Profile Service
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Ranking Engine ->](./07-ranking-engine.md)
+
 ## Overview
 
 The Customer Profile Service is responsible for maintaining a continuously updated view of each customer.
@@ -473,3 +475,9 @@ It transforms raw behaviour into structured intelligence used by:
 Its core value is:
 
 > turning events into actionable customer intelligence in real time
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Contentful Integration](./05-contentful-integration.md) | [Ranking Engine](./07-ranking-engine.md) |

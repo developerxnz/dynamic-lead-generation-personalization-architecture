@@ -1,5 +1,7 @@
 # Contentful Integration
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Customer Profile Service ->](./06-customer-profile-service.md)
+
 ## Overview
 
 Contentful should remain the source of truth for content.
@@ -41,3 +43,9 @@ Avoid highly restrictive queries.
 - normalize responses into domain models
 - isolate CMS logic in infrastructure adapters
 - support caching where appropriate
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [System Architecture](../architecture/04-system-architecture.md) | [Customer Profile Service](./06-customer-profile-service.md) |

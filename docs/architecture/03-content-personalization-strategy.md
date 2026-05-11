@@ -1,5 +1,7 @@
 # Content Personalization Strategy
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: System Architecture ->](./04-system-architecture.md)
+
 ## Overview
 
 This document defines how content is selected, ranked, and optimised for each customer in the personalization platform.
@@ -384,3 +386,9 @@ It connects:
 to deliver:
 
 > dynamic, conversion-optimised content experiences at scale
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Customer State Model](./02-customer-state-model.md) | [System Architecture](./04-system-architecture.md) |

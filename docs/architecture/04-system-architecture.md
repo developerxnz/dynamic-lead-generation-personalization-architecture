@@ -1,5 +1,7 @@
 # System Architecture
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Contentful Integration ->](../services/05-contentful-integration.md)
+
 ## Overview
 
 This document defines the technical architecture for the personalization platform.
@@ -81,3 +83,9 @@ For login-triggered personalization, `Load Customer State` should use the latest
 - isolate ranking logic
 - avoid coupling AI directly into core flows
 - support asynchronous analytics processing
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Content Personalization Strategy](./03-content-personalization-strategy.md) | [Contentful Integration](../services/05-contentful-integration.md) |

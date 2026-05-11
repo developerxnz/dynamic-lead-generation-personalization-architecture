@@ -1,5 +1,7 @@
 # Customer State Model
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Content Personalization Strategy ->](./03-content-personalization-strategy.md)
+
 ## Overview
 
 Customer state represents the platform's current understanding of a customer.
@@ -82,3 +84,9 @@ Lead scoring should combine:
 
 Lead scoring should remain deterministic initially.
 - maintain behavioral history for future reprocessing
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Dynamic Lead Generation Personalization Platform](./01-overview.md) | [Content Personalization Strategy](./03-content-personalization-strategy.md) |

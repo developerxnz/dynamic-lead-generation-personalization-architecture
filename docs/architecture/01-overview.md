@@ -1,5 +1,7 @@
 # Dynamic Lead Generation Personalization Platform
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Customer State Model ->](./02-customer-state-model.md)
+
 ## Overview
 
 This document outlines the overall vision and business goals for a dynamic personalization platform designed to increase lead generation through context-aware content delivery.
@@ -80,3 +82,9 @@ Frontend App Experience
 - intent inference
 - analytics feedback loops
 - conversational RAG experiences
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Documentation Home](../../README.md#documentation-structure) | [Customer State Model](./02-customer-state-model.md) |
