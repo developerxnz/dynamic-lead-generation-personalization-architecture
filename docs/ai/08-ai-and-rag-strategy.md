@@ -1,5 +1,7 @@
 # AI and RAG Strategy
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Vector Search Design ->](./09-vector-search-design.md)
+
 ## Overview
 
 This document defines how AI and Retrieval-Augmented Generation (RAG) should be used within the personalization platform.
@@ -382,3 +384,9 @@ while deterministic systems remain responsible for:
 The long-term goal is a **hybrid intelligence system**:
 
 > deterministic core + AI augmentation layer = scalable, explainable personalization
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Ranking Engine](../services/07-ranking-engine.md) | [Vector Search Design](./09-vector-search-design.md) |

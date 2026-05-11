@@ -1,5 +1,7 @@
 # Feedback and Analytics
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Delivery Roadmap ->](../delivery/11-roadmap.md)
+
 ## Overview
 
 Behavioral feedback and analytics are critical for improving personalization quality over time.
@@ -372,3 +374,9 @@ The platform should prioritize:
 - replayable history
 - explainable metrics
 - continuous optimization
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Vector Search Design](../ai/09-vector-search-design.md) | [Delivery Roadmap](../delivery/11-roadmap.md) |

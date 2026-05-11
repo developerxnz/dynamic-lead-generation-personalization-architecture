@@ -1,5 +1,7 @@
 # Ranking Engine
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: AI and RAG Strategy ->](../ai/08-ai-and-rag-strategy.md)
+
 ## Overview
 
 The Ranking Engine is the core decisioning component of the personalization platform.
@@ -394,3 +396,9 @@ It is responsible for:
 The long-term vision is a hybrid system:
 
 > deterministic ranking core + AI-assisted optimisation layer
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Customer Profile Service](./06-customer-profile-service.md) | [AI and RAG Strategy](../ai/08-ai-and-rag-strategy.md) |

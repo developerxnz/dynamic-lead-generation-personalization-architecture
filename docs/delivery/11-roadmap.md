@@ -1,5 +1,7 @@
 # Delivery Roadmap
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [End of guide ->](../../README.md#documentation-structure)
+
 ## Overview
 
 This roadmap outlines the recommended phased delivery strategy for the personalization platform.
@@ -405,3 +407,9 @@ This provides:
 - maintainable architecture
 - scalable long-term evolution
 - measurable business value at every phase
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [Feedback and Analytics](../operations/10-feedback-and-analytics.md) | [Documentation Home](../../README.md#documentation-structure) |

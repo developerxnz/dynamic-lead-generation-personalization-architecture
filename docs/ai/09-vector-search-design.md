@@ -1,5 +1,7 @@
 # Vector Search Design
 
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Feedback and Analytics ->](../operations/10-feedback-and-analytics.md)
+
 ## Overview
 
 Vector search enables semantic retrieval of content based on meaning rather than exact keyword matching.
@@ -368,3 +370,9 @@ it enables a powerful hybrid system that supports:
 The key principle is:
 
 > Vector search generates candidates. Ranking decides outcomes.
+
+---
+
+| <- Previous | Next -> |
+|---|---|
+| [AI and RAG Strategy](./08-ai-and-rag-strategy.md) | [Feedback and Analytics](../operations/10-feedback-and-analytics.md) |
