@@ -2,24 +2,31 @@
 
 ## Overview
 
-This repository contains the architecture, implementation guidance, and strategic design documents for a dynamic lead-generation personalization platform.
+This repository contains the architecture, implementation guidance, and strategic design documents for a multi-vertical lead-generation personalization platform.
 
-The platform is designed to:
+The platform is designed for service businesses such as:
 
-- dynamically personalize content on every login
-- increase engagement and lead conversion probability
-- combine deterministic ranking with optional AI augmentation
-- support future semantic search and RAG capabilities
-- maintain scalable and maintainable architecture patterns
+- novated leasing
+- health insurance
+- broadband and utilities
+- adjacent quote-driven or application-driven service categories
 
-The solution is designed around:
+It is designed to:
 
-- .NET
-- Azure
-- Cosmos DB
-- Contentful
-- Azure OpenAI
-- Azure AI Search
+- re-evaluate customer intent on every meaningful session
+- personalize offers, content, and next-best actions dynamically
+- optimize for qualified lead conversion rather than raw engagement alone
+- enforce eligibility and suitability rules before promotion
+- support future AI augmentation without losing explainability
+
+The reference solution is designed around:
+
+- .NET services
+- Azure hosting and integration services
+- Cosmos DB for operational profile storage
+- Contentful for managed content and offer metadata
+- Azure OpenAI for optional AI augmentation
+- Azure AI Search for semantic retrieval
 
 ---
 
@@ -27,31 +34,31 @@ The solution is designed around:
 
 The platform aims to:
 
-- continuously re-evaluate customer intent
-- personalize application experiences dynamically
-- optimize content selection for conversion probability
-- support explainable decisioning
-- enable incremental AI adoption
-- separate content management from personalization logic
+- identify which service category a customer is most likely to convert in
+- tailor journeys for research, comparison, quote, application, and renewal scenarios
+- support multiple verticals through configuration instead of separate architectures
+- optimize for qualified lead volume, lead quality, and downstream conversion
+- keep ranking and compliance logic explicit and explainable
+- separate content and offer management from decisioning logic
 
 ---
 
 # High-Level Architecture
 
 ```text
-Login Event
+Customer Session / Trigger
    ↓
-Profile Builder (.NET)
+Lead Profile Service
    ↓
-Intent Scoring Engine
+Intent + Eligibility Evaluation
    ↓
-Contentful Query
+CMS / Offer Catalog Query
    ↓
-Ranking Engine
+Ranking + Suitability Engine
    ↓
-Top Content Selection
+Next Best Action Selection
    ↓
-Frontend App Experience
+Web / App / Assisted Sales Experience
 ```
 
 ---
@@ -62,10 +69,10 @@ Frontend App Experience
 
 | Document | Description |
 |---|---|
-| [01-overview.md](./docs/architecture/01-overview.md) | Business goals, platform vision, and architectural overview |
-| [02-customer-state-model.md](./docs/architecture/02-customer-state-model.md) | Customer profiles, intent modeling, and lead scoring |
-| [03-content-personalization-strategy.md](./docs/architecture/03-content-personalization-strategy.md) | Content selection and ranking strategy |
-| [04-system-architecture.md](./docs/architecture/04-system-architecture.md) | Technical architecture and service boundaries |
+| [01-overview.md](./docs/architecture/01-overview.md) | Platform vision, business goals, and multi-vertical lead-generation framing |
+| [02-customer-state-model.md](./docs/architecture/02-customer-state-model.md) | Lead profile, intent, eligibility, and lead-scoring model |
+| [03-content-personalization-strategy.md](./docs/architecture/03-content-personalization-strategy.md) | Offer, content, and CTA selection strategy |
+| [04-system-architecture.md](./docs/architecture/04-system-architecture.md) | Technical architecture, service boundaries, and decisioning flow |
 
 ---
 
@@ -73,9 +80,9 @@ Frontend App Experience
 
 | Document | Description |
 |---|---|
-| [05-contentful-integration.md](./docs/services/05-contentful-integration.md) | Contentful integration and metadata strategy |
-| [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Customer profile service implementation guidance |
-| [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Ranking engine and scoring architecture |
+| [05-contentful-integration.md](./docs/services/05-contentful-integration.md) | CMS and offer metadata design for multi-vertical lead generation |
+| [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Lead profile service implementation guidance |
+| [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Ranking, suitability, and qualified conversion scoring |
 
 ---
 
@@ -83,8 +90,8 @@ Frontend App Experience
 
 | Document | Description |
 |---|---|
-| [08-ai-and-rag-strategy.md](./docs/ai/08-ai-and-rag-strategy.md) | AI boundaries, RAG strategy, and augmentation guidance |
-| [09-vector-search-design.md](./docs/ai/09-vector-search-design.md) | Vector search and semantic retrieval design |
+| [08-ai-and-rag-strategy.md](./docs/ai/08-ai-and-rag-strategy.md) | AI boundaries, RAG strategy, and assistive use cases |
+| [09-vector-search-design.md](./docs/ai/09-vector-search-design.md) | Semantic retrieval for offers, guides, and lead-support journeys |
 
 ---
 
@@ -92,7 +99,7 @@ Frontend App Experience
 
 | Document | Description |
 |---|---|
-| [10-feedback-and-analytics.md](./docs/operations/10-feedback-and-analytics.md) | Behavioral analytics and optimization feedback loops |
+| [10-feedback-and-analytics.md](./docs/operations/10-feedback-and-analytics.md) | Behavioral analytics, lead-quality measurement, and optimization loops |
 
 ---
 
@@ -100,27 +107,27 @@ Frontend App Experience
 
 | Document | Description |
 |---|---|
-| [11-roadmap.md](./docs/delivery/11-roadmap.md) | Phased implementation and future evolution strategy |
+| [11-roadmap.md](./docs/delivery/11-roadmap.md) | Phased rollout across deterministic, behavioral, and AI-assisted capabilities |
 
 ---
 
 # Recommended Delivery Approach
 
-## Phase 1 — Deterministic Personalization
+## Phase 1 — Deterministic Lead Personalization
 
 Initial implementation should focus on:
 
-- customer profiles
-- metadata-driven content selection
-- deterministic ranking
-- lead-focused personalization
+- unified lead profiles
+- service metadata and offer taxonomy
+- deterministic ranking with suitability guardrails
+- personalized next-best actions for each vertical
 
 This provides:
 
 - explainability
 - maintainability
-- predictable behavior
-- fast delivery
+- predictable compliance behavior
+- faster rollout across service categories
 
 ---
 
@@ -129,9 +136,9 @@ This provides:
 Enhance personalization using:
 
 - behavioral tracking
-- intent inference
-- engagement analytics
-- configurable ranking signals
+- intent refinement
+- lead-quality analytics
+- configurable ranking signals by vertical
 
 ---
 
@@ -139,11 +146,11 @@ Enhance personalization using:
 
 Introduce:
 
-- Azure OpenAI enrichment
+- AI-assisted intent interpretation
 - semantic retrieval
-- conversational experiences
-- personalized summaries
-- RAG-based discovery
+- conversational guidance
+- personalized summaries and explanations
+- RAG-based discovery for complex service journeys
 
 AI should augment rather than replace deterministic decisioning.
 
@@ -151,37 +158,38 @@ AI should augment rather than replace deterministic decisioning.
 
 # Architectural Principles
 
-## Keep Content Separate From Decisioning
+## Keep Content And Offers Separate From Decisioning
 
-Contentful should remain responsible for content management only.
+The CMS and offer catalog should remain responsible for managed assets and metadata only.
 
-Personalization and ranking logic should live within dedicated backend services.
-
----
-
-## Prefer Deterministic Ranking Initially
-
-Simple deterministic systems are:
-
-- easier to debug
-- easier to optimize
-- easier to explain
-- easier to evolve
-
-AI should be introduced incrementally.
+Personalization, eligibility, suitability, and ranking logic should live within dedicated backend services.
 
 ---
 
-## Treat Every Login As A Re-Evaluation Event
+## Optimize For Qualified Conversion
+
+The platform should optimize for:
+
+- quote starts
+- application progression
+- callback requests
+- qualified lead handoff
+- downstream activation or policy conversion
+
+Raw engagement alone is not enough.
+
+---
+
+## Treat Every Session As A Re-Evaluation Event
 
 Customer intent changes over time.
 
-Every login should:
+Each meaningful session should:
 
 - refresh customer state
-- update behavioral understanding
-- re-rank content
-- optimize for current conversion likelihood
+- update intent and urgency signals
+- re-rank offers and supporting content
+- adjust the next best action to current conversion likelihood
 
 ---
 
@@ -189,11 +197,11 @@ Every login should:
 
 | Area | Technology |
 |---|---|
-| Backend Services | .NET |
-| Customer State Storage | Cosmos DB |
-| CMS | Contentful |
-| AI Services | Azure OpenAI |
-| Semantic Search | Azure AI Search |
+| Experience and decisioning services | .NET |
+| Operational profile storage | Cosmos DB |
+| CMS / offer metadata | Contentful |
+| AI services | Azure OpenAI |
+| Semantic search | Azure AI Search |
 | APIs | GraphQL + REST |
 | Hosting | Azure |
 
@@ -203,28 +211,28 @@ Every login should:
 
 Potential future enhancements include:
 
-- experimentation frameworks
-- ML-assisted scoring
-- reinforcement learning
-- predictive lead conversion modeling
+- vertical-specific experimentation frameworks
+- predictive lead quality models
 - hybrid semantic + deterministic ranking
-- conversational onboarding experiences
+- provider-specific optimization strategies
+- conversational quote-assistance journeys
+- cross-sell and renewal propensity modeling
 
 ---
 
 # Summary
 
-This platform is designed as a hybrid personalization architecture that combines:
+This platform is designed as a multi-vertical lead-generation architecture that combines:
 
-- deterministic business logic
+- deterministic decisioning
 - behavioral optimization
-- scalable content management
+- structured content and offer metadata
 - incremental AI augmentation
 
 The architecture prioritizes:
 
-- maintainability
+- lead quality
 - explainability
-- scalability
-- lead generation effectiveness
+- scalability across verticals
+- compliance-aware promotion
 - long-term extensibility

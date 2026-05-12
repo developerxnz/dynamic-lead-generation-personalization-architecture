@@ -4,16 +4,16 @@
 
 ## Overview
 
-Vector search enables semantic retrieval of content based on meaning rather than exact keyword matching.
+Vector search enables semantic retrieval of offers and content based on meaning rather than exact keyword matching.
 
 In this platform, vector search is used to support:
 
-- semantic content discovery
+- semantic offer discovery
 - AI-enhanced personalization
-- conversational experiences (RAG)
-- hybrid search alongside deterministic ranking
+- conversational experiences
+- hybrid retrieval alongside deterministic ranking
 
-Vector search should **augment** deterministic ranking, not replace it.
+Vector search should augment deterministic decisioning, not replace it.
 
 ---
 
@@ -21,23 +21,23 @@ Vector search should **augment** deterministic ranking, not replace it.
 
 The vector search layer should:
 
-- improve content relevance through semantic understanding
-- support natural language queries
+- improve relevance for natural-language questions
+- support large cross-vertical content catalogs
 - enhance RAG-based experiences
-- enable similarity-based content discovery
+- enable similarity-based discovery
 - complement metadata-based filtering
-- remain optional in the core personalization flow
+- remain optional in the core deterministic flow
 
 ---
 
 # High-Level Architecture
 
 ```text
-Contentful Content
+Managed Offers And Content
         ↓
-Embedding Generation (Azure OpenAI)
+Embedding Generation
         ↓
-Vector Index (Azure AI Search)
+Vector Index
         ↓
 Retrieval Layer
         ↓
@@ -45,7 +45,7 @@ Personalization Service
         ↓
 Ranking Engine (Deterministic)
         ↓
-Final Content Selection
+Final Recommendation Set
 ```
 
 ---
@@ -54,22 +54,22 @@ Final Content Selection
 
 ## Embeddings
 
-Embeddings are numerical representations of content meaning.
+Embeddings are numerical representations of meaning.
 
 They are generated from:
 
-- content body
-- title
+- titles
+- body content
 - metadata
-- topics
+- provider descriptions
 - CTA context
 - summaries
 
 These embeddings allow semantic comparison between:
 
 - user intent
-- content items
-- queries
+- offers and guides
+- free-text queries
 
 ---
 
@@ -89,31 +89,30 @@ Recommended platform:
 
 ## Hybrid Search
 
-The recommended approach is **hybrid search**, combining:
+The recommended approach is hybrid search, combining:
 
-- keyword search (BM25)
+- keyword search
 - vector similarity search
 - metadata filtering
 
 This ensures both:
 
-- precision (keywords + filters)
-- relevance (semantic matching)
+- precision
+- semantic relevance
 
 ---
 
 # Embedding Strategy
 
-## What to Embed
+## What To Embed
 
 Each content item should generate embeddings from:
 
 - title
-- description
-- full content body
-- topics
-- persona tags
-- funnel stage
+- short description
+- long-form body
+- service category
+- provider context
 - CTA description
 
 ---
@@ -134,10 +133,10 @@ For long-form content:
 Embeddings should be updated when:
 
 - content is published
-- content is significantly modified
-- metadata changes affect meaning
+- content is materially modified
+- metadata changes alter meaning
 
-Avoid embedding regeneration on every minor edit.
+Avoid regeneration on every minor edit.
 
 ---
 
@@ -146,17 +145,17 @@ Avoid embedding regeneration on every minor edit.
 ## Semantic Retrieval Flow
 
 ```text
-User Query or Intent
+User Query Or Intent
         ↓
 Generate Query Embedding
         ↓
-Vector Search (Azure AI Search)
+Vector Search
         ↓
 Retrieve Candidate Content
         ↓
 Apply Metadata Filters
         ↓
-Pass to Ranking Engine
+Pass To Ranking Engine
 ```
 
 ---
@@ -165,19 +164,20 @@ Pass to Ranking Engine
 
 Vector search should incorporate:
 
+- service category
 - customer attributes
 - intent signals
 - funnel stage
-- engagement history
+- region or provider constraints
 
 Example:
 
-> “Senior .NET engineer improving deployment speed”
+> "health cover for a young family with extras"
 
 This is transformed into:
 
 - embedding query
-- metadata filters (persona, topic, experience level)
+- metadata filters for household fit, category, and current stage
 
 ---
 
@@ -189,18 +189,18 @@ The recommended approach:
 
 Apply deterministic filters:
 
-- persona match
-- funnel stage alignment
-- experience level
-- topic constraints
+- service category
+- region
+- provider availability
+- compliance status
 
 ## Step 2: Vector Search
 
-Apply semantic similarity on filtered dataset.
+Apply semantic similarity on the filtered dataset.
 
 ## Step 3: Rerank
 
-Use deterministic ranking engine to finalize ordering.
+Use the deterministic ranking engine to finalize ordering.
 
 ---
 
@@ -221,155 +221,20 @@ Responsible for:
 
 Responsible for:
 
-- business logic
+- suitability
 - conversion optimization
-- scoring
-- explainability
+- business constraints
 - final ordering
-
----
-
-# Integration with Personalization System
-
-```text
-Customer State
-        ↓
-Intent Inference
-        ↓
-Vector Query Generation
-        ↓
-Vector Retrieval (Azure AI Search)
-        ↓
-Candidate Content Set
-        ↓
-Deterministic Ranking Engine
-        ↓
-Personalized Output
-```
-
----
-
-# RAG Integration
-
-Vector search is a core component of RAG workflows.
-
-## RAG Flow
-
-```text
-User Question
-        ↓
-Vector Retrieval
-        ↓
-Context Injection
-        ↓
-LLM Response Generation (Azure OpenAI)
-```
-
----
-
-## Use Cases for RAG
-
-- onboarding assistance
-- product explanations
-- dynamic help content
-- conversational discovery
-- contextual recommendations
-
----
-
-## RAG Boundaries
-
-RAG should NOT be used for:
-
-- lead scoring
-- deterministic ranking
-- conversion decisioning
-- business rules enforcement
-
----
-
-# Performance Considerations
-
-## Latency Optimization
-
-- precompute embeddings
-- cache frequent queries
-- limit vector search scope with filters
-- avoid full index scans
-
----
-
-## Index Design
-
-Recommended structure:
-
-| Field | Purpose |
-|---|---|
-| embedding vector | semantic search |
-| content_id | lookup reference |
-| persona tags | filtering |
-| funnel stage | filtering |
-| topics | filtering |
-| raw content | fallback retrieval |
-
----
-
-# Observability
-
-Monitor:
-
-- query latency
-- retrieval accuracy
-- vector match relevance
-- ranking impact
-- conversion outcomes
-
----
-
-# Limitations
-
-Vector search should NOT be relied on for:
-
-- strict filtering logic
-- deterministic business decisions
-- compliance-critical rules
-- pricing or contractual logic
-
----
-
-# Future Enhancements
-
-Potential improvements:
-
-- personalized embeddings per user segment
-- multi-vector representations per content
-- semantic reranking models
-- cross-session memory retrieval
-- adaptive embedding tuning
-- multimodal embeddings (text + image)
 
 ---
 
 # Summary
 
-Vector search introduces semantic understanding into the personalization platform.
-
-When combined with:
-
-- deterministic ranking
-- customer state modeling
-- behavioral analytics
-
-it enables a powerful hybrid system that supports:
-
-- scalable personalization
-- AI-enhanced experiences
-- intelligent content discovery
-- conversational interfaces
+Vector search improves how the platform discovers relevant content and offers.
 
 The key principle is:
 
-> Vector search generates candidates. Ranking decides outcomes.
+> vector search generates candidates; deterministic ranking decides outcomes
 
 ---
 

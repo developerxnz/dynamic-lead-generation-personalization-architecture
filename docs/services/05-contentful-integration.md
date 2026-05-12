@@ -4,36 +4,68 @@
 
 ## Overview
 
-Contentful should remain the source of truth for content.
+Contentful should remain the source of truth for managed content, campaign copy, provider descriptions, and offer metadata.
 
-Business logic and personalization should not live in the CMS.
+Business logic, suitability rules, and ranking should not live in the CMS.
 
 ---
 
 ## Content Model Requirements
 
-Recommended metadata fields:
+### Universal Metadata Fields
 
-- persona_fit
+Recommended fields:
+
+- service_category
+- subtype
+- provider
+- region
 - funnel_stage
-- topics
 - conversion_goal
 - cta_type
-- experience_level
-- tags
+- compliance_flags
 - freshness
+- priority
+- lifecycle_status
+
+---
+
+### Service-Specific Extensions
+
+Examples:
+
+- novated leasing: employer_requirement, vehicle_type, tax_benefit_theme
+- health insurance: cover_tier, household_fit, extras_focus
+- broadband: speed_tier, access_technology, contract_length
 
 ---
 
 ## Query Strategy
 
-Use broad candidate retrieval:
+Use broad candidate retrieval based on:
 
-- persona-aligned queries
-- topic-aligned queries
-- funnel-stage filtering
+- service-category alignment
+- region and provider availability
+- funnel stage
+- campaign context
 
-Avoid highly restrictive queries.
+Avoid encoding business rules directly in CMS queries beyond hard constraints such as:
+
+- unpublished content
+- expired offers
+- missing compliance approval
+
+---
+
+## Normalization Requirements
+
+The adapter should transform Contentful entries into stable domain models that include:
+
+- normalized identifiers
+- provider and service taxonomy
+- structured CTA definitions
+- references to disclosures and eligibility rules
+- publish and expiry timestamps
 
 ---
 
@@ -42,7 +74,22 @@ Avoid highly restrictive queries.
 - use GraphQL APIs
 - normalize responses into domain models
 - isolate CMS logic in infrastructure adapters
-- support caching where appropriate
+- support publish-aware caching
+- emit change events when metadata changes affect personalization
+
+---
+
+## Governance
+
+The CMS model should support collaboration across:
+
+- marketing
+- provider management
+- operations
+- compliance
+- product and engineering
+
+That requires explicit fields for approvals, expiry, disclosures, and campaign ownership.
 
 ---
 

@@ -4,21 +4,21 @@
 
 ## Overview
 
-This document defines how AI and Retrieval-Augmented Generation (RAG) should be used within the personalization platform.
+This document defines how AI and Retrieval-Augmented Generation (RAG) should be used within the lead-generation platform.
 
 The guiding principle is:
 
-> AI enhances understanding and experience — deterministic systems control decisions.
+> AI enhances understanding and experience - deterministic systems control decisions
 
 AI is used to improve:
 
-- content understanding
 - intent interpretation
-- conversational experiences
+- content and offer explanation
+- conversational guidance
 - semantic retrieval
 - personalization enrichment
 
-It is NOT used for core business decisioning.
+It is not used for authoritative business decisioning.
 
 ---
 
@@ -26,12 +26,12 @@ It is NOT used for core business decisioning.
 
 The AI layer should:
 
-- enhance personalization with semantic understanding
-- support natural language interactions
-- improve content discovery
-- enable contextual recommendations
-- assist onboarding and guidance
+- improve discovery across large offer and content sets
+- support natural language interactions across service categories
+- help explain why a recommendation is relevant
 - enrich customer intent signals
+- reduce friction in quote and application journeys
+- remain grounded, reviewable, and safe
 
 ---
 
@@ -43,8 +43,8 @@ Responsible for:
 
 - ranking logic
 - lead scoring
-- funnel progression logic
-- content selection rules
+- eligibility and suitability rules
+- provider suppression and campaign logic
 - business constraints
 
 These must be:
@@ -60,8 +60,8 @@ These must be:
 
 Responsible for:
 
-- intent inference
-- summarisation
+- intent inference assistance
+- summarization
 - semantic understanding
 - content enrichment
 - conversational responses
@@ -75,56 +75,57 @@ AI is treated as:
 
 # Recommended AI Capabilities
 
-## 1. Intent Inference
+## 1. Intent Interpretation
 
 AI can infer customer intent from:
 
-- onboarding answers
-- click behaviour
+- form responses
+- click behavior
 - session activity
-- search queries
+- free-text questions
 
 Example outputs:
 
-- learning
-- evaluating
-- comparing
-- troubleshooting
-- ready to purchase
+- researching options
+- comparing providers
+- checking eligibility
+- ready for quote
+- ready to apply
 
 ---
 
-## 2. Content Summarisation
+## 2. Offer And Content Summarization
 
 AI can generate:
 
-- short content summaries
-- “why this is relevant” explanations
-- simplified technical explanations
+- short offer summaries
+- "why this is relevant" explanations
+- plain-language comparisons
 - CTA context summaries
 
 Used for improving:
 
-- engagement
 - comprehension
+- confidence
 - conversion
 
 ---
 
-## 3. Personalised Messaging
+## 3. Personalized Messaging
 
 AI can adapt:
 
-- headlines
+- hero messages
 - descriptions
-- onboarding messages
+- onboarding prompts
 - CTA explanations
 
 Based on:
 
+- service category
 - customer profile
 - funnel stage
-- engagement history
+- recent behavior
 
 ---
 
@@ -132,28 +133,28 @@ Based on:
 
 AI enables:
 
-- onboarding assistants
-- product discovery chat
+- quote-prep assistants
+- service discovery chat
 - contextual help systems
-- guided learning journeys
+- eligibility guidance journeys
 
 ---
 
 ## 5. Query Expansion
 
-AI can expand user intent into richer search queries:
+AI can expand user intent into richer search queries.
 
 Example:
 
 User input:
-> "faster deployments in .NET"
+> "best broadband plan for working from home"
 
 Expanded into:
 
-- CI/CD optimisation
-- Azure DevOps pipelines
-- deployment automation
-- release strategies
+- high-speed broadband
+- reliable family household connection
+- upload speed considerations
+- address availability and contract flexibility
 
 ---
 
@@ -177,13 +178,13 @@ User Input
         ↓
 Intent Extraction (AI)
         ↓
-Vector Retrieval (Azure AI Search)
+Metadata + Vector Retrieval
         ↓
 Context Assembly
         ↓
-LLM Response Generation (Azure OpenAI)
+LLM Response Generation
         ↓
-Personalised Output
+Personalized Output
 ```
 
 ---
@@ -192,198 +193,54 @@ Personalised Output
 
 RAG can use:
 
-- Contentful content
+- managed offer and content assets
 - customer profile data
 - engagement history
-- product documentation
-- knowledge base articles
+- provider FAQs
+- disclosure and eligibility guidance
 
 ---
 
 ## RAG Use Cases
 
-### 1. Onboarding Assistance
+### 1. Novated Leasing Guidance
 
-- explain platform features
-- guide setup
-- recommend next steps
+- explain salary packaging concepts
+- describe employer eligibility requirements
+- recommend next calculators or contact actions
 
----
+### 2. Health Insurance Discovery
 
-### 2. Content Discovery
+- compare cover tiers in simple language
+- explain hospital vs extras trade-offs
+- guide leads toward an appropriate quote path
 
-- “what should I read next?”
-- “how do I improve X?”
+### 3. Broadband Selection
 
----
-
-### 3. Contextual Help
-
-- explain features in-app
-- reduce support load
-- provide instant guidance
+- explain speed tiers and household fit
+- answer moving-house or switching questions
+- recommend address-check or quote actions
 
 ---
 
-### 4. Personalised Recommendations
+# Guardrails
 
-- explain why content is relevant
-- generate tailored suggestions
+AI outputs should:
 
----
-
-# AI System Boundaries
-
-## AI Should NOT Be Used For:
-
-- lead scoring
-- ranking decisions
-- funnel state transitions
-- pricing or business rules
-- eligibility logic
-
-These must remain deterministic.
-
----
-
-## Why These Boundaries Matter
-
-Keeping AI out of decision-critical paths ensures:
-
-- consistency
-- auditability
-- compliance safety
-- predictable behaviour
-- easier debugging
-
----
-
-# Prompting Strategy
-
-## Controlled Prompts
-
-Prompts should:
-
-- include customer context
-- include funnel stage
-- include content metadata
-- restrict output format
-
----
-
-## Example Prompt Pattern
-
-```text
-You are a personalization assistant.
-
-Customer:
-- role: engineer
-- seniority: senior
-- interests: .NET, Azure
-- funnel stage: consideration
-
-Task:
-Summarise why this content is relevant to the user.
-
-Content:
-{content}
-```
-
----
-
-# Grounding Strategy
-
-To avoid hallucination:
-
-- always ground AI in retrieved content
-- never allow free-form generation without context
-- constrain outputs to provided data
-- log all AI inputs and outputs
-
----
-
-# Observability
-
-Track:
-
-- prompt inputs
-- AI responses
-- retrieval sources used
-- latency
-- user engagement after AI output
-
----
-
-# Security & Compliance
-
-AI usage must support:
-
-- data minimisation
-- PII masking
-- audit logging
-- consent-based usage
-- secure prompt handling
-
----
-
-# Performance Considerations
-
-## Latency Control
-
-Mitigations:
-
-- cache embeddings
-- precompute summaries
-- limit context size
-- use async enrichment where possible
-
----
-
-## Cost Control
-
-Reduce cost by:
-
-- batching requests
-- caching responses
-- limiting token usage
-- using AI only where value is high
-
----
-
-# Future Enhancements
-
-Potential evolution paths:
-
-- multi-agent systems for personalization
-- adaptive prompt optimisation
-- reinforcement learning from engagement
-- dynamic persona generation
-- real-time intent prediction
-- autonomous content summarisation pipelines
+- cite retrieved source material where appropriate
+- avoid inventing eligibility outcomes
+- defer to deterministic systems for ranking and constraints
+- avoid personalized advice that exceeds approved policy boundaries
 
 ---
 
 # Summary
 
-AI in this platform acts as an **intelligence and enrichment layer**, not a decision engine.
+AI should make the platform easier to understand and use without replacing deterministic lead decisioning.
 
-It enhances:
+The long-term goal is a hybrid intelligence system:
 
-- understanding
-- relevance
-- engagement
-- content discovery
-
-while deterministic systems remain responsible for:
-
-- ranking
-- scoring
-- business rules
-- conversion logic
-
-The long-term goal is a **hybrid intelligence system**:
-
-> deterministic core + AI augmentation layer = scalable, explainable personalization
+> deterministic core + AI augmentation layer = scalable, explainable lead generation
 
 ---
 

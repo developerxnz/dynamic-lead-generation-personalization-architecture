@@ -4,13 +4,13 @@
 
 ## Overview
 
-The Ranking Engine is the core decisioning component of the personalization platform.
+The Ranking Engine is the core decisioning component of the platform.
 
-It determines which content is shown to a customer after candidate content has been retrieved.
+It determines which offers, content items, and CTAs are shown to a lead after candidate retrieval and suitability screening.
 
 Its purpose is to:
 
-> maximise engagement and lead conversion probability in an explainable, deterministic way
+> maximize qualified lead conversion in an explainable, deterministic way
 
 ---
 
@@ -18,11 +18,11 @@ Its purpose is to:
 
 The ranking engine should:
 
-- produce ordered content recommendations
-- optimise for conversion likelihood
+- produce ordered recommendations
+- optimize for qualified conversion likelihood
 - remain deterministic and explainable
 - support configurable business rules
-- integrate with customer state and behavioural signals
+- integrate with lead state and behavioral signals
 - allow future experimentation and AI augmentation
 
 ---
@@ -31,83 +31,67 @@ The ranking engine should:
 
 The ranking engine is responsible for:
 
-- scoring candidate content
-- applying business rules
+- scoring candidate assets
+- applying business and suitability rules
 - ordering results
 - explaining ranking decisions
 - supporting configuration-based tuning
-- ensuring consistency across sessions
+- ensuring consistency across similar sessions
 
 ---
 
-# High-Level Flow
+# Inputs To The Ranking Engine
 
-```text
-Customer State
-        ↓
-Candidate Content Set
-        ↓
-Feature Extraction
-        ↓
-Score Calculation
-        ↓
-Ranking Aggregation
-        ↓
-Final Ordered Results
-```
-
----
-
-# Inputs to the Ranking Engine
-
-## 1. Customer State
+## 1. Lead State
 
 From the Customer Profile Service:
 
-- persona (e.g. engineer, manager)
-- seniority
-- tech stack
+- service interests
+- household and employment attributes
 - engagement level
 - funnel stage
 - lead score
-- recent activity
+- urgency and renewal window
+- eligibility evidence
 
 ---
 
-## 2. Content Metadata
+## 2. Content And Offer Metadata
 
-From Contentful:
+From Contentful or the offer catalog:
 
-- persona_fit
-- funnel_stage
-- topics
+- service_category
+- subtype
+- provider
+- region
 - conversion_goal
-- CTA type
-- experience level
+- cta_type
+- compliance_flags
 - freshness
 - priority
 
 ---
 
-## 3. Behavioural Signals
+## 3. Behavioral Signals
 
 From analytics systems:
 
 - clicks
 - impressions
-- dwell time
-- past conversions
-- session history
+- quote starts
+- quote completion
+- callback requests
 - content interactions
+- provider handoff outcomes
 
 ---
 
 ## 4. Context Signals
 
-- login time
+- session source
 - device type
-- session entry point
-- referral source
+- referral partner
+- time sensitivity
 - campaign context
 
 ---
@@ -116,17 +100,18 @@ From analytics systems:
 
 ## Example Weighted Model
 
-Each content item is scored using weighted signals:
+Each candidate is scored using weighted signals:
 
 ```text
 Total Score =
-  Persona Match Score
+  Category Match Score
++ Intent Alignment Score
++ Eligibility Fit Score
 + Funnel Alignment Score
-+ Topic Relevance Score
-+ Behavioural Relevance Score
-+ CTA Alignment Score
++ Behavioral Relevance Score
++ CTA Likelihood Score
++ Commercial Priority Score
 + Freshness Score
-+ Editorial Priority Score
 ```
 
 ---
@@ -135,72 +120,84 @@ Total Score =
 
 | Signal | Weight |
 |---|---|
-| Funnel alignment | 6 |
-| Persona match | 5 |
-| CTA relevance | 5 |
-| Behavioural relevance | 4 |
-| Topic overlap | 3 |
+| Eligibility fit | 7 |
+| Intent alignment | 6 |
+| Funnel alignment | 5 |
+| CTA likelihood | 5 |
+| Behavioral relevance | 4 |
+| Category match | 4 |
+| Commercial priority | 2 |
 | Freshness | 2 |
-| Editorial priority | 2 |
 
 ---
 
 ## Example Calculation
 
 ```text
-Content A:
-- Persona match: +5
-- Funnel alignment: +6
-- CTA relevance: +5
-- Topic match: +3
-- Freshness: +2
+Candidate A:
+- Eligibility fit: +7
+- Intent alignment: +6
+- Funnel alignment: +5
+- CTA likelihood: +5
+- Category match: +4
 
-Total = 21
+Total = 27
 ```
 
 ---
 
 # Ranking Strategy
 
-## Step 1: Normalisation
+## Step 1: Normalization
 
-Standardise all inputs:
+Standardize all inputs:
 
 - scale scores consistently
 - remove bias between sources
-- normalise behavioural metrics
+- normalize behavioral metrics
 
 ---
 
-## Step 2: Feature Scoring
+## Step 2: Suitability Screening
+
+Before ranking, remove or suppress candidates that fail:
+
+- region availability
+- product or provider suitability
+- compliance requirements
+- hard eligibility rules
+
+---
+
+## Step 3: Feature Scoring
 
 Convert raw inputs into:
 
 - relevance scores
-- engagement probability
+- qualification confidence
 - conversion likelihood indicators
 
 ---
 
-## Step 3: Weighted Aggregation
+## Step 4: Weighted Aggregation
 
-Combine features into a single score per content item.
+Combine features into a single score per candidate.
 
 ---
 
-## Step 4: Sorting
+## Step 5: Sorting
 
 Order content by:
 
 ```text
-Highest score → Lowest score
+Highest score -> Lowest score
 ```
 
 Apply tie-breakers such as:
 
 - freshness
-- editorial priority
-- diversity constraints
+- campaign priority
+- provider diversity
 
 ---
 
@@ -218,11 +215,11 @@ The ranking engine must:
 
 ## 2. Explainability
 
-Every ranked item should be explainable:
+Every ranked item should be explainable.
 
 Example:
 
-> “Ranked high because it matches persona + funnel stage + recent engagement pattern”
+> ranked high because it matched current service intent, passed eligibility checks, and aligned to a quote-ready stage
 
 ---
 
@@ -238,18 +235,18 @@ Avoid hardcoding weights.
 
 ---
 
-## 4. Separation of Concerns
+## 4. Separation Of Concerns
 
-Ranking engine should NOT:
+The ranking engine should not:
 
 - retrieve content
-- infer intent
+- infer intent authoritatively
 - perform AI reasoning
-- apply CMS logic
+- own CMS logic
 
-It should ONLY:
+It should only:
 
-> rank a provided candidate set
+> rank a provided candidate set after deterministic constraints are applied
 
 ---
 
@@ -260,33 +257,35 @@ Personalization Service
         ↓
 Candidate Retrieval Service
         ↓
+Suitability Filters
+        ↓
 Ranking Engine
         ↓
-Ranked Content List
+Ranked Recommendations
         ↓
-Frontend Delivery Layer
+Channel Delivery Layer
 ```
 
 ---
 
-# Diversity and Business Rules
+# Diversity And Business Rules
 
 ## Diversity Controls
 
 To avoid repetitive results:
 
-- limit repeated topics
-- balance content types
-- introduce category spread
+- limit repeated providers
+- balance CTA types
+- introduce category spread where cross-sell is appropriate
 
 ---
 
 ## Business Rules Examples
 
-- prioritise high-value campaigns
-- exclude expired content
-- boost promotional content during campaigns
-- suppress low-performing content
+- prioritize high-value campaigns when relevance remains acceptable
+- exclude expired or withdrawn offers
+- suppress providers with temporary operational issues
+- boost renewal or churn-save content during renewal windows
 
 ---
 
@@ -296,13 +295,13 @@ Each ranked item should return:
 
 ```json
 {
-  "contentId": "abc123",
-  "score": 21,
+  "contentId": "offer-123",
+  "score": 27,
   "reasons": [
-    "Persona match: engineer",
-    "Funnel alignment: consideration",
-    "CTA relevance: trial signup",
-    "Topic match: CI/CD"
+    "Category match: health_insurance",
+    "Intent alignment: comparing providers",
+    "Eligibility fit: approved for quote flow",
+    "CTA alignment: get_quote"
   ]
 }
 ```
@@ -322,80 +321,41 @@ The ranking engine must:
 
 ---
 
-## Optimisation Strategies
+## Optimization Strategies
 
-- precompute behavioural aggregates
-- cache customer profiles by profile version
-- cache content metadata by content publish version
+- precompute behavioral aggregates
+- cache lead profiles by profile version
+- cache content metadata by publish version
 - avoid recomputing static scores
 
 ---
 
-## Cache Boundaries and Invalidation
+## Cache Boundaries And Invalidation
 
 The ranking engine should cache inputs and derived features, not assume a single ranking result stays valid across materially different sessions.
 
 Recommended rules:
 
-- invalidate profile-dependent feature caches when the customer profile version changes
-- invalidate content metadata caches on publish, unpublish, or scheduled content expiry events
-- use short TTLs as a fallback when event-driven invalidation is delayed
-- key reusable feature caches by the versions of the profile and content metadata they were derived from
-
-This keeps ranking deterministic while reducing the risk of serving stale features after asynchronous profile or CMS updates.
-
----
-
-# Experimentation Support
-
-The ranking engine should support:
-
-- A/B testing of weights
-- feature toggles
-- ranking strategy variants
-- shadow mode evaluations
-
----
-
-# Common Ranking Pitfalls
-
-Avoid:
-
-- overfitting to engagement metrics
-- excessive complexity early on
-- embedding AI directly into scoring logic
-- tightly coupling CMS structure to ranking rules
-- non-deterministic scoring behaviour
-
----
-
-# Future Enhancements
-
-Potential improvements include:
-
-- machine learning ranking models
-- reinforcement learning optimisation
-- contextual bandits for ranking
-- real-time weight adjustment
-- personalised ranking functions per segment
-- hybrid AI + deterministic scoring layers
+- invalidate profile-dependent feature caches when the profile version changes
+- invalidate content-dependent caches when offers, disclosures, or eligibility references change
+- shorten TTLs when urgency, renewal, or serviceability signals are volatile
 
 ---
 
 # Summary
 
-The Ranking Engine is the **decision layer** of the platform.
+The Ranking Engine is the decision layer of the platform.
 
 It is responsible for:
 
-- selecting the best content
+- selecting the best next actions
 - applying business logic
-- optimising for conversion outcomes
+- optimizing for qualified lead outcomes
 - ensuring explainability and consistency
 
 The long-term vision is a hybrid system:
 
-> deterministic ranking core + AI-assisted optimisation layer
+> deterministic ranking core + AI-assisted optimization layer
 
 ---
 

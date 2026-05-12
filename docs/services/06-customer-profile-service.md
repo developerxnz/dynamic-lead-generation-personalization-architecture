@@ -4,11 +4,9 @@
 
 ## Overview
 
-The Customer Profile Service is responsible for maintaining a continuously updated view of each customer.
+The Customer Profile Service is responsible for maintaining a continuously updated view of each lead.
 
-It aggregates behavioural signals, explicit attributes, and inferred intent into a single “customer state” that powers personalization and lead generation.
-
-This service is a foundational component of the platform because it determines *who the customer is right now*, not just what they said at onboarding.
+It aggregates declared attributes, behavioral signals, and inferred intent into a single lead state that powers personalization and lead generation across service categories.
 
 ---
 
@@ -16,8 +14,8 @@ This service is a foundational component of the platform because it determines *
 
 The Customer Profile Service should:
 
-- maintain an up-to-date customer state
-- aggregate behavioural signals over time
+- maintain an up-to-date lead profile
+- aggregate behavior over time
 - support real-time and near-real-time updates
 - calculate and evolve lead scores
 - expose a consistent API for downstream systems
@@ -27,43 +25,49 @@ The Customer Profile Service should:
 
 # Core Responsibilities
 
-## 1. Customer State Management
+## 1. Lead State Management
 
-Maintain a unified customer profile including:
+Maintain a unified profile including:
 
-- static attributes (role, seniority, industry)
-- dynamic attributes (engagement level, intent)
-- behavioural history
+- identity and account linkage
+- service interests
+- household and employment attributes
+- behavioral history
 - funnel stage
 - lead score
+- eligibility evidence
 
 ---
 
-## 2. Behavioural Aggregation
+## 2. Behavioral Aggregation
 
 Ingest and aggregate events such as:
 
-- content views
-- CTA clicks
-- session activity
-- feature usage
-- onboarding responses
+- content_viewed
+- offer_clicked
+- quote_started
+- quote_completed
+- callback_requested
+- application_started
+- address_checked
+- provider_selected
 
-These events are transformed into meaningful signals.
+These events are transformed into meaningful intent and qualification signals.
 
 ---
 
 ## 3. Intent Inference
 
-Derive customer intent from behaviour:
+Derive customer intent from behavior.
 
 Examples:
 
-- learning
-- evaluating
+- researching
 - comparing
-- troubleshooting
-- purchase-ready
+- checking eligibility
+- quote-ready
+- application-ready
+- renewal-switching
 
 Intent is continuously updated, not static.
 
@@ -73,30 +77,31 @@ Intent is continuously updated, not static.
 
 Compute a lead score based on:
 
-- engagement frequency
+- engagement quality
+- service-category fit
+- qualification confidence
 - conversion actions
-- funnel progression
 - recency of activity
-- content interaction depth
+- prior provider handoff outcomes
 
-Lead score is a *dynamic projection*, not a stored constant.
+Lead score is a dynamic projection, not a stored constant.
 
 ---
 
 # High-Level Architecture
 
 ```text
-Application Events
+Digital And Assisted Events
         ↓
 Event Ingestion Layer
         ↓
 Profile Processing Pipeline
         ↓
-Customer State Aggregation
+Lead State Aggregation
         ↓
 Cosmos DB (Profile Store)
         ↓
-Personalization / Ranking Services
+Decisioning / Ranking Services
 ```
 
 ---
@@ -108,29 +113,30 @@ Personalization / Ranking Services
 ```json
 {
   "customerId": "12345",
-  "persona": {
-    "role": "engineer",
-    "seniority": "senior",
-    "industry": "software"
-  },
-  "attributes": {
-    "tech_stack": [".net", "azure"],
-    "preferred_topics": ["ci-cd", "cloud"]
+  "serviceInterests": ["broadband", "health_insurance"],
+  "profile": {
+    "householdType": "family",
+    "employmentType": "full_time",
+    "location": "QLD"
   },
   "engagement": {
     "level": "high",
-    "recent_activity_score": 0.82,
-    "session_frequency": "daily"
+    "recentActivityScore": 0.82,
+    "sessionFrequency": "weekly"
   },
   "funnel": {
-    "stage": "consideration",
-    "progression_score": 0.65
+    "stage": "quote_ready",
+    "progressionScore": 0.65
   },
   "intent": {
-    "current": "evaluating",
+    "current": "comparing_providers",
     "confidence": 0.78
   },
-  "lead_score": 78
+  "eligibility": {
+    "serviceabilityConfirmed": true,
+    "renewalWindowDays": 14
+  },
+  "leadScore": 78
 }
 ```
 
@@ -143,11 +149,13 @@ Personalization / Ranking Services
 The system should ingest structured events such as:
 
 - `content_viewed`
-- `cta_clicked`
-- `session_started`
-- `onboarding_completed`
-- `feature_used`
-- `search_performed`
+- `offer_viewed`
+- `quote_started`
+- `quote_completed`
+- `callback_requested`
+- `application_started`
+- `eligibility_checked`
+- `provider_handoff_completed`
 
 ---
 
@@ -156,15 +164,15 @@ The system should ingest structured events such as:
 ```json
 {
   "eventId": "evt-001",
-  "eventType": "content_viewed",
+  "eventType": "quote_started",
   "customerId": "12345",
-  "contentId": "abc-001",
   "occurredAt": "2026-05-11T10:15:00Z",
   "ingestedAt": "2026-05-11T10:15:02Z",
   "metadata": {
-    "topic": "ci-cd",
-    "persona": "engineer",
-    "funnelStage": "consideration"
+    "serviceCategory": "health_insurance",
+    "provider": "Provider A",
+    "funnelStage": "quote",
+    "region": "QLD"
   }
 }
 ```
@@ -173,7 +181,7 @@ The system should ingest structured events such as:
 
 # Processing Model
 
-## Event → State Transformation
+## Event -> State Transformation
 
 ```text
 Event Stream
@@ -182,7 +190,7 @@ Event Processor
         ↓
 State Aggregation Logic
         ↓
-Customer Profile Update
+Lead Profile Update
         ↓
 Cosmos DB Projection
 ```
@@ -224,7 +232,7 @@ If an older event arrives after a newer projection has already been written, the
 
 Cosmos DB is used for:
 
-- customer profiles
+- lead profiles
 - aggregated state
 - projection storage
 - fast read access for personalization
@@ -239,17 +247,17 @@ Recommended partition key:
 
 This ensures:
 
-- fast lookup per user
+- fast lookup per customer
 - scalable horizontal partitioning
 - predictable access patterns
 
 ---
 
-## Separation of Data
+## Separation Of Data
 
 | Type | Storage |
 |---|---|
-| Raw events | Event store (stream/queue) |
+| Raw events | Event store / stream |
 | Aggregated state | Cosmos DB |
 | Analytics projections | Data warehouse / lake |
 
@@ -257,14 +265,14 @@ This ensures:
 
 # CQRS Approach
 
-The service should follow CQRS principles:
+The service should follow CQRS principles.
 
 ## Commands
 
 - ingest event
-- update profile
+- update profile attributes
 - recalculate lead score
-- update intent
+- refresh intent and eligibility projections
 
 ---
 
@@ -273,7 +281,7 @@ The service should follow CQRS principles:
 - get customer profile
 - get engagement summary
 - get funnel state
-- get intent state
+- get intent and eligibility state
 
 ---
 
@@ -283,7 +291,8 @@ Maintain derived views such as:
 
 - engagement summary
 - funnel progression
-- content affinity profile
+- provider affinity
+- service-category propensity
 
 ---
 
@@ -297,23 +306,17 @@ Maintain derived views such as:
 GET /customers/{customerId}
 ```
 
----
-
 ### Get Summary
 
 ```http
 GET /customers/{customerId}/summary
 ```
 
----
-
 ### Ingest Event
 
 ```http
 POST /customers/{customerId}/events
 ```
-
----
 
 ### Trigger Recalculation
 
@@ -323,158 +326,20 @@ POST /customers/{customerId}/recalculate
 
 ---
 
-# Lead Scoring Model
-
-## Scoring Inputs
-
-Lead score is derived from:
-
-- engagement frequency
-- conversion actions
-- funnel progression
-- recency of activity
-- content interaction depth
-
----
-
-## Example Scoring Logic
-
-```text
-Lead Score =
-  Engagement Score
-+ Conversion Score
-+ Funnel Progression Score
-+ Recency Boost
-+ Content Depth Score
-```
-
----
-
-## Key Principle
-
-Lead scoring should be:
-
-- deterministic (initially)
-- explainable
-- configurable
-- versioned
-
----
-
-# Performance Considerations
-
-## Requirements
-
-The service should support:
-
-- high-frequency event ingestion
-- low-latency profile reads
-- scalable aggregation pipelines
-
----
-
-## Optimisation Strategies
-
-- pre-aggregate behavioural metrics
-- batch event processing
-- cache frequently accessed profiles with short TTLs
-- separate read/write models
-
----
-
-# Consistency Model
-
-The system should operate with:
-
-- eventual consistency for behavioural updates and background recalculations
-- strong consistency, or explicitly bounded staleness, for login-time profile reads used in personalization
-- asynchronous processing for non-critical updates, analytics projections, and backfills
-
----
-
-## Login-Time Read Requirements
-
-Every login is a re-evaluation point for personalization. The read path that loads customer state before candidate retrieval and ranking should therefore use the latest committed profile projection, or a bounded-staleness mode with an explicit freshness target that downstream services can rely on.
-
-Background analytics, experimentation summaries, and non-user-facing recalculations can tolerate eventual consistency because they do not directly affect the current session experience.
-
----
-
-## Cache Invalidation
-
-Profile caching should use a read-through or cache-aside approach with:
-
-- short TTLs for hot profiles
-- invalidation when a newer profile projection version is written
-- cache keys that include the customer identity and profile version where possible
-
-If a login-time read detects that the cache is older than the latest committed projection, it should refresh from Cosmos DB before the ranking flow continues.
-
----
-
-# Observability
-
-Track:
-
-- event ingestion rate
-- processing latency
-- profile update frequency
-- lead score changes
-- intent shift frequency
-
----
-
-# Security & Privacy
-
-The service must support:
-
-- data minimisation
-- PII handling policies
-- customer data deletion requests
-- audit logging
-- secure event ingestion
-
----
-
-# Common Pitfalls
-
-Avoid:
-
-- tightly coupling raw events to profiles
-- synchronous event processing during login
-- embedding business rules in multiple layers
-- storing duplicated state without clear ownership
-- relying on manual updates instead of event-driven systems
-
----
-
-# Future Enhancements
-
-Potential improvements:
-
-- ML-based lead scoring
-- cross-device identity resolution
-- predictive intent modelling
-- real-time streaming updates
-- dynamic segmentation
-- behavioural clustering
-- lifetime value prediction
-
----
-
 # Summary
 
-The Customer Profile Service is the **system of record for customer understanding**.
+The Customer Profile Service is the system of record for current lead understanding.
 
-It transforms raw behaviour into structured intelligence used by:
+It transforms raw interactions into structured intelligence used by:
 
 - ranking engines
-- personalization systems
+- personalization services
+- sales-assist experiences
 - AI augmentation layers
 
 Its core value is:
 
-> turning events into actionable customer intelligence in real time
+> turning behavior and qualification evidence into actionable lead intelligence in real time
 
 ---
 
