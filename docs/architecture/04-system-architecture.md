@@ -4,19 +4,20 @@
 
 ## Overview
 
-This document defines the technical architecture for the personalization platform.
+This document defines the technical architecture for a multi-vertical lead-generation platform that personalizes offers and next-best actions across service categories.
 
 ---
 
 ## Core Services
 
-### Profile Service
+### Lead Profile Service
 
 Responsibilities:
 
-- manage customer state
-- aggregate behavioral data
+- maintain unified lead state
+- aggregate behavioral and declared data
 - calculate lead scores
+- expose profile, intent, and eligibility views
 
 Suggested technology:
 
@@ -29,15 +30,26 @@ Suggested technology:
 
 Responsibilities:
 
-- determine customer intent
-- retrieve candidate content
-- perform ranking
-- return personalized results
+- determine active service interest
+- retrieve candidate offers and content
+- coordinate eligibility and suitability checks
+- compose the recommendation response
 
 Suggested architecture:
 
-- CQRS-friendly design
-- isolated domain services
+- CQRS-friendly service boundaries
+- isolated domain services per decisioning concern
+
+---
+
+### Ranking And Suitability Engine
+
+Responsibilities:
+
+- score candidate offers and CTAs
+- enforce deterministic business constraints
+- prioritize the next best actions
+- explain why items were promoted or suppressed
 
 ---
 
@@ -45,9 +57,9 @@ Suggested architecture:
 
 Responsibilities:
 
-- query Contentful
-- normalize content
-- map metadata into domain models
+- query managed content and offer metadata
+- normalize CMS entities into domain models
+- surface publish, expiry, and metadata changes to downstream services
 
 Suggested implementation:
 
@@ -56,33 +68,88 @@ Suggested implementation:
 
 ---
 
-## Login Flow
+### Analytics And Feedback Pipeline
+
+Responsibilities:
+
+- collect interaction and conversion events
+- build projections for lead quality and provider performance
+- feed optimization signals back into the decisioning stack
+
+---
+
+## Session Flow
 
 ```text
-Login Event
+Customer Session Starts
    ↓
-Load Customer State
+Load Lead Profile
    ↓
-Update Intent Signals
+Update Intent / Urgency Signals
    ↓
-Retrieve Candidate Content
+Check Eligibility And Availability
    ↓
-Rank Content
+Retrieve Candidate Offers And Content
+   ↓
+Rank And Filter For Suitability
    ↓
 Return Personalized Experience
 ```
 
-For login-triggered personalization, `Load Customer State` should use the latest committed customer profile projection, or a bounded-staleness equivalent with an explicit freshness target, before candidate retrieval and ranking continue.
+For session-triggered personalization, `Load Lead Profile` should use the latest committed lead projection, or a bounded-staleness equivalent with an explicit freshness target, before candidate retrieval and ranking continue.
+
+---
+
+## Service Boundaries
+
+### Profile Domain
+
+Owns:
+
+- customer identity linkage
+- service interests
+- lead score
+- intent and stage projections
+- eligibility evidence
+
+### Decisioning Domain
+
+Owns:
+
+- candidate retrieval
+- ranking
+- suitability constraints
+- campaign priority handling
+- next-best-action assembly
+
+### Content Domain
+
+Owns:
+
+- managed copy
+- provider and offer metadata
+- disclosure content
+- lifecycle status of content assets
+
+### Analytics Domain
+
+Owns:
+
+- event history
+- optimization projections
+- funnel reporting
+- experiment measurement
 
 ---
 
 ## Architectural Principles
 
 - keep business logic server-side
-- keep frontend rendering lightweight
-- isolate ranking logic
-- avoid coupling AI directly into core flows
+- keep rendering channels lightweight
+- separate qualification from presentation
+- make suitability and compliance rules explicit
 - support asynchronous analytics processing
+- enable vertical rollout through configuration, not cloned services
 
 ---
 

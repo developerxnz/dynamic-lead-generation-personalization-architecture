@@ -4,15 +4,15 @@
 
 ## Overview
 
-Behavioral feedback and analytics are critical for improving personalization quality over time.
+Behavioral feedback and analytics are critical for improving lead quality and personalization effectiveness over time.
 
 The platform should continuously measure:
 
 - engagement
-- conversion behavior
+- qualification behavior
 - ranking effectiveness
 - recommendation quality
-- customer progression through the funnel
+- progression toward quote, application, and provider handoff
 
 Analytics should be treated as a core platform capability rather than a secondary concern.
 
@@ -42,13 +42,13 @@ This enables:
 
 - replayability
 - analytics projections
-- future ML training
+- future model training
 - experimentation
 - debugging
 
 ---
 
-## Separate Operational and Analytical Concerns
+## Separate Operational And Analytical Concerns
 
 Operational systems should remain optimized for:
 
@@ -69,8 +69,8 @@ Analytics systems should focus on:
 
 Analytics processing should not slow down:
 
-- login flows
-- content retrieval
+- session flows
+- candidate retrieval
 - ranking
 - personalization responses
 
@@ -86,11 +86,22 @@ Track:
 
 - content impressions
 - clicks
-- dwell time
 - session duration
 - repeated visits
-- feature interactions
-- onboarding completion
+- calculator usage
+- form starts
+
+---
+
+## Qualification Signals
+
+Track:
+
+- eligibility checks
+- serviceability results
+- provider comparison depth
+- contact preference selections
+- renewal timing
 
 ---
 
@@ -98,25 +109,12 @@ Track:
 
 Track:
 
-- CTA clicks
-- trial signups
-- demo requests
-- account upgrades
-- conversion completion
-- funnel progression
-
----
-
-## Behavioral Signals
-
-Track:
-
-- navigation paths
-- search activity
-- repeated topic interest
-- content consumption patterns
-- interaction frequency
-- inactivity patterns
+- quote starts
+- quote completion
+- application starts
+- callback requests
+- provider handoff completion
+- downstream activation proxies
 
 ---
 
@@ -124,7 +122,7 @@ Track:
 
 Track:
 
-- recommended content shown
+- recommended assets shown
 - recommendation clicks
 - recommendation dismissal
 - recommendation effectiveness
@@ -138,15 +136,15 @@ Example event structure:
 
 ```json
 {
-  "eventType": "content_viewed",
+  "eventType": "quote_started",
   "customerId": "12345",
-  "contentId": "abc123",
   "timestamp": "2026-05-11T12:00:00Z",
   "sessionId": "session-001",
   "metadata": {
-    "persona": "engineer",
-    "funnelStage": "consideration",
-    "topic": "ci-cd"
+    "serviceCategory": "broadband",
+    "provider": "Provider A",
+    "funnelStage": "quote",
+    "region": "NSW"
   }
 }
 ```
@@ -156,7 +154,7 @@ Example event structure:
 # Recommended Analytics Architecture
 
 ```text
-Frontend Events
+Frontend / CRM Events
         ↓
 Event Collection API
         ↓
@@ -166,7 +164,7 @@ Analytics Processing
         ↓
 Aggregated Projections
         ↓
-Dashboards / Optimization / Personalization
+Dashboards / Optimization / Decisioning Feedback
 ```
 
 ---
@@ -191,22 +189,23 @@ Recommended projections include:
 | Projection | Purpose |
 |---|---|
 | customer_engagement | Engagement scoring |
-| content_performance | Content optimization |
+| qualified_lead_score | Lead-quality measurement |
+| provider_performance | Partner and provider optimization |
 | conversion_funnel | Funnel analysis |
 | personalization_effectiveness | Recommendation quality |
 | behavioral_patterns | Intent analysis |
 
 ---
 
-# Content Performance Analysis
+# Performance Analysis
 
 Measure:
 
-- CTR by content type
+- quote rate by service category
+- quote completion by provider
+- callback rate by journey type
 - conversion rate by CTA
-- engagement by persona
-- performance by funnel stage
-- topic effectiveness
+- eligibility drop-off points
 - campaign effectiveness
 
 ---
@@ -225,7 +224,7 @@ Suggested comparisons:
 
 - personalized vs non-personalized experiences
 - deterministic vs AI-assisted experiences
-- ranking strategy comparisons
+- ranking strategy comparisons by vertical
 
 ---
 
@@ -234,13 +233,15 @@ Suggested comparisons:
 Track customer movement through:
 
 ```text
-Awareness
+Research
     ↓
-Consideration
+Compare
     ↓
-Evaluation
+Check Eligibility
     ↓
-Conversion
+Quote / Callback
+    ↓
+Apply / Handoff
 ```
 
 Measure:
@@ -258,114 +259,14 @@ The analytics platform should support:
 
 - A/B testing
 - ranking experiments
-- CTA experiments
-- content experiments
-- onboarding flow experiments
-
-Recommended capabilities:
-
-- experiment tagging
-- traffic splitting
-- experiment attribution
-- conversion comparison
+- provider mix experiments
+- vertical-specific journey tests
 
 ---
 
-# Operational Recommendations
+# Summary
 
-## Maintain Replayable Event History
-
-Raw events should be retained for:
-
-- reprocessing
-- model retraining
-- analytics correction
-- historical analysis
-
----
-
-## Use Immutable Events
-
-Avoid mutating historical analytics events.
-
-Prefer append-only event streams.
-
----
-
-## Version Event Contracts
-
-Event schemas should support:
-
-- backward compatibility
-- schema evolution
-- replay safety
-
----
-
-# Observability
-
-Recommended observability areas:
-
-- event processing latency
-- failed event handling
-- projection health
-- personalization latency
-- analytics pipeline throughput
-
----
-
-# Privacy and Governance
-
-Analytics implementation should support:
-
-- consent management
-- data retention policies
-- GDPR/privacy compliance
-- customer data deletion
-- auditability
-
----
-
-# Future Enhancements
-
-Potential future capabilities:
-
-- predictive analytics
-- anomaly detection
-- ML-assisted ranking optimization
-- customer lifetime value prediction
-- churn prediction
-- reinforcement learning
-- adaptive experimentation
-
----
-
-# Success Metrics
-
-Recommended platform-level metrics:
-
-| Metric | Purpose |
-|---|---|
-| CTR | Engagement quality |
-| conversion rate | Lead effectiveness |
-| dwell time | Content relevance |
-| repeat visits | Retention |
-| recommendation engagement | Personalization quality |
-| funnel progression | Conversion optimization |
-
----
-
-# Final Recommendation
-
-Analytics should be treated as a foundational platform capability from the beginning.
-
-A strong analytics foundation enables:
-
-- better personalization
-- improved conversion optimization
-- explainable ranking improvements
-- AI evolution readiness
-- measurable business outcomes
+Analytics should help the platform maximize qualified lead outcomes while preserving explainability.
 
 The platform should prioritize:
 

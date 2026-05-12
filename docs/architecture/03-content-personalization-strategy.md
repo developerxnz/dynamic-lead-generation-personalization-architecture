@@ -4,56 +4,59 @@
 
 ## Overview
 
-This document defines how content is selected, ranked, and optimised for each customer in the personalization platform.
+This document defines how offers, educational content, tools, and CTAs are selected for each lead in a multi-vertical service platform.
 
 The goal is not simply to recommend content.
 
 The goal is:
 
-> deliver the *right content, to the right customer, at the right moment* to maximise engagement and lead conversion.
+> deliver the *right offer, guidance, and next action* to the right lead at the right moment to maximize qualified conversion.
 
 ---
 
 # Goals
 
-The content personalization layer should:
+The personalization layer should:
 
-- match content to customer intent
-- optimise for conversion outcomes (lead generation)
-- support dynamic real-time decisions on login
-- combine metadata, behaviour, and context signals
+- match experiences to customer intent and service category
+- optimize for qualified lead outcomes such as quotes, applications, and callbacks
+- account for eligibility, suitability, and regional availability
+- combine metadata, behavior, and session context
 - remain explainable and testable
-- separate content selection from content storage (Contentful)
+- separate content selection from content storage
 
 ---
 
 # Core Personalization Model
 
-Personalization is based on three inputs:
+Personalization is based on four inputs:
 
 ## 1. Customer State
 
 Provided by the Customer Profile Service:
 
-- persona (role, seniority, industry)
+- service interests
+- profile and household attributes
+- eligibility signals
 - engagement level
 - funnel stage
-- intent signals
 - lead score
-- behavioural history
+- behavioral history
 
 ---
 
-## 2. Content Metadata
+## 2. Content And Offer Metadata
 
-Provided by Contentful:
+Provided by the CMS or offer catalog:
 
-- persona_fit
-- funnel_stage
-- topics
+- service_category
+- subtype
+- provider
+- region
+- eligibility rules reference
 - conversion_goal
-- CTA type
-- experience level
+- cta_type
+- compliance_flags
 - freshness
 - priority
 
@@ -63,30 +66,43 @@ Provided by Contentful:
 
 Real-time signals such as:
 
-- login time
-- device type
 - session origin
+- device type
 - campaign source
-- current session behaviour
+- referral partner
+- current session behavior
+- assisted-sales vs self-serve journey type
+
+---
+
+## 4. Business Constraints
+
+Deterministic rules such as:
+
+- region restrictions
+- serviceability checks
+- provider suppression lists
+- compliance guardrails
+- campaign windows
 
 ---
 
 # Personalization Flow
 
 ```text
-Customer Login
+Customer Session
         ↓
-Load Customer State
+Load Lead State
         ↓
-Retrieve Candidate Content
+Retrieve Candidate Offers And Content
         ↓
-Apply Relevance Filtering
+Apply Eligibility / Suitability Filters
         ↓
-Rank Content Items
+Rank Remaining Candidates
         ↓
-Select Top Content
+Select Next Best Actions
         ↓
-Render in Application
+Render In Journey
 ```
 
 ---
@@ -95,9 +111,13 @@ Render in Application
 
 ## Principle: Broad First, Narrow Later
 
-The system should first retrieve a **broad candidate set**, then narrow through ranking.
+The system should first retrieve a broad candidate set, then narrow through deterministic filtering and ranking.
 
-Avoid overly restrictive filtering in Contentful queries.
+Avoid overly restrictive CMS queries unless needed for hard constraints such as:
+
+- expired offers
+- unsupported regions
+- missing compliance approval
 
 ---
 
@@ -105,19 +125,18 @@ Avoid overly restrictive filtering in Contentful queries.
 
 Initial filtering should include:
 
-- persona alignment
+- service category alignment
 - funnel stage compatibility
-- topic relevance
-
-Avoid hard exclusions unless required (e.g. expired content).
+- region and provider availability
+- basic eligibility and suitability checks
 
 ---
 
 # Ranking Strategy Overview
 
-Ranking determines final ordering of content.
+Ranking determines final ordering of offers, content, and CTAs.
 
-It is handled by the Ranking Engine (see `/services/07-ranking-engine.md`), but relies on this strategy.
+It is handled by the Ranking Engine, but relies on this strategy.
 
 ---
 
@@ -125,25 +144,27 @@ It is handled by the Ranking Engine (see `/services/07-ranking-engine.md`), but 
 
 | Signal | Purpose |
 |---|---|
-| persona match | Align content to user type |
-| funnel alignment | Match buying stage |
-| behavioural relevance | Reflect user activity |
-| CTA alignment | Improve conversion likelihood |
-| topic overlap | Ensure relevance |
-| freshness | Ensure recency |
-| editorial priority | Business control |
+| category match | Align to the most relevant service line |
+| intent alignment | Match the current customer need |
+| eligibility fit | Prefer actions the lead can actually complete |
+| funnel alignment | Match the current decision stage |
+| behavioral relevance | Reflect recent actions and repeat interests |
+| cta alignment | Improve quote, callback, or application likelihood |
+| provider / campaign priority | Support commercial objectives explicitly |
+| freshness | Ensure current offers and guidance |
 
 ---
 
-## Conversion Optimisation Focus
+## Qualified Conversion Focus
 
-Ranking is optimised for:
+Ranking is optimized for:
 
-- CTA engagement
-- trial signups
-- demo requests
-- product exploration
-- onboarding completion
+- quote starts
+- quote completion
+- application starts
+- callback requests
+- provider handoff success
+- downstream qualified lead outcomes
 
 ---
 
@@ -151,18 +172,32 @@ Ranking is optimised for:
 
 ## Required Metadata Model
 
-All Contentful content should include:
+All managed assets should include universal metadata:
 
 | Field | Purpose |
 |---|---|
-| persona_fit | Target audience |
-| funnel_stage | Awareness / Consideration / Decision |
-| topics | Subject relevance |
-| conversion_goal | Intended outcome |
-| CTA type | Action type |
-| experience_level | Skill targeting |
-| freshness | Recency relevance |
-| priority | Editorial control |
+| service_category | Lead vertical such as novated leasing, health insurance, or broadband |
+| subtype | More specific classification inside a vertical |
+| provider | Provider or partner association |
+| region | Geographic availability |
+| funnel_stage | Research / Compare / Quote / Apply / Renew |
+| conversion_goal | Intended business outcome |
+| cta_type | Quote, callback, compare, check-eligibility, apply |
+| compliance_flags | Approval and disclosure requirements |
+| freshness | Recency and validity relevance |
+| priority | Explicit business control |
+
+---
+
+## Service-Specific Extensions
+
+Verticals can extend the metadata model.
+
+Examples:
+
+- **Novated leasing:** vehicle type, employer requirement, tax-benefit angle
+- **Health insurance:** cover tier, household fit, extras focus
+- **Broadband:** speed tier, technology availability, contract type
 
 ---
 
@@ -170,13 +205,15 @@ All Contentful content should include:
 
 ```json
 {
-  "title": "Improve CI/CD pipelines with Azure DevOps",
-  "persona_fit": ["engineer", "devops"],
-  "funnel_stage": "consideration",
-  "topics": ["ci-cd", "azure", ".net"],
-  "conversion_goal": "start_trial",
-  "cta_type": "trial_signup",
-  "experience_level": "senior",
+  "title": "Compare family health cover with extras",
+  "service_category": "health_insurance",
+  "subtype": "family_cover",
+  "provider": "Provider A",
+  "region": ["NSW", "VIC"],
+  "funnel_stage": "compare",
+  "conversion_goal": "start_quote",
+  "cta_type": "get_quote",
+  "compliance_flags": ["approved_health_copy"],
   "freshness": "high",
   "priority": 3
 }
@@ -186,13 +223,13 @@ All Contentful content should include:
 
 # Personalization Dimensions
 
-## 1. Persona Matching
+## 1. Service Category Matching
 
-Match content based on:
+Match assets based on:
 
-- role (engineer, manager, architect)
-- seniority (junior, mid, senior)
-- industry
+- current service interest
+- adjacent service cross-sell potential
+- provider affinity
 
 ---
 
@@ -200,19 +237,23 @@ Match content based on:
 
 Align content to customer journey:
 
-- Awareness → educational content
-- Consideration → comparison content
-- Decision → conversion-focused content
+- Research -> educational guides and calculators
+- Compare -> provider comparisons and suitability explainers
+- Quote -> quote-start and eligibility CTAs
+- Apply -> conversion-focused support and reassurance
+- Renew / Switch -> urgency-driven switching messages
 
 ---
 
-## 3. Behavioural Alignment
+## 3. Behavioral Alignment
 
-Use observed behaviour:
+Use observed behavior:
 
-- previously viewed topics
-- clicked content types
-- time spent on categories
+- viewed providers or plans
+- repeated category visits
+- quote or form abandonment
+- calculator usage
+- return frequency
 
 ---
 
@@ -220,10 +261,12 @@ Use observed behaviour:
 
 Infer intent such as:
 
-- learning
-- evaluating
-- comparing
-- ready to convert
+- exploring options
+- comparing providers
+- checking eligibility
+- ready for quote
+- ready to apply
+- likely to switch
 
 ---
 
@@ -231,52 +274,59 @@ Infer intent such as:
 
 ## Rule 1: Relevance First
 
-Content must always pass basic relevance thresholds before ranking.
+Candidates must pass basic relevance thresholds before ranking.
 
 ---
 
-## Rule 2: Conversion Bias
+## Rule 2: Suitability Before Promotion
 
-When multiple items are similar in relevance:
-
-> prefer content with stronger conversion signals
+Do not promote offers or CTAs that fail deterministic suitability, eligibility, or compliance constraints.
 
 ---
 
-## Rule 3: Diversity
+## Rule 3: Qualified Conversion Bias
+
+When multiple items are similarly relevant:
+
+> prefer the item most likely to produce a qualified lead outcome
+
+---
+
+## Rule 4: Diversity
 
 Avoid showing:
 
-- repeated topics
-- same CTA types
-- overly similar content items
+- repeated providers
+- duplicate CTA types
+- overly similar assets in the same slot set
 
 ---
 
-## Rule 4: Freshness Awareness
+## Rule 5: Freshness Awareness
 
 Prefer:
 
-- recently published content
-- actively maintained campaigns
-- time-sensitive offers
+- current approved offers
+- active campaigns
+- recently updated explainer content
 
 ---
 
-# AI Usage in Personalization
+# AI Usage In Personalization
 
-AI is used ONLY for:
+AI is used only for:
 
 - intent inference
-- content summarisation
-- content explanation
+- content summarization
+- explanation generation
 - query expansion
 
-AI must NOT be used for:
+AI must not be used for:
 
 - ranking decisions
-- lead scoring
+- lead scoring authority
 - business rule enforcement
+- compliance overrides
 
 ---
 
@@ -284,18 +334,18 @@ AI must NOT be used for:
 
 RAG can enhance personalization by:
 
-- enriching content explanations
-- providing contextual answers
-- improving content discovery
+- enriching offer explanations
+- answering service-specific questions
+- improving discovery across complex service offer sets
 
 Example:
 
 ```text
-User asks: "How do I improve deployment speed?"
+User asks: "What broadband option suits a family working from home?"
 
-→ Retrieve relevant CI/CD content
-→ Inject customer context
-→ Generate explanation + recommendations
+→ Retrieve relevant broadband guides, speed explainers, and provider offers
+→ Inject customer context such as household type and location
+→ Generate grounded explanation + recommended next action
 ```
 
 ---
@@ -306,7 +356,7 @@ User asks: "How do I improve deployment speed?"
 
 Personalization should be designed for:
 
-- fast login experiences (<200ms target for decisioning layer)
+- fast session experiences (<200ms target for the decisioning layer)
 - cached candidate retrieval where possible
 - precomputed customer state
 
@@ -314,23 +364,21 @@ Personalization should be designed for:
 
 ## Optimization Strategies
 
-- cache Contentful metadata with publish-aware invalidation
-- precompute engagement signals
-- avoid runtime heavy computations in ranking
-- reuse candidate sets across sessions only when the underlying profile and content versions remain valid
+- cache CMS metadata with publish-aware invalidation
+- precompute intent and engagement signals
+- avoid heavy runtime calculations in ranking
+- reuse candidate sets only when profile and content versions remain valid
 
 ---
 
 ## Cache Usage Rules
 
-Caching in the personalization layer should preserve freshness for login-time decisioning:
+Caching should preserve freshness for lead decisioning:
 
-- invalidate Contentful metadata caches on publish, unpublish, or expiry events
-- reuse candidate sets only when the customer's profile version has not changed since the set was produced
-- prefer short TTLs for candidate-set caches because intent and funnel state can change quickly
-- do not serve a cached candidate set for a login flow if a fresher customer profile projection is available
-
-These rules keep latency low without letting stale profile or content state distort personalization outcomes.
+- invalidate metadata caches on publish, unpublish, expiry, or compliance changes
+- reuse candidate sets only when the customer profile version has not changed
+- prefer short TTLs where intent and eligibility change quickly
+- do not serve a cached candidate set if a fresher profile or serviceability result is available
 
 ---
 
@@ -338,12 +386,13 @@ These rules keep latency low without letting stale profile or content state dist
 
 Track:
 
-- content impression rates
+- asset impressions
 - click-through rates
-- conversion rates
-- ranking effectiveness
-- personalization uplift
-- funnel progression impact
+- quote starts
+- quote completion
+- application progression
+- provider handoff quality
+- personalization uplift by vertical
 
 ---
 
@@ -351,41 +400,28 @@ Track:
 
 Avoid:
 
-- over-filtering candidates early
+- over-filtering too early
 - embedding business logic into CMS queries
 - using AI as a decision engine
-- ignoring behavioural signals
-- static personalization logic
-
----
-
-# Future Enhancements
-
-Potential improvements:
-
-- real-time adaptive personalization
-- reinforcement learning-based ranking tuning
-- dynamic content generation
-- personalized content sequences (journeys)
-- predictive content recommendations
-- cross-session intent continuity
+- ignoring qualification and compliance constraints
+- static personalization logic across all verticals
 
 ---
 
 # Summary
 
-The Content Personalization Strategy defines how content becomes relevant to each customer.
+The Content Personalization Strategy defines how offers and content become relevant to each lead.
 
 It connects:
 
 - customer state
-- content metadata
-- behavioural signals
+- content and offer metadata
+- behavioral signals
 - ranking logic
 
 to deliver:
 
-> dynamic, conversion-optimised content experiences at scale
+> dynamic, qualified-conversion-focused lead experiences at scale
 
 ---
 

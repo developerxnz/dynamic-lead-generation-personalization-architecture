@@ -4,25 +4,25 @@
 
 ## Overview
 
-This roadmap outlines the recommended phased delivery strategy for the personalization platform.
+This roadmap outlines the recommended phased delivery strategy for the lead-generation platform.
 
 The goal is to:
 
 - deliver value incrementally
 - reduce implementation risk
 - maintain architectural flexibility
-- introduce AI capabilities gradually
+- support rollout across multiple service categories
 
 ---
 
-# Phase 1 — Deterministic Personalization
+# Phase 1 - Deterministic Lead Personalization
 
 ## Goals
 
-- establish customer profiles
-- implement metadata-driven personalization
-- build deterministic ranking
-- deliver personalized content experiences
+- establish unified lead profiles
+- implement service metadata and offer taxonomy
+- build deterministic ranking with suitability rules
+- deliver personalized next-best actions
 
 ---
 
@@ -30,25 +30,25 @@ The goal is to:
 
 Core capabilities:
 
-- Cosmos DB customer profiles
+- Cosmos DB lead profiles
 - Contentful metadata strategy
 - basic ranking engine
 - candidate retrieval
-- login personalization flow
+- session personalization flow
 - lead scoring
 
 ---
 
 ## Recommended Deliverables
 
-### Customer Profile Foundation
+### Lead Profile Foundation
 
 Implement:
 
-- customer state storage
+- lead state storage
 - profile APIs
 - profile aggregation logic
-- engagement tracking foundations
+- engagement and qualification signal foundations
 
 Suggested technologies:
 
@@ -57,15 +57,16 @@ Suggested technologies:
 
 ---
 
-### Content Metadata Strategy
+### Content And Offer Metadata Strategy
 
-Enhance Contentful content models with:
+Enhance managed content models with:
 
-- persona metadata
+- service-category metadata
+- provider metadata
 - funnel-stage metadata
-- topic metadata
 - CTA metadata
 - conversion-goal metadata
+- compliance flags
 
 ---
 
@@ -73,10 +74,11 @@ Enhance Contentful content models with:
 
 Implement deterministic ranking using:
 
-- persona alignment
+- category alignment
+- intent alignment
+- eligibility fit
 - funnel alignment
-- topic relevance
-- CTA relevance
+- CTA likelihood
 - freshness scoring
 
 Ranking should remain:
@@ -87,18 +89,20 @@ Ranking should remain:
 
 ---
 
-### Login Personalization Flow
+### Session Personalization Flow
 
 Build the initial personalization pipeline:
 
 ```text
-Login Event
+Customer Session
    ↓
-Load Customer State
+Load Lead State
    ↓
-Retrieve Candidate Content
+Retrieve Candidate Offers And Content
    ↓
-Rank Content
+Check Eligibility / Suitability
+   ↓
+Rank Candidates
    ↓
 Return Personalized Results
 ```
@@ -109,34 +113,22 @@ Return Personalized Results
 
 Phase 1 should provide:
 
-- explainable personalization
-- measurable engagement improvements
+- explainable decisioning
+- measurable lead uplift
 - stable ranking behavior
 - maintainable architecture foundations
 - low operational complexity
 
 ---
 
-## Success Metrics
-
-Suggested metrics:
-
-- click-through rate
-- engagement duration
-- CTA interactions
-- return visits
-- content interaction depth
-
----
-
-# Phase 2 — Behavioral Optimization
+# Phase 2 - Behavioral Optimization
 
 ## Goals
 
 - improve personalization quality
-- introduce behavioral understanding
+- introduce richer behavioral understanding
 - optimize ranking effectiveness
-- evolve customer intent modeling
+- evolve lead qualification and intent modeling
 
 ---
 
@@ -146,8 +138,8 @@ Enhancements include:
 
 - behavioral event tracking
 - analytics pipelines
-- engagement scoring
-- intent inference
+- qualification scoring
+- intent refinement
 - configurable ranking weights
 - experimentation support
 
@@ -161,29 +153,31 @@ Track:
 
 - impressions
 - clicks
-- dwell time
-- CTA interactions
+- quote starts
+- quote completion
+- callback requests
 - repeated visits
-- feature usage
+- provider handoff outcomes
 
 ---
 
-### Intent Inference
+### Intent And Qualification Refinement
 
-Introduce intent modeling using:
+Introduce richer modeling using:
 
 - behavioral aggregation
 - session analysis
 - engagement patterns
+- eligibility evidence
 - optional AI-assisted inference
 
 Example intents:
 
-- learning
-- evaluating
-- troubleshooting
+- researching
 - comparing
-- purchase-ready
+- quote-ready
+- application-ready
+- renewal-switching
 
 ---
 
@@ -192,7 +186,7 @@ Example intents:
 Recommended architecture:
 
 ```text
-Frontend Events
+Frontend / CRM Events
         ↓
 Event Pipeline
         ↓
@@ -210,9 +204,9 @@ Personalization Optimization
 Enhance ranking using:
 
 - engagement history
-- behavioral weighting
+- qualification confidence
 - content effectiveness
-- configurable scoring
+- configurable scoring by vertical
 
 ---
 
@@ -220,106 +214,74 @@ Enhance ranking using:
 
 Phase 2 should provide:
 
-- improved relevance
-- stronger engagement
 - better lead quality
-- more adaptive personalization
-- improved ranking accuracy
+- more accurate intent handling
+- improved conversion efficiency
+- stronger optimization feedback loops
 
 ---
 
-## Success Metrics
-
-Suggested metrics:
-
-- conversion rate improvements
-- engagement uplift
-- personalization accuracy
-- recommendation effectiveness
-- funnel progression rates
-
----
-
-# Phase 3 — AI-Augmented Experiences
+# Phase 3 - AI-Augmented Experiences
 
 ## Goals
 
-- introduce semantic experiences
-- improve contextual understanding
-- support conversational interactions
-- enable intelligent discovery
+- improve discovery and explanation
+- reduce friction in complex journeys
+- support natural-language guidance
+- augment deterministic decisioning safely
 
 ---
 
 ## Implementation Scope
 
-AI enhancements include:
+Enhancements include:
 
 - Azure OpenAI integration
 - vector search
-- semantic retrieval
 - RAG experiences
-- personalized summaries
-- conversational onboarding
+- conversational guidance
+- summary generation
 
 ---
 
 ## Recommended Deliverables
 
-### AI-Assisted Intent Understanding
+### Semantic Retrieval
 
-Use AI for:
+Implement:
 
-- intent extraction
-- semantic enrichment
-- contextual understanding
-- dynamic messaging
-
-AI should augment deterministic systems rather than replace them.
+- vector index for managed content
+- metadata-aware retrieval
+- semantic candidate generation
 
 ---
 
-### Vector Search Integration
+### Conversational Guidance
 
-Implement semantic retrieval using:
+Support:
 
-- Azure AI Search
-- embeddings generated via Azure OpenAI
-- hybrid keyword + vector search
-
----
-
-### RAG Experiences
-
-Introduce:
-
-- conversational onboarding
-- contextual explanations
-- intelligent content discovery
-- semantic support experiences
-
-Example flow:
-
-```text
-Customer Question
-        ↓
-Semantic Retrieval
-        ↓
-Inject Customer Context
-        ↓
-Generate Personalized Response
-```
+- quote-prep assistants
+- service comparison help
+- eligibility explanation
+- next-step recommendations
 
 ---
 
-### Personalized Messaging
+### Multi-Vertical Expansion
 
-Generate:
+Roll out new service lines primarily through configuration:
 
-- personalized summaries
-- contextual onboarding
-- adaptive CTA messaging
-- dynamic recommendations
+- metadata extensions
+- ranking rule sets
+- provider onboarding
+- analytics segmentation
+
+Examples:
+
+- novated leasing
+- health insurance
+- broadband
+- future service categories
 
 ---
 
@@ -327,74 +289,16 @@ Generate:
 
 Phase 3 should provide:
 
-- richer customer experiences
+- richer customer guidance
 - improved discovery
-- conversational personalization
-- scalable AI-assisted engagement
+- scalable multi-vertical expansion
+- measurable AI-assisted conversion uplift
 
 ---
 
-## Success Metrics
+# Summary
 
-Suggested metrics:
-
-- conversational engagement
-- semantic search effectiveness
-- onboarding completion rates
-- AI-assisted conversion uplift
-- support deflection improvements
-
----
-
-# Long-Term Considerations
-
-Potential future capabilities:
-
-- reinforcement learning
-- predictive lead modeling
-- adaptive recommendation systems
-- autonomous optimization
-- advanced experimentation frameworks
-- predictive content selection
-- customer lifecycle prediction
-
----
-
-# Recommended Delivery Principles
-
-## Prioritize Deterministic Systems First
-
-Build stable and explainable systems before introducing advanced AI.
-
----
-
-## Keep AI Augmentation Incremental
-
-Introduce AI gradually in areas where semantic understanding provides measurable value.
-
----
-
-## Maintain Explainability
-
-Personalization decisions should remain understandable and observable.
-
----
-
-## Validate With Analytics
-
-Use measurable outcomes to guide personalization improvements.
-
----
-
-## Avoid Premature Optimization
-
-Start with simple systems that can evolve incrementally over time.
-
----
-
-# Final Recommendation
-
-The recommended approach is to evolve the platform through progressive maturity stages:
+The recommended delivery sequence is:
 
 1. deterministic personalization
 2. behavioral optimization
@@ -405,7 +309,7 @@ This provides:
 - lower implementation risk
 - faster initial delivery
 - maintainable architecture
-- scalable long-term evolution
+- scalable vertical expansion
 - measurable business value at every phase
 
 ---
