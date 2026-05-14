@@ -4,7 +4,7 @@
 
 ## Overview
 
-This document outlines the overall vision and business goals for a multi-vertical lead-generation platform that personalizes service journeys in real time.
+This document frames the platform from a product and engineering perspective: **what problem it solves, why the architecture looks the way it does, and how it supports both new lead generation and returning-customer re-engagement**.
 
 The platform is intended for service categories such as:
 
@@ -13,25 +13,47 @@ The platform is intended for service categories such as:
 - broadband
 - other quote-led, callback-led, or application-led services
 
-The core objective is to present the right combination of:
+Across those verticals, the objective is consistent:
 
-- offer
-- educational content
-- calculator or comparison tool
-- next-best CTA
+- understand what the customer is trying to do now
+- determine what they are likely eligible and suitable for
+- decide which offer, content, and CTA combination best fits the session
+- improve the quality of downstream sales or provider handoff
 
-for the customer's current intent, eligibility, and likely conversion stage.
+---
+
+## Why Now
+
+Many lead-generation businesses already have:
+
+- capable paid and owned acquisition channels
+- strong campaign operations
+- rich content libraries
+- provider or product relationships
+
+What they often lack is a shared decisioning layer that can answer:
+
+- which service should this customer see first
+- which journey should a returning visitor resume or switch to
+- which offers are genuinely suitable for this customer
+- which action is most likely to convert without degrading lead quality
+
+Without that layer, the experience tends to drift toward generic landing pages, over-reliance on campaign routing, and weak reuse of prior customer context.
 
 ---
 
 ## Business Goals
 
+The platform should help the business:
+
 - increase qualified lead volume
-- improve conversion from visit to quote, application, or callback
-- tailor journeys by service category without duplicating architecture
-- support provider and campaign priorities without losing relevance
-- maintain explainable and auditable decisioning
-- allow incremental AI adoption over time
+- improve conversion from visit to quote, callback, or application
+- re-engage returning customers with more relevant journeys
+- support multiple verticals without duplicating architecture and operating models
+- align customer relevance with commercial priorities in a controlled way
+- maintain explainable and auditable decisioning for operational confidence
+
+These goals make the platform relevant beyond marketing optimization alone. It becomes a shared growth and operating capability.
 
 ---
 
@@ -39,11 +61,13 @@ for the customer's current intent, eligibility, and likely conversion stage.
 
 The platform combines:
 
-- unified lead profiles
-- behavioral signals
+- customer profiles and journey states
+- behavioral and contextual signals
 - service and offer metadata
 - deterministic ranking and suitability rules
-- optional AI augmentation
+- configurable campaign and provider priorities
+- analytics and feedback loops
+- AI-forward interpretation, retrieval, and explanation capabilities with deterministic guardrails
 
 The reference implementation uses:
 
@@ -53,6 +77,32 @@ The reference implementation uses:
 - Contentful
 - Azure OpenAI
 - Azure AI Search
+
+The architectural pattern matters more than the exact vendor choices.
+
+---
+
+## End-To-End Decisioning Flow
+
+```mermaid
+flowchart TD
+    A[Customer session, trigger, or return visit] --> B[Lead profile refresh]
+    B --> C[Intent, urgency, and eligibility evaluation]
+    C --> D[Offer and content candidate retrieval]
+    D --> E[Suitability and ranking]
+    E --> F[Next-best action selection]
+    F --> G[Experience delivery across web, app, or assisted sales]
+    G --> H[Behavior, lead-quality, and conversion outcomes]
+    H --> B
+```
+
+The loop matters because the platform should not treat conversion as a single-session event. It should support:
+
+- first-time discovery
+- mid-funnel return visits
+- renewal or replacement journeys
+- cross-sell or adjacent-service intent
+- abandoned quote or application recovery
 
 ---
 
@@ -72,7 +122,58 @@ Ranking + Suitability Engine
 Next Best Action Selection
    ↓
 Web / App / Assisted Sales Experience
+   ↓
+Analytics / Feedback Loop
 ```
+
+Each stage exists to keep responsibilities clear:
+
+- the **profile layer** maintains evolving customer state
+- the **decisioning layer** evaluates what should happen now
+- the **content and offer layer** supplies managed candidates
+- the **experience layer** delivers recommendations in context
+- the **analytics layer** measures whether the decision improved outcomes
+
+---
+
+## Why The Architecture Is Structured This Way
+
+### 1. Customer State Must Persist Across Sessions
+
+Service purchases are rarely one-click journeys. Customers compare, pause, return, switch products, and revisit when circumstances change.
+
+That means the platform needs a persistent view of:
+
+- interests
+- research depth
+- quote or application progress
+- renewal timing
+- prior service interactions
+- known eligibility signals
+
+### 2. Ranking Must Be Constrained By Suitability
+
+The best-converting asset is not always the right asset to show. The system must filter and prioritize using:
+
+- eligibility rules
+- suitability rules
+- campaign constraints
+- provider capacity or commercial priorities
+- channel and compliance constraints
+
+### 3. Content Operations And Decisioning Should Not Be Coupled
+
+Product and marketing teams need to manage offers, content, and metadata quickly. Engineering teams need stable, testable decisioning systems.
+
+Separating those concerns allows:
+
+- faster campaign and content iteration
+- safer backend logic changes
+- clearer governance and accountability
+
+### 4. AI Should Improve Discovery, Not Own Policy
+
+AI can help customers understand options and help the system retrieve useful information, but deterministic systems should remain authoritative for decisions that need to be explained, audited, or defended.
 
 ---
 
@@ -82,17 +183,31 @@ The same architecture should support multiple services through metadata and conf
 
 Examples:
 
-- **Novated leasing:** show EV tax-benefit guides, salary-packaging calculators, and "check employer eligibility" CTAs
-- **Health insurance:** show cover comparisons, extras explainers, and "get a quote" CTAs based on household and life stage
-- **Broadband:** show speed guidance, provider comparisons, and "check address availability" CTAs based on move or churn intent
+- **Novated leasing:** show EV tax-benefit guides, salary-packaging calculators, employer-eligibility prompts, and quote CTAs
+- **Health insurance:** show cover comparisons, extras explainers, household-based guidance, and quote CTAs aligned to life stage
+- **Broadband:** show speed guidance, provider comparisons, address-availability checks, and move-home or churn-support CTAs
+
+The underlying platform logic stays consistent even when the visible experience changes by vertical.
+
+---
+
+## Product And Engineering View
+
+| Perspective | What this architecture enables |
+|---|---|
+| Product | A reusable personalization capability that improves qualified conversion, returning-customer journeys, and cross-vertical consistency |
+| Engineering | Clear service boundaries, deterministic decisioning, managed metadata inputs, and scalable event-driven profile updates |
+| Marketing and growth | Better campaign landing experiences, clearer prioritization controls, and more useful lead-quality feedback |
+| Sales and operations | Higher-confidence handoff quality and more context about why a lead was promoted |
 
 ---
 
 ## Core Principles
 
-- personalization should be dynamic and session-aware
+- personalization should be dynamic, session-aware, and resilient to changing customer intent
 - decisioning should optimize for qualified conversion, not just engagement
-- deterministic rules should handle eligibility, suitability, and campaign constraints first
+- returning customers should be re-evaluated using prior context, not treated as blank sessions
+- deterministic rules should handle eligibility, suitability, and campaign constraints before promotion
 - AI should augment rather than replace business logic
 - content and offer management should stay separate from ranking logic
 
@@ -100,26 +215,28 @@ Examples:
 
 ## Recommended Delivery Approach
 
-### Phase 1
+### Phase 1 - Decisioning Foundation
 
-- deterministic lead personalization
-- unified lead profiles
+- customer profiles and journey states
 - vertical-aware metadata model
 - ranking with suitability guardrails
+- initial analytics for lead quality and handoff outcomes
 
-### Phase 2
+### Phase 2 - Behavioral And Analytics Optimization
 
 - behavioral scoring
+- returning-customer re-entry logic
 - intent refinement
-- lead-quality analytics
+- lead-quality analytics by vertical and provider
 - cross-vertical optimization loops
 
-### Phase 3
+### Phase 3 - AI-Forward Experiences
 
 - conversational guidance
 - semantic retrieval
 - AI-assisted summaries and query expansion
 - richer recommendation explanation
+- broader assisted-sales augmentation
 
 ---
 
@@ -132,7 +249,8 @@ The platform should improve:
 - callback requests
 - provider handoff quality
 - conversion by service category
-- explainability for marketing, operations, and compliance teams
+- reactivation of returning customers
+- explainability for product, operations, compliance, and provider stakeholders
 
 ---
 

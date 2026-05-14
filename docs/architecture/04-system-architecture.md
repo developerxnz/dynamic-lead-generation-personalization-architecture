@@ -6,6 +6,12 @@
 
 This document defines the technical architecture for a multi-vertical lead-generation platform that personalizes offers and next-best actions across service categories.
 
+The architecture assumes:
+
+- one durable customer profile entity
+- multiple concurrent journey states per customer
+- an active-journey selection step during live decisioning
+
 ---
 
 ## Core Services
@@ -14,10 +20,11 @@ This document defines the technical architecture for a multi-vertical lead-gener
 
 Responsibilities:
 
-- maintain unified lead state
+- maintain the durable customer profile
 - aggregate behavioral and declared data
-- calculate lead scores
-- expose profile, intent, and eligibility views
+- maintain multiple journey states
+- calculate customer-level and journey-level scores
+- expose profile, journey, intent, and qualification views
 
 Suggested technology:
 
@@ -83,7 +90,9 @@ Responsibilities:
 ```text
 Customer Session Starts
    ↓
-Load Lead Profile
+Load Customer Profile + Journey States
+   ↓
+Select Active Journey
    ↓
 Update Intent / Urgency Signals
    ↓
@@ -96,7 +105,7 @@ Rank And Filter For Suitability
 Return Personalized Experience
 ```
 
-For session-triggered personalization, `Load Lead Profile` should use the latest committed lead projection, or a bounded-staleness equivalent with an explicit freshness target, before candidate retrieval and ranking continue.
+For session-triggered personalization, the profile and journey reads should use the latest committed projections, or a bounded-staleness equivalent with an explicit freshness target, before candidate retrieval and ranking continue.
 
 ---
 
@@ -107,15 +116,25 @@ For session-triggered personalization, `Load Lead Profile` should use the latest
 Owns:
 
 - customer identity linkage
-- service interests
-- lead score
-- intent and stage projections
-- eligibility evidence
+- stable customer facts
+- customer-level lead score
+- customer-level return behavior summaries
+
+### Journey Domain
+
+Owns:
+
+- service-specific journey states
+- journey intent and stage projections
+- journey qualification evidence
+- resume and renewal indicators
+- journey-level scores
 
 ### Decisioning Domain
 
 Owns:
 
+- active-journey selection
 - candidate retrieval
 - ranking
 - suitability constraints
@@ -146,6 +165,7 @@ Owns:
 
 - keep business logic server-side
 - keep rendering channels lightweight
+- separate profile, journey, and decisioning concerns
 - separate qualification from presentation
 - make suitability and compliance rules explicit
 - support asynchronous analytics processing

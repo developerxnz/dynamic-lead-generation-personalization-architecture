@@ -6,7 +6,11 @@
 
 The Customer Profile Service is responsible for maintaining a continuously updated view of each lead.
 
-It aggregates declared attributes, behavioral signals, and inferred intent into a single lead state that powers personalization and lead generation across service categories.
+It should manage:
+
+- a durable customer profile
+- one or more journey states per customer
+- the projections needed for personalization and lead generation across service categories
 
 ---
 
@@ -14,10 +18,11 @@ It aggregates declared attributes, behavioral signals, and inferred intent into 
 
 The Customer Profile Service should:
 
-- maintain an up-to-date lead profile
+- maintain an up-to-date customer profile
+- maintain multiple concurrent journey states
 - aggregate behavior over time
 - support real-time and near-real-time updates
-- calculate and evolve lead scores
+- calculate customer-level and journey-level scores
 - expose a consistent API for downstream systems
 - support reprocessing and historical correction
 
@@ -25,21 +30,31 @@ The Customer Profile Service should:
 
 # Core Responsibilities
 
-## 1. Lead State Management
+## 1. Customer Profile Management
 
-Maintain a unified profile including:
+Maintain a durable profile including:
 
 - identity and account linkage
-- service interests
 - household and employment attributes
-- behavioral history
-- funnel stage
-- lead score
-- eligibility evidence
+- cross-journey behavioral summaries
+- overall lead score
 
 ---
 
-## 2. Behavioral Aggregation
+## 2. Journey State Management
+
+Maintain service-specific journey states including:
+
+- service category
+- intent
+- funnel stage
+- urgency
+- qualification state
+- journey-level score
+
+---
+
+## 3. Behavioral Aggregation
 
 Ingest and aggregate events such as:
 
@@ -52,13 +67,13 @@ Ingest and aggregate events such as:
 - address_checked
 - provider_selected
 
-These events are transformed into meaningful intent and qualification signals.
+These events are transformed into meaningful profile and journey signals.
 
 ---
 
-## 3. Intent Inference
+## 4. Intent Inference
 
-Derive customer intent from behavior.
+Derive customer and journey intent from behavior.
 
 Examples:
 
@@ -68,14 +83,15 @@ Examples:
 - quote-ready
 - application-ready
 - renewal-switching
+- returning-to-resume
 
-Intent is continuously updated, not static.
+Intent should be maintained primarily at the journey level, with customer-level summaries where useful.
 
 ---
 
-## 4. Lead Scoring
+## 5. Lead Scoring
 
-Compute a lead score based on:
+Compute both customer-level and journey-level scores based on:
 
 - engagement quality
 - service-category fit
@@ -83,8 +99,9 @@ Compute a lead score based on:
 - conversion actions
 - recency of activity
 - prior provider handoff outcomes
+- return and resume behavior
 
-Lead score is a dynamic projection, not a stored constant.
+Scores are dynamic projections, not stored constants.
 
 ---
 
@@ -97,9 +114,9 @@ Event Ingestion Layer
         ↓
 Profile Processing Pipeline
         ↓
-Lead State Aggregation
+Customer Profile + Journey State Aggregation
         ↓
-Cosmos DB (Profile Store)
+Cosmos DB (Profile And Journey Store)
         ↓
 Decisioning / Ranking Services
 ```
@@ -113,30 +130,29 @@ Decisioning / Ranking Services
 ```json
 {
   "customerId": "12345",
-  "serviceInterests": ["broadband", "health_insurance"],
   "profile": {
     "householdType": "family",
     "employmentType": "full_time",
     "location": "QLD"
   },
-  "engagement": {
-    "level": "high",
-    "recentActivityScore": 0.82,
-    "sessionFrequency": "weekly"
+  "customerSummary": {
+    "isReturningCustomer": true,
+    "leadScore": 78
   },
-  "funnel": {
-    "stage": "quote_ready",
-    "progressionScore": 0.65
-  },
-  "intent": {
-    "current": "comparing_providers",
-    "confidence": 0.78
-  },
-  "eligibility": {
-    "serviceabilityConfirmed": true,
-    "renewalWindowDays": 14
-  },
-  "leadScore": 78
+  "journeys": [
+    {
+      "serviceCategory": "health_insurance",
+      "stage": "quote_ready",
+      "intent": "comparing_providers",
+      "resumeCandidate": true
+    },
+    {
+      "serviceCategory": "broadband",
+      "stage": "research",
+      "intent": "checking_availability",
+      "resumeCandidate": false
+    }
+  ]
 }
 ```
 
@@ -156,6 +172,7 @@ The system should ingest structured events such as:
 - `application_started`
 - `eligibility_checked`
 - `provider_handoff_completed`
+- `journey_resumed`
 
 ---
 
@@ -188,9 +205,9 @@ Event Stream
         ↓
 Event Processor
         ↓
-State Aggregation Logic
+Profile + Journey Aggregation Logic
         ↓
-Lead Profile Update
+Profile / Journey Update
         ↓
 Cosmos DB Projection
 ```
@@ -219,10 +236,26 @@ To keep profile state correct under asynchronous delivery, the service should gu
 
 - idempotent processing keyed by `eventId`
 - per-customer ordering using source sequence numbers where available, otherwise `occurredAt`
-- optimistic concurrency on profile projections using document versioning / ETags
-- deterministic replay for profile rebuilds and historical correction
+- optimistic concurrency on profile and journey projections using document versioning / ETags
+- deterministic replay for rebuilds and historical correction
 
-If an older event arrives after a newer projection has already been written, the processor should not blindly overwrite state. It should either merge deterministically or trigger reprocessing for that customer's projection from the authoritative event stream.
+If an older event arrives after a newer projection has already been written, the processor should not blindly overwrite state. It should either merge deterministically or trigger reprocessing for that customer's profile and journeys from the authoritative event stream.
+
+---
+
+# Active Journey Support
+
+The profile service does not have to decide the active journey permanently, but it should expose enough information for the decisioning layer to choose it reliably.
+
+Recommended outputs:
+
+- all current journey states
+- journey-level scores
+- journey recency
+- resume indicators
+- cross-journey return summary
+
+This allows live decisioning to pick the best journey for the current session without losing visibility of parallel journeys.
 
 ---
 
@@ -232,9 +265,9 @@ If an older event arrives after a newer projection has already been written, the
 
 Cosmos DB is used for:
 
-- lead profiles
+- customer profiles
+- journey-state projections
 - aggregated state
-- projection storage
 - fast read access for personalization
 
 ---
@@ -258,7 +291,7 @@ This ensures:
 | Type | Storage |
 |---|---|
 | Raw events | Event store / stream |
-| Aggregated state | Cosmos DB |
+| Profile and journey projections | Cosmos DB |
 | Analytics projections | Data warehouse / lake |
 
 ---
@@ -271,17 +304,18 @@ The service should follow CQRS principles.
 
 - ingest event
 - update profile attributes
-- recalculate lead score
-- refresh intent and eligibility projections
+- recalculate scores
+- refresh journey intent and eligibility projections
 
 ---
 
 ## Queries
 
 - get customer profile
+- get journey states
 - get engagement summary
-- get funnel state
-- get intent and eligibility state
+- get qualification summary
+- get return and resume summary
 
 ---
 
@@ -290,9 +324,10 @@ The service should follow CQRS principles.
 Maintain derived views such as:
 
 - engagement summary
-- funnel progression
+- journey progression
 - provider affinity
 - service-category propensity
+- return readiness
 
 ---
 
@@ -310,6 +345,12 @@ GET /customers/{customerId}
 
 ```http
 GET /customers/{customerId}/summary
+```
+
+### Get Journeys
+
+```http
+GET /customers/{customerId}/journeys
 ```
 
 ### Ingest Event
@@ -335,11 +376,11 @@ It transforms raw interactions into structured intelligence used by:
 - ranking engines
 - personalization services
 - sales-assist experiences
-- AI augmentation layers
+- AI interpretation and guidance layers
 
 Its core value is:
 
-> turning behavior and qualification evidence into actionable lead intelligence in real time
+> turning fragmented behavior into usable customer profile and journey intelligence for real-time decisioning
 
 ---
 
