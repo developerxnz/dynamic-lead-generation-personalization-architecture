@@ -4,7 +4,7 @@
 
 ## Overview
 
-This roadmap outlines the recommended phased delivery strategy for the lead-generation platform.
+This roadmap outlines a phased delivery strategy for the lead-generation platform.
 
 The goal is to:
 
@@ -12,52 +12,54 @@ The goal is to:
 - reduce implementation risk
 - maintain architectural flexibility
 - support rollout across multiple service categories
+- build toward an AI-forward platform without losing control of core decisioning
 
 ---
 
-# Phase 1 - Deterministic Lead Personalization
+## Delivery Principles
 
-## Goals
+- start with durable platform foundations
+- make journey selection and qualification explainable first
+- add AI where it visibly improves customer and operator experience
+- instrument every phase for lead-quality learning
+- keep multi-vertical rollout configuration-driven
 
-- establish unified lead profiles
+---
+
+## Phase 1 - Decisioning Foundation
+
+### Goals
+
+- establish the customer profile and journey-state model
 - implement service metadata and offer taxonomy
 - build deterministic ranking with suitability rules
-- deliver personalized next-best actions
+- deliver personalized next-best actions for a primary active journey
 
----
-
-## Implementation Scope
+### Implementation Scope
 
 Core capabilities:
 
-- Cosmos DB lead profiles
+- Cosmos DB customer profiles and journey states
 - Contentful metadata strategy
-- basic ranking engine
+- initial ranking engine
 - candidate retrieval
+- active-journey selection
 - session personalization flow
-- lead scoring
 
----
+### Recommended Deliverables
 
-## Recommended Deliverables
-
-### Lead Profile Foundation
+#### Profile And Journey Foundation
 
 Implement:
 
-- lead state storage
+- customer profile storage
+- journey-state storage
 - profile APIs
-- profile aggregation logic
-- engagement and qualification signal foundations
+- journey APIs
+- aggregation logic
+- qualification signal foundations
 
-Suggested technologies:
-
-- .NET
-- Cosmos DB
-
----
-
-### Content And Offer Metadata Strategy
+#### Content And Offer Metadata Strategy
 
 Enhance managed content models with:
 
@@ -68,13 +70,11 @@ Enhance managed content models with:
 - conversion-goal metadata
 - compliance flags
 
----
-
-### Ranking Engine (Initial)
+#### Ranking Engine (Initial)
 
 Implement deterministic ranking using:
 
-- category alignment
+- active-journey match
 - intent alignment
 - eligibility fit
 - funnel alignment
@@ -87,16 +87,16 @@ Ranking should remain:
 - configurable
 - deterministic
 
----
-
-### Session Personalization Flow
+#### Session Personalization Flow
 
 Build the initial personalization pipeline:
 
 ```text
 Customer Session
    ↓
-Load Lead State
+Load Profile + Journey States
+   ↓
+Select Active Journey
    ↓
 Retrieve Candidate Offers And Content
    ↓
@@ -107,9 +107,7 @@ Rank Candidates
 Return Personalized Results
 ```
 
----
-
-## Expected Outcomes
+### Expected Outcomes
 
 Phase 1 should provide:
 
@@ -121,33 +119,30 @@ Phase 1 should provide:
 
 ---
 
-# Phase 2 - Behavioral Optimization
+## Phase 2 - Behavioral And Analytics Optimization
 
-## Goals
+### Goals
 
 - improve personalization quality
 - introduce richer behavioral understanding
-- optimize ranking effectiveness
-- evolve lead qualification and intent modeling
+- optimize active-journey selection
+- evolve qualification and intent modeling
+- strengthen returning-customer re-entry
 
----
-
-## Implementation Scope
+### Implementation Scope
 
 Enhancements include:
 
 - behavioral event tracking
 - analytics pipelines
-- qualification scoring
+- customer-level and journey-level scoring refinement
 - intent refinement
 - configurable ranking weights
 - experimentation support
 
----
+### Recommended Deliverables
 
-## Recommended Deliverables
-
-### Behavioral Tracking
+#### Behavioral Tracking
 
 Track:
 
@@ -158,10 +153,9 @@ Track:
 - callback requests
 - repeated visits
 - provider handoff outcomes
+- journey resume events
 
----
-
-### Intent And Qualification Refinement
+#### Intent And Qualification Refinement
 
 Introduce richer modeling using:
 
@@ -169,19 +163,10 @@ Introduce richer modeling using:
 - session analysis
 - engagement patterns
 - eligibility evidence
+- returning-customer behavior
 - optional AI-assisted inference
 
-Example intents:
-
-- researching
-- comparing
-- quote-ready
-- application-ready
-- renewal-switching
-
----
-
-### Analytics Pipeline
+#### Analytics Pipeline
 
 Recommended architecture:
 
@@ -197,9 +182,7 @@ Aggregated Projections
 Personalization Optimization
 ```
 
----
-
-### Ranking Optimization
+#### Ranking Optimization
 
 Enhance ranking using:
 
@@ -207,32 +190,30 @@ Enhance ranking using:
 - qualification confidence
 - content effectiveness
 - configurable scoring by vertical
+- stronger active-journey and resume signals
 
----
-
-## Expected Outcomes
+### Expected Outcomes
 
 Phase 2 should provide:
 
 - better lead quality
-- more accurate intent handling
+- more accurate journey handling
 - improved conversion efficiency
 - stronger optimization feedback loops
 
 ---
 
-# Phase 3 - AI-Augmented Experiences
+## Phase 3 - AI-Forward Experiences
 
-## Goals
+### Goals
 
 - improve discovery and explanation
 - reduce friction in complex journeys
 - support natural-language guidance
+- help resolve multi-journey ambiguity
 - augment deterministic decisioning safely
 
----
-
-## Implementation Scope
+### Implementation Scope
 
 Enhancements include:
 
@@ -241,22 +222,20 @@ Enhancements include:
 - RAG experiences
 - conversational guidance
 - summary generation
+- AI-assisted journey interpretation
 
----
+### Recommended Deliverables
 
-## Recommended Deliverables
-
-### Semantic Retrieval
+#### Semantic Retrieval
 
 Implement:
 
 - vector index for managed content
 - metadata-aware retrieval
 - semantic candidate generation
+- journey-aware query expansion
 
----
-
-### Conversational Guidance
+#### Conversational Guidance
 
 Support:
 
@@ -264,10 +243,17 @@ Support:
 - service comparison help
 - eligibility explanation
 - next-step recommendations
+- assisted-sales summaries
 
----
+#### AI Explanation Layer
 
-### Multi-Vertical Expansion
+Add:
+
+- "why this is relevant" explanations
+- resume guidance for returning customers
+- secondary-journey prompts where appropriate
+
+#### Multi-Vertical Expansion
 
 Roll out new service lines primarily through configuration:
 
@@ -275,17 +261,9 @@ Roll out new service lines primarily through configuration:
 - ranking rule sets
 - provider onboarding
 - analytics segmentation
+- AI grounding content
 
-Examples:
-
-- novated leasing
-- health insurance
-- broadband
-- future service categories
-
----
-
-## Expected Outcomes
+### Expected Outcomes
 
 Phase 3 should provide:
 
@@ -296,13 +274,41 @@ Phase 3 should provide:
 
 ---
 
-# Summary
+## Phase 4 - Operating Model Maturity
+
+### Goals
+
+- make experimentation routine
+- improve governance around AI and personalization
+- turn platform signals into repeatable commercial optimization
+
+### Implementation Scope
+
+Enhancements include:
+
+- mature experimentation workflows
+- AI governance and review processes
+- provider and channel performance optimization
+- stronger operational dashboards
+
+### Expected Outcomes
+
+Phase 4 should provide:
+
+- better organizational confidence in the platform
+- faster iteration loops
+- clearer ownership across product, engineering, marketing, and operations
+
+---
+
+## Summary
 
 The recommended delivery sequence is:
 
-1. deterministic personalization
-2. behavioral optimization
-3. AI-augmented experiences
+1. decisioning foundation
+2. behavioral and analytics optimization
+3. AI-forward experiences
+4. operating model maturity
 
 This provides:
 

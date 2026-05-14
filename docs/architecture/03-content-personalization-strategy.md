@@ -4,65 +4,79 @@
 
 ## Overview
 
-This document defines how offers, educational content, tools, and CTAs are selected for each lead in a multi-vertical service platform.
+This document defines how offers, educational content, tools, explanations, and CTAs are selected for each lead in a multi-vertical service platform.
 
-The goal is not simply to recommend content.
+The goal is not simply to recommend content. The goal is to:
 
-The goal is:
+> deliver the right offer, guidance, and next action for the most relevant current journey in a way that improves qualified conversion
 
-> deliver the *right offer, guidance, and next action* to the right lead at the right moment to maximize qualified conversion.
+In this architecture, personalization is a coordinated decision across:
+
+- customer profile
+- journey states
+- business constraints
+- managed metadata
+- deterministic ranking
+- AI-assisted interpretation and explanation
 
 ---
 
-# Goals
+## Goals
 
 The personalization layer should:
 
-- match experiences to customer intent and service category
+- match experiences to the most relevant active journey
 - optimize for qualified lead outcomes such as quotes, applications, and callbacks
+- support customers traversing multiple journeys at once
 - account for eligibility, suitability, and regional availability
 - combine metadata, behavior, and session context
 - remain explainable and testable
-- separate content selection from content storage
 
 ---
 
-# Core Personalization Model
+## Core Personalization Model
 
-Personalization is based on four inputs:
+Personalization is based on five inputs.
 
-## 1. Customer State
+### 1. Customer Profile
 
 Provided by the Customer Profile Service:
 
-- service interests
-- profile and household attributes
-- eligibility signals
-- engagement level
-- funnel stage
-- lead score
-- behavioral history
+- household and employment attributes
+- location and stable customer facts
+- returning-customer summary
+- cross-journey lead score
 
----
+### 2. Journey States
 
-## 2. Content And Offer Metadata
+Also provided by the Customer Profile Service:
+
+- service category
+- intent
+- stage
+- urgency
+- resume status
+- qualification state
+- journey-level score
+
+The platform may have multiple journey states for a customer, but it should select one as the primary driver for the current session.
+
+### 3. Content And Offer Metadata
 
 Provided by the CMS or offer catalog:
 
-- service_category
+- service category
 - subtype
 - provider
 - region
 - eligibility rules reference
-- conversion_goal
-- cta_type
-- compliance_flags
+- conversion goal
+- cta type
+- compliance flags
 - freshness
 - priority
 
----
-
-## 3. Context Signals
+### 4. Context Signals
 
 Real-time signals such as:
 
@@ -71,11 +85,9 @@ Real-time signals such as:
 - campaign source
 - referral partner
 - current session behavior
-- assisted-sales vs self-serve journey type
+- assisted-sales versus self-serve journey type
 
----
-
-## 4. Business Constraints
+### 5. Business Constraints
 
 Deterministic rules such as:
 
@@ -87,29 +99,45 @@ Deterministic rules such as:
 
 ---
 
-# Personalization Flow
+## Personalization Flow
 
-```text
-Customer Session
-        ↓
-Load Lead State
-        ↓
-Retrieve Candidate Offers And Content
-        ↓
-Apply Eligibility / Suitability Filters
-        ↓
-Rank Remaining Candidates
-        ↓
-Select Next Best Actions
-        ↓
-Render In Journey
+```mermaid
+flowchart TD
+    A[Customer session] --> B[Load profile and journey states]
+    B --> C[Select active journey for this session]
+    C --> D[Retrieve candidate offers and content]
+    D --> E[Apply eligibility and suitability filters]
+    E --> F[Rank remaining candidates]
+    F --> G[Select next best actions]
+    G --> H[Render in journey]
 ```
+
+This makes the decisioning model explicit:
+
+1. load the customer-level context
+2. choose the journey that should lead the session
+3. personalize around that journey while still allowing supporting cross-journey signals
 
 ---
 
-# Candidate Selection Strategy
+## Active-Journey Selection
 
-## Principle: Broad First, Narrow Later
+When multiple journeys exist, the platform should choose the active journey using:
+
+- recency of meaningful events
+- current session behavior
+- campaign and channel context
+- journey-level score
+- qualification confidence
+- whether the customer is resuming an interrupted flow
+
+This avoids forcing the customer into a single permanent category while still keeping the current experience coherent.
+
+---
+
+## Candidate Selection Strategy
+
+### Principle: Broad First, Narrow Later
 
 The system should first retrieve a broad candidate set, then narrow through deterministic filtering and ranking.
 
@@ -119,43 +147,39 @@ Avoid overly restrictive CMS queries unless needed for hard constraints such as:
 - unsupported regions
 - missing compliance approval
 
----
-
-## Filtering Dimensions
+### Filtering Dimensions
 
 Initial filtering should include:
 
-- service category alignment
-- funnel stage compatibility
+- active-journey category alignment
+- funnel-stage compatibility
 - region and provider availability
 - basic eligibility and suitability checks
 
+Cross-sell or secondary-journey candidates can still be included, but they should be intentionally positioned rather than mixed blindly into the primary journey set.
+
 ---
 
-# Ranking Strategy Overview
+## Ranking Strategy Overview
 
 Ranking determines final ordering of offers, content, and CTAs.
 
 It is handled by the Ranking Engine, but relies on this strategy.
 
----
-
-## Primary Ranking Signals
+### Primary Ranking Signals
 
 | Signal | Purpose |
 |---|---|
-| category match | Align to the most relevant service line |
+| active-journey match | Align to the journey the platform should optimize now |
 | intent alignment | Match the current customer need |
 | eligibility fit | Prefer actions the lead can actually complete |
 | funnel alignment | Match the current decision stage |
 | behavioral relevance | Reflect recent actions and repeat interests |
-| cta alignment | Improve quote, callback, or application likelihood |
-| provider / campaign priority | Support commercial objectives explicitly |
+| CTA alignment | Improve quote, callback, or application likelihood |
+| provider or campaign priority | Support commercial objectives explicitly |
 | freshness | Ensure current offers and guidance |
 
----
-
-## Qualified Conversion Focus
+### Qualified Conversion Focus
 
 Ranking is optimized for:
 
@@ -168,11 +192,11 @@ Ranking is optimized for:
 
 ---
 
-# Content Metadata Strategy
+## Content Metadata Strategy
 
-## Required Metadata Model
+### Required Metadata Model
 
-All managed assets should include universal metadata:
+All managed assets should include universal metadata.
 
 | Field | Purpose |
 |---|---|
@@ -180,16 +204,14 @@ All managed assets should include universal metadata:
 | subtype | More specific classification inside a vertical |
 | provider | Provider or partner association |
 | region | Geographic availability |
-| funnel_stage | Research / Compare / Quote / Apply / Renew |
+| funnel_stage | Research, compare, quote, apply, renew, or resume |
 | conversion_goal | Intended business outcome |
-| cta_type | Quote, callback, compare, check-eligibility, apply |
+| cta_type | Quote, callback, compare, check eligibility, apply, resume |
 | compliance_flags | Approval and disclosure requirements |
 | freshness | Recency and validity relevance |
 | priority | Explicit business control |
 
----
-
-## Service-Specific Extensions
+### Service-Specific Extensions
 
 Verticals can extend the metadata model.
 
@@ -201,51 +223,26 @@ Examples:
 
 ---
 
-## Example Content Entry
+## Personalization Dimensions
 
-```json
-{
-  "title": "Compare family health cover with extras",
-  "service_category": "health_insurance",
-  "subtype": "family_cover",
-  "provider": "Provider A",
-  "region": ["NSW", "VIC"],
-  "funnel_stage": "compare",
-  "conversion_goal": "start_quote",
-  "cta_type": "get_quote",
-  "compliance_flags": ["approved_health_copy"],
-  "freshness": "high",
-  "priority": 3
-}
-```
-
----
-
-# Personalization Dimensions
-
-## 1. Service Category Matching
+### 1. Journey Matching
 
 Match assets based on:
 
-- current service interest
-- adjacent service cross-sell potential
-- provider affinity
+- active journey category
+- active journey intent
+- active journey stage
+- qualification and suitability state
 
----
+### 2. Cross-Journey Support
 
-## 2. Funnel Stage Matching
+When appropriate, the experience can also include:
 
-Align content to customer journey:
+- adjacent-service cross-sell prompts
+- secondary-journey reminders
+- lightweight exploration hooks for other active categories
 
-- Research -> educational guides and calculators
-- Compare -> provider comparisons and suitability explainers
-- Quote -> quote-start and eligibility CTAs
-- Apply -> conversion-focused support and reassurance
-- Renew / Switch -> urgency-driven switching messages
-
----
-
-## 3. Behavioral Alignment
+### 3. Behavioral Alignment
 
 Use observed behavior:
 
@@ -255,9 +252,7 @@ Use observed behavior:
 - calculator usage
 - return frequency
 
----
-
-## 4. Intent Alignment
+### 4. Intent Alignment
 
 Infer intent such as:
 
@@ -270,29 +265,31 @@ Infer intent such as:
 
 ---
 
-# Personalization Rules
+## Personalization Rules
 
-## Rule 1: Relevance First
+### Rule 1: Relevance First
 
 Candidates must pass basic relevance thresholds before ranking.
 
----
-
-## Rule 2: Suitability Before Promotion
+### Rule 2: Suitability Before Promotion
 
 Do not promote offers or CTAs that fail deterministic suitability, eligibility, or compliance constraints.
 
----
+### Rule 3: Active Journey Leads
 
-## Rule 3: Qualified Conversion Bias
+The most relevant current journey should anchor the session experience.
+
+### Rule 4: Cross-Journey Support Must Be Intentional
+
+Secondary-journey content should support, not confuse, the primary path.
+
+### Rule 5: Qualified Conversion Bias
 
 When multiple items are similarly relevant:
 
 > prefer the item most likely to produce a qualified lead outcome
 
----
-
-## Rule 4: Diversity
+### Rule 6: Diversity
 
 Avoid showing:
 
@@ -302,20 +299,11 @@ Avoid showing:
 
 ---
 
-## Rule 5: Freshness Awareness
+## AI Usage In Personalization
 
-Prefer:
+AI should help with:
 
-- current approved offers
-- active campaigns
-- recently updated explainer content
-
----
-
-# AI Usage In Personalization
-
-AI is used only for:
-
+- active-journey selection support
 - intent inference
 - content summarization
 - explanation generation
@@ -323,105 +311,47 @@ AI is used only for:
 
 AI must not be used for:
 
-- ranking decisions
+- hard ranking authority
 - lead scoring authority
 - business rule enforcement
 - compliance overrides
 
 ---
 
-# RAG Integration (Optional Layer)
+## Performance Considerations
 
-RAG can enhance personalization by:
-
-- enriching offer explanations
-- answering service-specific questions
-- improving discovery across complex service offer sets
-
-Example:
-
-```text
-User asks: "What broadband option suits a family working from home?"
-
-→ Retrieve relevant broadband guides, speed explainers, and provider offers
-→ Inject customer context such as household type and location
-→ Generate grounded explanation + recommended next action
-```
-
----
-
-# Performance Considerations
-
-## Latency Target
+### Latency Target
 
 Personalization should be designed for:
 
-- fast session experiences (<200ms target for the decisioning layer)
+- fast session experiences
 - cached candidate retrieval where possible
-- precomputed customer state
+- precomputed profile and journey state
 
----
-
-## Optimization Strategies
+### Optimization Strategies
 
 - cache CMS metadata with publish-aware invalidation
 - precompute intent and engagement signals
 - avoid heavy runtime calculations in ranking
-- reuse candidate sets only when profile and content versions remain valid
+- reuse candidate sets only when profile, journey, and content versions remain valid
 
 ---
 
-## Cache Usage Rules
-
-Caching should preserve freshness for lead decisioning:
-
-- invalidate metadata caches on publish, unpublish, expiry, or compliance changes
-- reuse candidate sets only when the customer profile version has not changed
-- prefer short TTLs where intent and eligibility change quickly
-- do not serve a cached candidate set if a fresher profile or serviceability result is available
-
----
-
-# Observability
-
-Track:
-
-- asset impressions
-- click-through rates
-- quote starts
-- quote completion
-- application progression
-- provider handoff quality
-- personalization uplift by vertical
-
----
-
-# Common Pitfalls
-
-Avoid:
-
-- over-filtering too early
-- embedding business logic into CMS queries
-- using AI as a decision engine
-- ignoring qualification and compliance constraints
-- static personalization logic across all verticals
-
----
-
-# Summary
+## Summary
 
 The Content Personalization Strategy defines how offers and content become relevant to each lead.
 
 It connects:
 
-- customer state
+- customer profile
+- journey states
 - content and offer metadata
 - behavioral signals
 - ranking logic
 
 to deliver:
 
-> dynamic, qualified-conversion-focused lead experiences at scale
+> dynamic, qualified-conversion-focused lead experiences at scale, even when customers are traversing multiple journeys
 
 ---
 

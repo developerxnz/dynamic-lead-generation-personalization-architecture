@@ -8,6 +8,8 @@ The Ranking Engine is the core decisioning component of the platform.
 
 It determines which offers, content items, and CTAs are shown to a lead after candidate retrieval and suitability screening.
 
+It assumes the customer may have multiple journey states, but ranking should operate against the **active journey selected for the current session**.
+
 Its purpose is to:
 
 > maximize qualified lead conversion in an explainable, deterministic way
@@ -22,8 +24,8 @@ The ranking engine should:
 - optimize for qualified conversion likelihood
 - remain deterministic and explainable
 - support configurable business rules
-- integrate with lead state and behavioral signals
-- allow future experimentation and AI augmentation
+- integrate with customer-profile, journey-state, and behavioral signals
+- allow future experimentation and AI-assisted relevance support
 
 ---
 
@@ -42,17 +44,18 @@ The ranking engine is responsible for:
 
 # Inputs To The Ranking Engine
 
-## 1. Lead State
+## 1. Customer Profile And Active Journey
 
 From the Customer Profile Service:
 
-- service interests
 - household and employment attributes
 - engagement level
-- funnel stage
-- lead score
+- customer-level lead score
+- active journey stage
+- active journey intent
 - urgency and renewal window
-- eligibility evidence
+- qualification evidence
+- returning-customer signals
 
 ---
 
@@ -96,6 +99,19 @@ From analytics systems:
 
 ---
 
+## 5. AI-Assisted Signals
+
+AI can contribute:
+
+- semantic relevance support
+- inferred intent support
+- explanation hints
+- likely next-question signals
+
+These inputs should improve ranking quality, but they should remain subordinate to deterministic policy controls.
+
+---
+
 # Scoring Model
 
 ## Example Weighted Model
@@ -105,11 +121,13 @@ Each candidate is scored using weighted signals:
 ```text
 Total Score =
   Category Match Score
++ Active Journey Fit Score
 + Intent Alignment Score
 + Eligibility Fit Score
 + Funnel Alignment Score
 + Behavioral Relevance Score
 + CTA Likelihood Score
++ AI Relevance Support Score
 + Commercial Priority Score
 + Freshness Score
 ```
@@ -124,8 +142,10 @@ Total Score =
 | Intent alignment | 6 |
 | Funnel alignment | 5 |
 | CTA likelihood | 5 |
+| Active journey fit | 5 |
 | Behavioral relevance | 4 |
 | Category match | 4 |
+| AI relevance support | 3 |
 | Commercial priority | 2 |
 | Freshness | 2 |
 
@@ -136,12 +156,13 @@ Total Score =
 ```text
 Candidate A:
 - Eligibility fit: +7
+- Active journey fit: +5
 - Intent alignment: +6
 - Funnel alignment: +5
 - CTA likelihood: +5
 - Category match: +4
 
-Total = 27
+Total = 32
 ```
 
 ---
@@ -167,6 +188,8 @@ Before ranking, remove or suppress candidates that fail:
 - compliance requirements
 - hard eligibility rules
 
+The suitability screen should be driven primarily by the active journey's qualification state.
+
 ---
 
 ## Step 3: Feature Scoring
@@ -176,6 +199,7 @@ Convert raw inputs into:
 - relevance scores
 - qualification confidence
 - conversion likelihood indicators
+- active-journey fit
 
 ---
 
@@ -198,6 +222,7 @@ Apply tie-breakers such as:
 - freshness
 - campaign priority
 - provider diversity
+- secondary-journey suppression
 
 ---
 
@@ -241,7 +266,7 @@ The ranking engine should not:
 
 - retrieve content
 - infer intent authoritatively
-- perform AI reasoning
+- own free-form AI interpretation
 - own CMS logic
 
 It should only:
@@ -286,6 +311,7 @@ To avoid repetitive results:
 - exclude expired or withdrawn offers
 - suppress providers with temporary operational issues
 - boost renewal or churn-save content during renewal windows
+- allow carefully positioned secondary-journey prompts without displacing the active journey
 
 ---
 
@@ -299,6 +325,7 @@ Each ranked item should return:
   "score": 27,
   "reasons": [
     "Category match: health_insurance",
+    "Active journey fit: health_insurance quote journey",
     "Intent alignment: comparing providers",
     "Eligibility fit: approved for quote flow",
     "CTA alignment: get_quote"
@@ -324,7 +351,8 @@ The ranking engine must:
 ## Optimization Strategies
 
 - precompute behavioral aggregates
-- cache lead profiles by profile version
+- cache customer profiles by profile version
+- cache journey-state inputs by journey version
 - cache content metadata by publish version
 - avoid recomputing static scores
 
@@ -337,6 +365,7 @@ The ranking engine should cache inputs and derived features, not assume a single
 Recommended rules:
 
 - invalidate profile-dependent feature caches when the profile version changes
+- invalidate journey-dependent feature caches when the active journey changes
 - invalidate content-dependent caches when offers, disclosures, or eligibility references change
 - shorten TTLs when urgency, renewal, or serviceability signals are volatile
 
@@ -350,6 +379,7 @@ It is responsible for:
 
 - selecting the best next actions
 - applying business logic
+- choosing results that best fit the active journey
 - optimizing for qualified lead outcomes
 - ensuring explainability and consistency
 

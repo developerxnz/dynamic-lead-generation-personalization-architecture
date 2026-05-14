@@ -4,48 +4,49 @@
 
 ## Overview
 
-This document defines how AI and Retrieval-Augmented Generation (RAG) should be used within the lead-generation platform.
+This document defines how AI and Retrieval-Augmented Generation should be used within the lead-generation platform.
 
 The guiding principle is:
 
-> AI enhances understanding and experience - deterministic systems control decisions
+> AI should be a first-class experience and interpretation layer, while deterministic systems remain authoritative for protected decisions
 
 AI is used to improve:
 
-- intent interpretation
+- active-journey interpretation
 - content and offer explanation
 - conversational guidance
 - semantic retrieval
-- personalization enrichment
+- personalization quality
+- returning-customer understanding
 
-It is not used for authoritative business decisioning.
+It should play a major role in the platform, but not own ranking policy, eligibility, or compliance outcomes.
 
 ---
 
-# Goals
+## Strategic Goals
 
 The AI layer should:
 
-- improve discovery across large offer and content sets
-- support natural language interactions across service categories
-- help explain why a recommendation is relevant
-- enrich customer intent signals
-- reduce friction in quote and application journeys
+- improve discovery across large multi-vertical content and offer sets
+- support natural-language interactions across service categories
+- help identify the most relevant current journey when multiple journeys exist
+- explain why a recommendation is relevant in human-readable terms
+- reduce friction in quote, callback, and application journeys
 - remain grounded, reviewable, and safe
 
 ---
 
-# AI vs Deterministic Systems
+## AI Vs Deterministic Systems
 
-## Deterministic Systems (Authoritative)
+### Deterministic Systems (Authoritative)
 
 Responsible for:
 
 - ranking logic
-- lead scoring
+- customer-level and journey-level scoring
 - eligibility and suitability rules
 - provider suppression and campaign logic
-- business constraints
+- hard business constraints
 
 These must be:
 
@@ -54,35 +55,35 @@ These must be:
 - testable
 - auditable
 
----
-
-## AI Systems (Augmentation Layer)
+### AI Systems (Interpretation And Experience Layer)
 
 Responsible for:
 
-- intent inference assistance
+- intent interpretation support
+- multi-journey disambiguation support
 - summarization
 - semantic understanding
-- content enrichment
 - conversational responses
 - query expansion
+- explanation generation
 
-AI is treated as:
+AI should be treated as:
 
-> a supporting intelligence layer, not a decision engine
+> a powerful intelligence layer that improves understanding, discovery, and guidance without becoming the policy engine
 
 ---
 
-# Recommended AI Capabilities
+## Recommended AI Capabilities
 
-## 1. Intent Interpretation
+### 1. Journey Interpretation
 
-AI can infer customer intent from:
+AI can help infer which journey is most relevant now from:
 
 - form responses
 - click behavior
 - session activity
 - free-text questions
+- prior journey history
 
 Example outputs:
 
@@ -90,11 +91,9 @@ Example outputs:
 - comparing providers
 - checking eligibility
 - ready for quote
-- ready to apply
+- returning to resume
 
----
-
-## 2. Offer And Content Summarization
+### 2. Offer And Content Summarization
 
 AI can generate:
 
@@ -103,44 +102,41 @@ AI can generate:
 - plain-language comparisons
 - CTA context summaries
 
-Used for improving:
+This improves:
 
 - comprehension
 - confidence
-- conversion
+- conversion readiness
 
----
-
-## 3. Personalized Messaging
+### 3. Personalized Guidance
 
 AI can adapt:
 
 - hero messages
-- descriptions
 - onboarding prompts
 - CTA explanations
+- reassurance content
+- objection-handling summaries
 
-Based on:
+based on:
 
 - service category
 - customer profile
-- funnel stage
+- active journey stage
 - recent behavior
+- returning-customer history
 
----
-
-## 4. Conversational Experiences
+### 4. Conversational Experiences
 
 AI enables:
 
 - quote-prep assistants
-- service discovery chat
+- service discovery guidance
 - contextual help systems
 - eligibility guidance journeys
+- assisted-sales support summaries
 
----
-
-## 5. Query Expansion
+### 5. Query Expansion
 
 AI can expand user intent into richer search queries.
 
@@ -158,64 +154,55 @@ Expanded into:
 
 ---
 
-# RAG (Retrieval-Augmented Generation)
+## RAG Strategy
 
-## Overview
+### What RAG Should Do
 
 RAG combines:
 
-- retrieval (vector search + metadata filtering)
-- generation (LLM responses)
+- retrieval
+- grounding context
+- generation
 
-to produce contextual, grounded outputs.
+to produce responses that are more useful, more accurate, and easier to trust.
 
----
+### RAG Flow
 
-## RAG Flow
-
-```text
-User Input
-        ↓
-Intent Extraction (AI)
-        ↓
-Metadata + Vector Retrieval
-        ↓
-Context Assembly
-        ↓
-LLM Response Generation
-        ↓
-Personalized Output
+```mermaid
+flowchart TD
+    A[User input or journey context] --> B[AI interpretation]
+    B --> C[Metadata and vector retrieval]
+    C --> D[Context assembly]
+    D --> E[LLM response generation]
+    E --> F[Grounded explanation or recommendation]
 ```
 
----
-
-## RAG Data Sources
+### RAG Data Sources
 
 RAG can use:
 
 - managed offer and content assets
-- customer profile data
-- engagement history
+- customer profile summaries
+- journey-state summaries
 - provider FAQs
 - disclosure and eligibility guidance
+- calculator and tool descriptions
 
----
+### RAG Use Cases
 
-## RAG Use Cases
-
-### 1. Novated Leasing Guidance
+#### Novated Leasing Guidance
 
 - explain salary packaging concepts
 - describe employer eligibility requirements
 - recommend next calculators or contact actions
 
-### 2. Health Insurance Discovery
+#### Health Insurance Discovery
 
 - compare cover tiers in simple language
-- explain hospital vs extras trade-offs
+- explain hospital versus extras trade-offs
 - guide leads toward an appropriate quote path
 
-### 3. Broadband Selection
+#### Broadband Selection
 
 - explain speed tiers and household fit
 - answer moving-house or switching questions
@@ -223,24 +210,64 @@ RAG can use:
 
 ---
 
-# Guardrails
+## Multi-Journey AI Support
 
-AI outputs should:
+A major platform advantage is helping customers who are active in more than one journey.
 
-- cite retrieved source material where appropriate
-- avoid inventing eligibility outcomes
-- defer to deterministic systems for ranking and constraints
-- avoid personalized advice that exceeds approved policy boundaries
+AI can help by:
+
+- summarizing parallel journey activity
+- identifying which journey seems most relevant in the current session
+- surfacing secondary-journey reminders without derailing the primary path
+- generating better resume-language for returning customers
+
+This is especially useful when deterministic signals alone are insufficient to disambiguate intent.
 
 ---
 
-# Summary
+## Guardrails
 
-AI should make the platform easier to understand and use without replacing deterministic lead decisioning.
+AI outputs should:
 
-The long-term goal is a hybrid intelligence system:
+- remain grounded in retrieved material
+- avoid inventing eligibility or suitability outcomes
+- defer to deterministic systems for ranking and protected constraints
+- avoid personalized advice beyond approved policy boundaries
+- be traceable to the content and prompt context used
 
-> deterministic core + AI augmentation layer = scalable, explainable lead generation
+Recommended safety controls:
+
+- approved grounding sources only
+- prompt templates under engineering control
+- output moderation and policy checks
+- observability for generated responses
+
+---
+
+## Operating Model
+
+To make AI credible in product and engineering review, the platform should define:
+
+- which AI use cases are customer-facing
+- which are internal-only
+- who approves AI grounding content
+- how prompts and model settings are versioned
+- how hallucination or policy-risk incidents are reviewed
+
+This matters as much as the model choice itself.
+
+---
+
+## Summary
+
+AI should be a visible, valuable part of the platform:
+
+- improving journey interpretation
+- improving retrieval and explanation
+- supporting guided and conversational experiences
+- strengthening returning-customer re-engagement
+
+while deterministic systems retain authority over qualification, suitability, ranking, and protected business controls.
 
 ---
 

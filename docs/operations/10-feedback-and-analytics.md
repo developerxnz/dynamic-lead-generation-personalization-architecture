@@ -10,31 +10,33 @@ The platform should continuously measure:
 
 - engagement
 - qualification behavior
+- active-journey selection quality
 - ranking effectiveness
-- recommendation quality
+- AI-assisted experience quality
 - progression toward quote, application, and provider handoff
 
 Analytics should be treated as a core platform capability rather than a secondary concern.
 
 ---
 
-# Goals
+## Goals
 
 The analytics platform should support:
 
 - personalization optimization
 - ranking improvements
 - lead-scoring refinement
+- active-journey refinement
 - conversion analysis
 - experimentation
 - behavioral understanding
-- customer journey analysis
+- customer and journey analysis
 
 ---
 
-# Core Principles
+## Core Principles
 
-## Collect Structured Events
+### Collect Structured Events
 
 All behavioral events should follow consistent schemas.
 
@@ -46,9 +48,7 @@ This enables:
 - experimentation
 - debugging
 
----
-
-## Separate Operational And Analytical Concerns
+### Separate Operational And Analytical Concerns
 
 Operational systems should remain optimized for:
 
@@ -63,9 +63,7 @@ Analytics systems should focus on:
 - optimization
 - historical analysis
 
----
-
-## Process Analytics Asynchronously
+### Process Analytics Asynchronously
 
 Analytics processing should not slow down:
 
@@ -78,9 +76,9 @@ Use asynchronous event pipelines wherever possible.
 
 ---
 
-# Recommended Signals
+## Recommended Signals
 
-## Engagement Signals
+### Engagement Signals
 
 Track:
 
@@ -91,9 +89,7 @@ Track:
 - calculator usage
 - form starts
 
----
-
-## Qualification Signals
+### Qualification Signals
 
 Track:
 
@@ -103,9 +99,7 @@ Track:
 - contact preference selections
 - renewal timing
 
----
-
-## Conversion Signals
+### Conversion Signals
 
 Track:
 
@@ -116,9 +110,7 @@ Track:
 - provider handoff completion
 - downstream activation proxies
 
----
-
-## Personalization Signals
+### Personalization Signals
 
 Track:
 
@@ -128,9 +120,19 @@ Track:
 - recommendation effectiveness
 - personalization confidence
 
+### AI Signals
+
+Track:
+
+- AI explanation shown
+- AI explanation clicked or expanded
+- conversational assist usage
+- AI-supported journey selection outcome
+- retrieval grounding quality indicators
+
 ---
 
-# Recommended Event Model
+## Recommended Event Model
 
 Example event structure:
 
@@ -138,38 +140,38 @@ Example event structure:
 {
   "eventType": "quote_started",
   "customerId": "12345",
+  "journeyId": "journey-broadband-001",
   "timestamp": "2026-05-11T12:00:00Z",
   "sessionId": "session-001",
   "metadata": {
     "serviceCategory": "broadband",
     "provider": "Provider A",
     "funnelStage": "quote",
-    "region": "NSW"
+    "region": "NSW",
+    "activeJourneySelected": true
   }
 }
 ```
 
+Including `journeyId` is important once the platform supports multiple concurrent journeys.
+
 ---
 
-# Recommended Analytics Architecture
+## Recommended Analytics Architecture
 
-```text
-Frontend / CRM Events
-        ↓
-Event Collection API
-        ↓
-Event Stream / Queue
-        ↓
-Analytics Processing
-        ↓
-Aggregated Projections
-        ↓
-Dashboards / Optimization / Decisioning Feedback
+```mermaid
+flowchart TD
+    A[Frontend, CRM, and assisted-sales events] --> B[Event collection API]
+    B --> C[Event stream or queue]
+    C --> D[Analytics processing]
+    D --> E[Aggregated projections]
+    E --> F[Dashboards and reporting]
+    E --> G[Decisioning feedback loops]
 ```
 
 ---
 
-# Recommended Technologies
+## Recommended Technologies
 
 | Capability | Suggested Technology |
 |---|---|
@@ -182,22 +184,25 @@ Dashboards / Optimization / Decisioning Feedback
 
 ---
 
-# Analytics Projections
+## Analytics Projections
 
 Recommended projections include:
 
 | Projection | Purpose |
 |---|---|
 | customer_engagement | Engagement scoring |
+| journey_performance | Journey-specific conversion and drop-off analysis |
 | qualified_lead_score | Lead-quality measurement |
 | provider_performance | Partner and provider optimization |
 | conversion_funnel | Funnel analysis |
 | personalization_effectiveness | Recommendation quality |
-| behavioral_patterns | Intent analysis |
+| ai_experience_effectiveness | AI-assisted experience quality |
 
 ---
 
-# Performance Analysis
+## What The Platform Should Measure
+
+### Performance Analysis
 
 Measure:
 
@@ -208,9 +213,16 @@ Measure:
 - eligibility drop-off points
 - campaign effectiveness
 
----
+### Journey Analysis
 
-# Personalization Effectiveness
+Evaluate:
+
+- which journey was selected as active
+- whether that journey was the right one in hindsight
+- when secondary journeys should have been surfaced
+- where returning customers resume or abandon
+
+### Personalization Effectiveness
 
 Evaluate:
 
@@ -222,13 +234,14 @@ Evaluate:
 
 Suggested comparisons:
 
-- personalized vs non-personalized experiences
-- deterministic vs AI-assisted experiences
+- personalized versus non-personalized experiences
+- deterministic versus AI-assisted experiences
 - ranking strategy comparisons by vertical
+- single-journey versus multi-journey presentation strategies
 
 ---
 
-# Funnel Analytics
+## Funnel Analytics
 
 Track customer movement through:
 
@@ -253,7 +266,7 @@ Measure:
 
 ---
 
-# Experimentation Support
+## Experimentation Support
 
 The analytics platform should support:
 
@@ -261,16 +274,18 @@ The analytics platform should support:
 - ranking experiments
 - provider mix experiments
 - vertical-specific journey tests
+- AI explanation and conversational experiments
 
 ---
 
-# Summary
+## Summary
 
 Analytics should help the platform maximize qualified lead outcomes while preserving explainability.
 
 The platform should prioritize:
 
 - structured events
+- journey-aware measurement
 - asynchronous processing
 - replayable history
 - explainable metrics
