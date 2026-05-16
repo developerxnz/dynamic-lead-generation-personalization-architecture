@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1080" viewBox="0 0 1400 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Novated lease funnel example, compare stage</title>
+  <desc id="desc">Taller compare-stage example with more space for comparison cards and decisioning detail.</desc>
+  <rect width="1400" height="1080" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="1352" height="1032" rx="20" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="48" y="62" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2a44">Novated Leasing Funnel Example 2 - Compare and Check Fit</text>
+  <text x="48" y="92" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#5b6780">Taller mid-funnel example showing richer comparison content, employer-fit prompts, and stronger CTA shaping</text>
+
+  <rect x="48" y="120" width="858" height="896" rx="18" fill="#fbfcff" stroke="#d9e1ee"/>
+  <rect x="930" y="120" width="422" height="896" rx="18" fill="#f8fafe" stroke="#d9e1ee"/>
+  <line x1="906" y1="120" x2="906" y2="1016" stroke="#e1e7f0" stroke-width="2"/>
+
+  <rect x="72" y="148" width="810" height="138" rx="18" fill="#184d8d"/>
+  <text x="104" y="184" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#d6e5ff">Comparison header</text>
+  <text x="104" y="220" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#ffffff">Compare EV novated lease options and confirm whether</text>
+  <text x="104" y="252" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#ffffff">your employer supports salary packaging</text>
+  <text x="104" y="278" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#d6e5ff">The content mix becomes more evaluative and begins to guide the customer toward eligibility-based next steps.</text>
+
+  <rect x="92" y="330" width="382" height="274" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="112" y="350" width="342" height="124" rx="14" fill="#eef4ff"/>
+  <text x="130" y="406" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">Provider comparison summary</text>
+  <text x="130" y="434" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Lease inclusions, servicing support, and take-home-pay effect</text>
+  <text x="112" y="520" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Comparison card</text>
+  <text x="112" y="546" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Shows the difference between provider models and how each one fits a salary-packaging decision.</text>
+  <rect x="112" y="562" width="118" height="24" rx="12" fill="#eefaf3"/>
+  <text x="134" y="578" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#1f2a44">Compare providers</text>
+
+  <rect x="500" y="330" width="382" height="274" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="520" y="350" width="342" height="124" rx="14" fill="#eefaf3"/>
+  <text x="540" y="402" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">Employer-fit checkpoint</text>
+  <text x="540" y="430" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Is your employer already supporting novated leases?</text>
+  <text x="520" y="520" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Eligibility-guidance card</text>
+  <text x="520" y="546" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">This card helps qualify whether a quote-ready CTA should be promoted or delayed.</text>
+  <rect x="520" y="560" width="182" height="40" rx="10" fill="#ff8c42"/>
+  <text x="563" y="585" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Check employer eligibility</text>
+
+  <rect x="92" y="636" width="790" height="170" rx="16" fill="#fff8ec" stroke="#f0dec1"/>
+  <text x="112" y="672" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Mid-funnel progression</text>
+  <text x="112" y="702" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">The journey now prioritizes comparison and fit-check guidance because the customer has shown</text>
+  <text x="112" y="724" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">calculator engagement, provider exploration, and stronger purchase intent.</text>
+  <path d="M112 784 H292 L272 750 H132 Z" fill="#dce7ff"/>
+  <path d="M336 784 H516 L496 750 H356 Z" fill="#8ab4ff"/>
+  <path d="M560 784 H740 L720 750 H580 Z" fill="#5c90ff"/>
+  <text x="170" y="770" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#1f2a44">Research</text>
+  <text x="391" y="770" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Compare</text>
+  <text x="621" y="770" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Quote next</text>
+
+  <rect x="92" y="834" width="790" height="150" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="112" y="870" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">What the customer sees now</text>
+  <text x="112" y="900" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">1. Richer comparison content</text>
+  <text x="112" y="922" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">2. Employer-fit prompt that qualifies the next action</text>
+  <text x="112" y="944" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">3. Quote-ready CTA still gated until eligibility confidence improves</text>
+
+  <text x="954" y="160" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">Matching inputs and decision trace</text>
+  <rect x="954" y="184" width="374" height="110" rx="14" fill="#eef4ff" stroke="#cfdbf4"/>
+  <text x="972" y="210" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Profile and journey</text>
+  <text x="972" y="238" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">service_category: novated_leasing</text>
+  <text x="972" y="258" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">funnel_stage: compare</text>
+  <text x="972" y="278" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">intent: comparing_providers, checking_eligibility</text>
+
+  <rect x="954" y="310" width="374" height="182" rx="14" fill="#eefaf3" stroke="#d3ebdc"/>
+  <text x="972" y="336" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Contentful metadata used</text>
+  <text x="972" y="364" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">subtype: comparison_module, guidance_asset, action_definition</text>
+  <text x="972" y="384" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">employer_requirement: true</text>
+  <text x="972" y="404" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">cta_type: check_eligibility</text>
+  <text x="972" y="424" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">cta_deep_link: /novated-lease/employer-check</text>
+  <text x="972" y="444" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">conversion_goal: eligibility_check</text>
+
+  <rect x="954" y="508" width="374" height="172" rx="14" fill="#f4f0ff" stroke="#ddd4f7"/>
+  <text x="972" y="534" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">AI support signals</text>
+  <text x="972" y="562" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">AI summary: customer behavior suggests evaluation rather</text>
+  <text x="972" y="582" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">than basic discovery</text>
+  <text x="972" y="602" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">semantic hints: employer approval, EV affordability,</text>
+  <text x="972" y="622" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">provider comparison</text>
+  <text x="972" y="642" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">explanation support: why employer check comes first</text>
+
+  <rect x="954" y="696" width="374" height="264" rx="14" fill="#fff8ec" stroke="#f0dec1"/>
+  <text x="972" y="722" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Deterministic rules applied</text>
+  <text x="972" y="750" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">1. Quote CTA can surface only after eligibility confidence</text>
+  <text x="972" y="770" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">2. Employer requirement assets receive a stage boost</text>
+  <text x="972" y="790" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">3. Diversity rule limits repetitive provider prompts</text>
+  <text x="972" y="818" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Outcome: comparison and fit-check guidance outrank</text>
+  <text x="972" y="838" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">premature lead capture</text>
+</svg>

@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="980" viewBox="0 0 1400 980" role="img" aria-labelledby="title desc">
+  <title id="title">Novated lease funnel example, quote stage</title>
+  <desc id="desc">Illustrative taller two-thirds and one-third split mockup showing quote-stage novated leasing content with car cards on the left and metadata and decisioning inputs on the right.</desc>
+  <rect width="1400" height="980" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="1352" height="932" rx="20" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="48" y="62" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2a44">Novated Leasing Funnel Example 3 - Quote Ready and Lead Capture</text>
+  <text x="48" y="92" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#5b6780">Taller quote-stage example with richer EV content cards, CTA handoff, and the matching logic that promotes them</text>
+
+  <rect x="48" y="120" width="858" height="796" rx="18" fill="#fbfcff" stroke="#d9e1ee"/>
+  <rect x="930" y="120" width="422" height="796" rx="18" fill="#f8fafe" stroke="#d9e1ee"/>
+  <line x1="906" y1="120" x2="906" y2="916" stroke="#e1e7f0" stroke-width="2"/>
+
+  <rect x="72" y="148" width="810" height="136" rx="18" fill="#0f5a5e"/>
+  <text x="104" y="184" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#c9f0ef">Quote-ready hero</text>
+  <text x="104" y="220" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#ffffff">Choose an EV, review estimated salary-packaging savings,</text>
+  <text x="104" y="252" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#ffffff">and hand off into the novated-lease quote journey</text>
+  <text x="104" y="278" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#d3fbfa">The content surface remains editorial, but the CTA deep-links into the dedicated lead-generation flow.</text>
+
+  <text x="92" y="326" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">Example content cards shown to the customer</text>
+
+  <rect x="92" y="350" width="382" height="256" rx="18" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="112" y="370" width="342" height="132" rx="14" fill="#eaf2ff"/>
+  <ellipse cx="284" cy="450" rx="118" ry="34" fill="#d3dceb"/>
+  <path d="M180 438 C214 404 256 392 330 396 C360 398 388 410 408 430 L408 460 L378 460 C370 484 344 494 320 494 C294 494 270 486 258 460 L220 460 C210 484 184 494 160 494 C136 494 114 484 108 460 L96 460 L96 438 C118 420 142 410 180 438 Z" fill="#20324d"/>
+  <circle cx="164" cy="462" r="24" fill="#0f1726"/>
+  <circle cx="164" cy="462" r="11" fill="#8fa0bb"/>
+  <circle cx="318" cy="462" r="24" fill="#0f1726"/>
+  <circle cx="318" cy="462" r="11" fill="#8fa0bb"/>
+  <path d="M220 414 L296 414 C318 414 340 422 352 436 L204 436 C208 424 212 418 220 414 Z" fill="#4f6787"/>
+  <text x="112" y="530" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Premium EV sedan example</text>
+  <text x="112" y="556" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Higher monthly saving estimate, strong salary-packaging fit, and quote-ready positioning.</text>
+  <rect x="112" y="570" width="130" height="24" rx="12" fill="#eef4ff"/>
+  <text x="128" y="586" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#1f2a44">EV salary benefit</text>
+  <rect x="252" y="570" width="92" height="24" rx="12" fill="#eefaf3"/>
+  <text x="269" y="586" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#1f2a44">Quote ready</text>
+
+  <rect x="500" y="350" width="382" height="256" rx="18" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="520" y="370" width="342" height="132" rx="14" fill="#fff3e7"/>
+  <ellipse cx="692" cy="450" rx="118" ry="34" fill="#ead8c9"/>
+  <path d="M588 438 C620 408 654 398 736 400 C766 402 796 412 816 432 L816 460 L784 460 C776 484 750 494 726 494 C700 494 676 486 664 460 L628 460 C620 484 594 494 570 494 C546 494 524 484 516 460 L504 460 L504 438 C530 420 550 412 588 438 Z" fill="#7b4d2f"/>
+  <circle cx="572" cy="462" r="24" fill="#1d1712"/>
+  <circle cx="572" cy="462" r="11" fill="#b8a18f"/>
+  <circle cx="726" cy="462" r="24" fill="#1d1712"/>
+  <circle cx="726" cy="462" r="11" fill="#b8a18f"/>
+  <path d="M632 414 L710 414 C734 414 756 422 770 436 L614 436 C620 424 624 418 632 414 Z" fill="#af7048"/>
+  <text x="520" y="530" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Family SUV example</text>
+  <text x="520" y="556" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Shows a higher running-cost comparison and a stronger savings explainer for larger vehicles.</text>
+  <rect x="520" y="570" width="128" height="24" rx="12" fill="#eef4ff"/>
+  <text x="536" y="586" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#1f2a44">Running cost view</text>
+  <rect x="658" y="570" width="110" height="24" rx="12" fill="#fff8ec"/>
+  <text x="676" y="586" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#1f2a44">Employer fit</text>
+
+  <rect x="92" y="634" width="790" height="122" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="112" y="664" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Lead-generation CTA module</text>
+  <text x="112" y="692" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">The content area promotes the next best action, but the actual quote journey begins after the handoff.</text>
+  <rect x="112" y="708" width="212" height="40" rx="10" fill="#23a55a"/>
+  <text x="170" y="733" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Start novated quote</text>
+  <rect x="340" y="708" width="176" height="40" rx="10" fill="#eef4ff" stroke="#cfdbf4"/>
+  <text x="389" y="733" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1f2a44">View savings detail</text>
+  <text x="538" y="722" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Deep link: /quote/novated-lease?vehicle=ev</text>
+  <text x="538" y="742" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Disclosure: subject to employer participation and credit approval</text>
+
+  <rect x="92" y="778" width="790" height="108" rx="16" fill="#fff8ec" stroke="#f0dec1"/>
+  <text x="112" y="808" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Funnel progression</text>
+  <text x="112" y="834" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">The car-content cards build confidence, then the quote CTA moves the customer into the dedicated conversion flow.</text>
+  <path d="M112 872 H258 L238 842 H132 Z" fill="#dce7ff"/>
+  <path d="M286 872 H432 L412 842 H306 Z" fill="#8ab4ff"/>
+  <path d="M460 872 H606 L586 842 H480 Z" fill="#23a55a"/>
+  <text x="152" y="860" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#1f2a44">Compare</text>
+  <text x="327" y="860" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Savings review</text>
+  <text x="503" y="860" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Lead capture</text>
+
+  <text x="954" y="160" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">Matching inputs and decision trace</text>
+
+  <rect x="954" y="182" width="374" height="110" rx="14" fill="#eef4ff" stroke="#cfdbf4"/>
+  <text x="972" y="206" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Profile and journey</text>
+  <text x="972" y="232" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">service_category: novated_leasing</text>
+  <text x="972" y="252" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">funnel_stage: quote</text>
+  <text x="972" y="272" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">intent: ready_for_quote, ev_shortlist_selected</text>
+
+  <rect x="954" y="308" width="374" height="182" rx="14" fill="#eefaf3" stroke="#d3ebdc"/>
+  <text x="972" y="332" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Contentful metadata used</text>
+  <text x="972" y="358" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">subtype: offer_candidate, vehicle_card, action_definition</text>
+  <text x="972" y="378" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">vehicle_type: ev_sedan, ev_suv</text>
+  <text x="972" y="398" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">funnel_stage: quote</text>
+  <text x="972" y="418" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">cta_type: get_quote</text>
+  <text x="972" y="438" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">cta_deep_link: /quote/novated-lease?vehicle=ev</text>
+  <text x="972" y="458" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">conversion_goal: start_quote</text>
+  <text x="972" y="478" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">compliance_flags: approved, employer_required, disclosure_present</text>
+
+  <rect x="954" y="506" width="374" height="148" rx="14" fill="#f4f0ff" stroke="#ddd4f7"/>
+  <text x="972" y="530" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">AI support signals</text>
+  <text x="972" y="556" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">AI summary: customer has moved from exploration to</text>
+  <text x="972" y="576" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">vehicle-specific savings evaluation</text>
+  <text x="972" y="596" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">semantic hints: EV sedan, family SUV, salary sacrifice,</text>
+  <text x="972" y="616" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">running cost comparison</text>
+  <text x="972" y="636" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">explanation support: confidence-building quote CTA copy</text>
+
+  <rect x="954" y="670" width="374" height="214" rx="14" fill="#fff8ec" stroke="#f0dec1"/>
+  <text x="972" y="694" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Deterministic rules applied</text>
+  <text x="972" y="720" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">1. Quote CTA promoted only after employer-fit evidence</text>
+  <text x="972" y="740" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">2. Vehicle cards filtered to approved EV content only</text>
+  <text x="972" y="760" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">3. Deep link validated for active journey and channel</text>
+  <text x="972" y="780" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">4. Disclosure asset required anywhere quote CTA is shown</text>
+  <text x="972" y="808" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Outcome: vehicle-content cards build context, then the</text>
+  <text x="972" y="828" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">lead-generation CTA becomes the primary next action</text>
+</svg>
