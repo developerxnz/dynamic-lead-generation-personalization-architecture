@@ -158,6 +158,43 @@ Decisioning / Ranking Services
 
 ---
 
+## Suggested Persistence Model
+
+A concrete persistence split makes the service easier to reason about.
+
+| Entity | Suggested key | Purpose |
+|---|---|---|
+| customer profile | `customerId` | durable customer-wide facts and summaries |
+| journey state | `customerId + journeyId` | service-specific live decision state |
+| processed-event marker | `eventId` | idempotency and replay safety |
+| projection checkpoint | `customerId` | operational rebuild and replay coordination |
+
+This can be implemented as separate containers or as distinct document types in the same partitioned store, depending on throughput and operational preferences.
+
+### Example Journey Document
+
+```json
+{
+  "customerId": "12345",
+  "journeyId": "journey-health-001",
+  "documentType": "journey_state",
+  "serviceCategory": "health_insurance",
+  "intent": "comparing_providers",
+  "stage": "quote_ready",
+  "resumeCandidate": true,
+  "qualification": {
+    "coverageRegionMatch": true,
+    "serviceabilityConfirmed": true
+  },
+  "scores": {
+    "journeyScore": 0.78
+  },
+  "version": 14
+}
+```
+
+---
+
 # Event Model
 
 ## Supported Events
@@ -193,6 +230,22 @@ The system should ingest structured events such as:
   }
 }
 ```
+
+---
+
+## Event Processing Detail
+
+Recommended processing steps for each event:
+
+1. validate schema and required identifiers
+2. check idempotency using `eventId`
+3. load current profile and affected journey documents
+4. apply deterministic aggregation rules
+5. update derived scores and summaries
+6. write updated projections with optimistic concurrency
+7. emit downstream change notifications if needed
+
+This keeps the service deterministic and replayable.
 
 ---
 
@@ -259,6 +312,53 @@ This allows live decisioning to pick the best journey for the current session wi
 
 ---
 
+## Example Read Payloads
+
+### `GET /customers/{customerId}`
+
+```json
+{
+  "customerId": "12345",
+  "profile": {
+    "householdType": "family",
+    "employmentType": "full_time",
+    "location": "QLD"
+  },
+  "customerSummary": {
+    "isReturningCustomer": true,
+    "leadScore": 78
+  }
+}
+```
+
+### `GET /customers/{customerId}/journeys`
+
+```json
+{
+  "customerId": "12345",
+  "journeys": [
+    {
+      "journeyId": "journey-health-001",
+      "serviceCategory": "health_insurance",
+      "intent": "comparing_providers",
+      "stage": "quote_ready",
+      "resumeCandidate": true,
+      "journeyScore": 0.78
+    },
+    {
+      "journeyId": "journey-broadband-001",
+      "serviceCategory": "broadband",
+      "intent": "checking_availability",
+      "stage": "research",
+      "resumeCandidate": false,
+      "journeyScore": 0.41
+    }
+  ]
+}
+```
+
+---
+
 # Storage Strategy
 
 ## Cosmos DB Usage
@@ -283,6 +383,19 @@ This ensures:
 - fast lookup per customer
 - scalable horizontal partitioning
 - predictable access patterns
+
+---
+
+## Consistency And Read Strategy
+
+Recommended read behavior for live personalization:
+
+- read the latest committed profile document
+- read all active or recent journey documents for the customer
+- prefer bounded-staleness or session-consistent reads where supported
+- avoid fan-out across unrelated partitions during live decisioning
+
+This keeps the service fast enough for request-time orchestration while preserving useful consistency for active-journey selection.
 
 ---
 
