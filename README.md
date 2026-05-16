@@ -281,6 +281,7 @@ These documents move from business framing into implementation guidance.
 | Document | Description |
 |---|---|
 | [11-roadmap.md](./docs/delivery/11-roadmap.md) | Phased rollout across deterministic, behavioral, and AI-assisted capabilities |
+| [12-poc-scope.md](./docs/delivery/12-poc-scope.md) | Focused proof-of-concept scope, success criteria, demo audience, and live-versus-described implementation cut |
 
 ---
 
