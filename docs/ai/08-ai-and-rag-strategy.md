@@ -23,6 +23,23 @@ It should play a major role in the platform, but not own ranking policy, eligibi
 
 ---
 
+## How To Read This Section
+
+Use this overview page for:
+
+- AI boundaries and responsibilities
+- customer-facing AI use cases
+- RAG purpose and safe usage patterns
+- operating-model expectations
+
+For implementation detail, use:
+
+| Detail page | Best for | Covers |
+|---|---|---|
+| [Runtime and Implementation](./ai-and-rag-strategy/01-runtime-and-implementation.md) | engineering + architecture | runtime components, prompt assembly, journey-interpretation contracts, fallbacks, observability, and evaluation |
+
+---
+
 ## Strategic Goals
 
 The AI layer should:

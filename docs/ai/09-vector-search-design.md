@@ -18,6 +18,23 @@ Vector search should be a core retrieval capability, but not the authority on fi
 
 ---
 
+## How To Read This Section
+
+Use this overview page for:
+
+- vector-search goals and responsibilities
+- embedding and hybrid-retrieval concepts
+- multi-journey retrieval guidance
+- the boundary between retrieval and ranking
+
+For implementation detail, use:
+
+| Detail page | Best for | Covers |
+|---|---|---|
+| [Index and Retrieval Implementation](./vector-search-design/01-index-and-retrieval-implementation.md) | engineering + data | index schema, ingestion pipeline, query contracts, tuning, caching, and retrieval evaluation |
+
+---
+
 ## Goals
 
 The vector search layer should:
