@@ -108,22 +108,16 @@ The loop matters because the platform should not treat conversion as a single-se
 
 ## High-Level Architecture
 
-```text
-Customer Session / Trigger
-   ↓
-Lead Profile Service
-   ↓
-Intent + Eligibility Evaluation
-   ↓
-Offer / Content Candidate Retrieval
-   ↓
-Ranking + Suitability Engine
-   ↓
-Next Best Action Selection
-   ↓
-Web / App / Assisted Sales Experience
-   ↓
-Analytics / Feedback Loop
+```mermaid
+flowchart TD
+    A[Customer session or trigger] --> B[Lead profile service]
+    B --> C[Intent and eligibility evaluation]
+    C --> D[Offer and content candidate retrieval]
+    D --> E[Ranking and suitability engine]
+    E --> F[Next-best action selection]
+    F --> G[Web, app, or assisted-sales experience]
+    G --> H[Analytics and feedback loop]
+    H --> B
 ```
 
 Each stage exists to keep responsibilities clear:

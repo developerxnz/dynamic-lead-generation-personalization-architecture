@@ -104,22 +104,15 @@ This keeps the live request path small while allowing enrichment and analytics t
 
 ## Session Flow
 
-```text
-Customer Session Starts
-   ↓
-Load Customer Profile + Journey States
-   ↓
-Select Active Journey
-   ↓
-Update Intent / Urgency Signals
-   ↓
-Check Eligibility And Availability
-   ↓
-Retrieve Candidate Offers And Content
-   ↓
-Rank And Filter For Suitability
-   ↓
-Return Personalized Experience
+```mermaid
+flowchart TD
+    A[Customer session starts] --> B[Load customer profile and journey states]
+    B --> C[Select active journey]
+    C --> D[Update intent and urgency signals]
+    D --> E[Check eligibility and availability]
+    E --> F[Retrieve candidate offers and content]
+    F --> G[Rank and filter for suitability]
+    G --> H[Return personalized experience]
 ```
 
 For session-triggered personalization, the profile and journey reads should use the latest committed projections, or a bounded-staleness equivalent with an explicit freshness target, before candidate retrieval and ranking continue.
