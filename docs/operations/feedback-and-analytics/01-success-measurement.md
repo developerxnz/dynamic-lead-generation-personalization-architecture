@@ -71,6 +71,56 @@ Recommended operating metrics:
 
 ---
 
+## Measuring AI Responses
+
+AI responses should be measured with the same discipline as ranking or conversion logic.
+
+The key question is not whether customers interacted with AI, but whether AI improved qualified progression without introducing unsafe or ungrounded behavior.
+
+### Response Quality Metrics
+
+Recommended measures:
+
+- AI response acceptance rate
+- explanation usefulness score
+- response relevance score for the active journey
+- required-field completion rate for structured responses
+- CTA support-text usefulness or progression rate
+
+### Guardrail Metrics For AI
+
+Recommended measures:
+
+- grounded-response defect rate
+- unsupported-claim rate
+- missing-disclosure rate
+- escalation or manual-review rate
+- fallback-to-deterministic-copy rate
+
+### Operational Metrics For AI
+
+Recommended measures:
+
+- latency percentile by AI task type
+- timeout rate
+- response rejection rate
+- token or cost per accepted response
+- telemetry completeness for prompt, model, and grounding versions
+
+### Outcome Metrics For AI
+
+Recommended measures:
+
+- quote-start rate after AI explanation
+- quote-completion rate after AI assistance
+- callback-request rate after AI guidance
+- journey progression delta for AI-assisted versus non-AI experiences
+- qualified conversion lift by AI experiment or rollout cohort
+
+Teams should review these measures together. A high engagement rate is not success if the same AI experiences also increase fallbacks, defects, or poor-quality handoffs.
+
+---
+
 ## What Success Should Look Like
 
 For the platform to be considered successful, teams should be able to say:
@@ -96,6 +146,7 @@ Recommended feedback outputs:
 - CTA effectiveness by vertical
 - ranking weight review candidates
 - AI explanation performance metrics
+- AI response defect patterns by prompt, model, and journey type
 
 These outputs should feed configuration review and future model tuning, not directly overwrite live decision logic.
 
@@ -125,6 +176,7 @@ The platform should emit:
 - recommendation served
 - candidate suppressed
 - AI explanation shown
+- AI response accepted, rejected, or replaced by fallback
 
 Without these events, teams cannot reliably explain or improve decision quality.
 
@@ -170,6 +222,7 @@ Make it easy to tie outcomes back to:
 - ranking configuration version
 - Contentful content revision
 - AI prompt or model version where applicable
+- grounding set or retrieved asset version where applicable
 - experiment assignment
 
 If these cannot be linked, teams will struggle to attribute success correctly.

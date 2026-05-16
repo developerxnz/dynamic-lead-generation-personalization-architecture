@@ -103,6 +103,9 @@ Track:
 - conversational assist usage
 - AI-supported journey selection outcome
 - retrieval grounding quality indicators
+- AI response accepted, rejected, or replaced with fallback
+- unsupported-claim or disclosure defect indicators
+- CTA progression after AI response
 
 ---
 
@@ -140,8 +143,52 @@ Implementation becomes easier if events are grouped by purpose.
 | qualification events | `eligibility_checked`, `serviceability_checked` | suitability and drop-off analysis |
 | conversion events | `quote_started`, `quote_completed`, `callback_requested` | lead-quality and funnel analysis |
 | decision trace events | `active_journey_selected`, `recommendation_served` | personalization debugging and optimization |
+| AI trace events | `ai_response_generated`, `ai_response_accepted`, `ai_response_rejected`, `ai_fallback_served` | AI quality, safety, and runtime analysis |
 
 This taxonomy helps engineering and analytics teams agree on event ownership.
+
+### AI Trace Detail
+
+AI should emit its own lightweight trace events so teams can inspect response quality without scraping free-form logs.
+
+Example:
+
+```json
+{
+  "eventType": "ai_response_accepted",
+  "customerId": "12345",
+  "journeyId": "journey-health-001",
+  "sessionId": "session-001",
+  "metadata": {
+    "responseId": "air-001",
+    "aiTaskType": "offer_explanation",
+    "serviceCategory": "health_insurance",
+    "modelVersion": "gpt-5.4",
+    "promptTemplateVersion": "offer-explainer-v2",
+    "groundingAssetIds": [
+      "offer-health-family-001",
+      "faq-health-extras-003"
+    ],
+    "accepted": true,
+    "fallbackUsed": false,
+    "latencyMs": 840,
+    "ctaId": "start-quote"
+  }
+}
+```
+
+Recommended fields for AI trace events:
+
+- response ID
+- AI task type
+- prompt template version
+- model version
+- grounding asset IDs
+- acceptance or rejection outcome
+- fallback reason where applicable
+- latency and timeout outcome
+- CTA or next-step identifier
+- experiment assignment
 
 ### Decision Trace Detail
 
@@ -254,6 +301,9 @@ Recommended panels:
 - AI-supported journey selection quality
 - conversational assist usage and progression
 - grounded-response issue or escalation rate
+- AI response acceptance rate
+- fallback and timeout rate by AI task type
+- AI outcome comparison by prompt and model version
 
 ### 5. Operational Trust Dashboard
 
@@ -318,6 +368,16 @@ Evaluate:
 - personalization accuracy
 - conversion influence
 - ranking quality
+
+### AI Response Effectiveness
+
+Evaluate:
+
+- whether responses were accepted or rejected before display
+- whether grounded answers progress customers to a meaningful CTA
+- which prompt or model versions create the best qualified outcomes
+- where fallback logic is protecting the experience
+- whether AI adds value beyond deterministic explanations
 
 Suggested comparisons:
 

@@ -251,6 +251,13 @@ These documents move from business framing into implementation guidance.
 | [08-ai-and-rag-strategy.md](./docs/ai/08-ai-and-rag-strategy.md) | AI boundaries, RAG strategy, and assistive use cases |
 | [09-vector-search-design.md](./docs/ai/09-vector-search-design.md) | Semantic retrieval for offers, guidance, and lead-support journeys |
 
+### AI Deep Dives
+
+| Document | Description |
+|---|---|
+| [ai-and-rag-strategy/01-runtime-and-implementation.md](./docs/ai/ai-and-rag-strategy/01-runtime-and-implementation.md) | Runtime components, journey-interpretation contracts, prompt assembly, fallbacks, observability, and evaluation |
+| [vector-search-design/01-index-and-retrieval-implementation.md](./docs/ai/vector-search-design/01-index-and-retrieval-implementation.md) | Index schema, ingestion pipeline, query contracts, tuning, caching, and retrieval evaluation |
+
 ---
 
 ## Operations
