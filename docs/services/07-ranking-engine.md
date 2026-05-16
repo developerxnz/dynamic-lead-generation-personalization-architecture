@@ -16,7 +16,17 @@ Its purpose is to:
 
 ---
 
-# Goals
+## Who Should Read This
+
+| Audience | Why this page matters |
+|---|---|
+| Product and growth | understand which levers shape relevance, guardrails, and commercial prioritization |
+| Engineering | understand the ranking boundary and where to find runtime and contract detail |
+| Analytics | understand which ranking inputs and outputs should be measurable |
+
+---
+
+## Goals
 
 The ranking engine should:
 
@@ -29,7 +39,7 @@ The ranking engine should:
 
 ---
 
-# Core Responsibilities
+## Core Responsibilities
 
 The ranking engine is responsible for:
 
@@ -42,446 +52,46 @@ The ranking engine is responsible for:
 
 ---
 
-# Inputs To The Ranking Engine
-
-## 1. Customer Profile And Active Journey
-
-From the Customer Profile Service:
-
-- household and employment attributes
-- engagement level
-- customer-level lead score
-- active journey stage
-- active journey intent
-- urgency and renewal window
-- qualification evidence
-- returning-customer signals
-
----
-
-## 2. Content And Offer Metadata
-
-From Contentful or the offer catalog:
-
-- service_category
-- subtype
-- provider
-- region
-- conversion_goal
-- cta_type
-- compliance_flags
-- freshness
-- priority
-
----
-
-## 3. Behavioral Signals
-
-From analytics systems:
-
-- clicks
-- impressions
-- quote starts
-- quote completion
-- callback requests
-- content interactions
-- provider handoff outcomes
-
----
-
-## 4. Context Signals
-
-- session source
-- device type
-- referral partner
-- time sensitivity
-- campaign context
-
----
-
-## 5. AI-Assisted Signals
-
-AI can contribute:
-
-- semantic relevance support
-- inferred intent support
-- explanation hints
-- likely next-question signals
-
-These inputs should improve ranking quality, but they should remain subordinate to deterministic policy controls.
-
----
-
-## Suggested Request Contract
-
-A concrete request shape helps make the ranking boundary implementable.
-
-```json
-{
-  "customerProfile": {
-    "customerId": "12345",
-    "leadScore": 78,
-    "location": "NSW"
-  },
-  "activeJourney": {
-    "journeyId": "journey-health-001",
-    "serviceCategory": "health_insurance",
-    "intent": "comparing_providers",
-    "stage": "quote_ready"
-  },
-  "context": {
-    "channel": "web",
-    "campaignSource": "paid_search"
-  },
-  "candidates": [
-    {
-      "contentId": "offer-123",
-      "serviceCategory": "health_insurance",
-      "ctaType": "get_quote",
-      "provider": "Provider A",
-      "priority": 2
-    }
-  ]
-}
-```
-
----
-
-# Scoring Model
-
-## Example Weighted Model
-
-Each candidate is scored using weighted signals:
+## At-A-Glance Flow
 
 ```text
-Total Score =
-  Category Match Score
-+ Active Journey Fit Score
-+ Intent Alignment Score
-+ Eligibility Fit Score
-+ Funnel Alignment Score
-+ Behavioral Relevance Score
-+ CTA Likelihood Score
-+ AI Relevance Support Score
-+ Commercial Priority Score
-+ Freshness Score
-```
-
----
-
-## Example Weights
-
-| Signal | Weight |
-|---|---|
-| Eligibility fit | 7 |
-| Intent alignment | 6 |
-| Funnel alignment | 5 |
-| CTA likelihood | 5 |
-| Active journey fit | 5 |
-| Behavioral relevance | 4 |
-| Category match | 4 |
-| AI relevance support | 3 |
-| Commercial priority | 2 |
-| Freshness | 2 |
-
----
-
-## Example Calculation
-
-```text
-Candidate A:
-- Eligibility fit: +7
-- Active journey fit: +5
-- Intent alignment: +6
-- Funnel alignment: +5
-- CTA likelihood: +5
-- Category match: +4
-
-Total = 32
-```
-
----
-
-## Suggested Runtime Algorithm
-
-```text
-for each candidate:
-  normalize raw inputs
-  apply hard suppression and suitability checks
-  compute active-journey fit
-  compute intent, funnel, CTA, and behavioral features
-  apply configurable weights
-  record explanation reasons
-
-apply diversity and slot rules
-sort by total score
-return ranked set + suppression reasons
-```
-
-This is intentionally simple. The platform can grow in sophistication later without losing explainability.
-
----
-
-# Ranking Strategy
-
-## Step 1: Normalization
-
-Standardize all inputs:
-
-- scale scores consistently
-- remove bias between sources
-- normalize behavioral metrics
-
----
-
-## Step 2: Suitability Screening
-
-Before ranking, remove or suppress candidates that fail:
-
-- region availability
-- product or provider suitability
-- compliance requirements
-- hard eligibility rules
-
-The suitability screen should be driven primarily by the active journey's qualification state.
-
----
-
-## Step 3: Feature Scoring
-
-Convert raw inputs into:
-
-- relevance scores
-- qualification confidence
-- conversion likelihood indicators
-- active-journey fit
-
----
-
-## Step 4: Weighted Aggregation
-
-Combine features into a single score per candidate.
-
----
-
-## Step 5: Sorting
-
-Order content by:
-
-```text
-Highest score -> Lowest score
-```
-
-Apply tie-breakers such as:
-
-- freshness
-- campaign priority
-- provider diversity
-- secondary-journey suppression
-
----
-
-# Ranking Principles
-
-## 1. Deterministic First
-
-The ranking engine must:
-
-- always return the same result for the same inputs
-- avoid hidden randomness
-- avoid opaque ML dependencies early on
-
----
-
-## 2. Explainability
-
-Every ranked item should be explainable.
-
-Example:
-
-> ranked high because it matched current service intent, passed eligibility checks, and aligned to a quote-ready stage
-
----
-
-## 3. Configurable Logic
-
-Scoring should be configurable via:
-
-- configuration files
-- database-driven rules
-- feature flags
-
-Avoid hardcoding weights.
-
----
-
-## Example Config Shape
-
-```json
-{
-  "vertical": "health_insurance",
-  "weights": {
-    "eligibilityFit": 7,
-    "intentAlignment": 6,
-    "funnelAlignment": 5,
-    "ctaLikelihood": 5,
-    "activeJourneyFit": 5,
-    "behavioralRelevance": 4,
-    "categoryMatch": 4,
-    "aiRelevanceSupport": 3,
-    "commercialPriority": 2,
-    "freshness": 2
-  },
-  "diversityRules": {
-    "maxSameProviderInTop3": 1
-  }
-}
-```
-
-This makes it easier to tune by vertical without changing code paths.
-
----
-
-## 4. Separation Of Concerns
-
-The ranking engine should not:
-
-- retrieve content
-- infer intent authoritatively
-- own free-form AI interpretation
-- own CMS logic
-
-It should only:
-
-> rank a provided candidate set after deterministic constraints are applied
-
----
-
-# Ranking Architecture
-
-```text
-Personalization Service
-        ↓
-Candidate Retrieval Service
+Candidate Retrieval
         ↓
 Suitability Filters
         ↓
 Ranking Engine
         ↓
-Ranked Recommendations
-        ↓
-Channel Delivery Layer
+Ranked Recommendations + Suppression Reasons
 ```
 
 ---
 
-# Diversity And Business Rules
+## How To Read This Section
 
-## Diversity Controls
+Use the overview page for orientation, then go deeper based on what you need:
 
-To avoid repetitive results:
-
-- limit repeated providers
-- balance CTA types
-- introduce category spread where cross-sell is appropriate
-
----
-
-## Business Rules Examples
-
-- prioritize high-value campaigns when relevance remains acceptable
-- exclude expired or withdrawn offers
-- suppress providers with temporary operational issues
-- boost renewal or churn-save content during renewal windows
-- allow carefully positioned secondary-journey prompts without displacing the active journey
+| Detail page | Best for | Covers |
+|---|---|---|
+| [Scoring Model and Policy](./ranking-engine/01-scoring-model-and-policy.md) | product + engineering | ranking inputs, weights, policy rules, and configuration |
+| [Runtime and Contracts](./ranking-engine/02-runtime-and-contracts.md) | engineering | request and response shapes, runtime steps, explainability, and performance boundaries |
 
 ---
 
-# Explainability Model
+## What Product Should Take Away
 
-Each ranked item should return:
+- ranking is where relevance, suitability, and commercial priorities are balanced
+- deterministic controls stay authoritative even when AI contributes relevance signals
+- explainability is part of the output, not an afterthought
 
-```json
-{
-  "contentId": "offer-123",
-  "score": 27,
-  "reasons": [
-    "Category match: health_insurance",
-    "Active journey fit: health_insurance quote journey",
-    "Intent alignment: comparing providers",
-    "Eligibility fit: approved for quote flow",
-    "CTA alignment: get_quote"
-  ]
-}
-```
+## What Engineering Should Take Away
+
+- the engine ranks a provided candidate set rather than owning retrieval or CMS logic
+- scoring, suppression, and traceability should be configurable and testable
+- runtime contracts and cache invalidation boundaries matter as much as the weight model
 
 ---
 
-## Example Response Contract
-
-```json
-{
-  "rankedRecommendations": [
-    {
-      "contentId": "offer-123",
-      "score": 32,
-      "reasons": [
-        "Active journey fit: health_insurance quote journey",
-        "Eligibility fit: approved for quote flow",
-        "Intent alignment: comparing providers"
-      ]
-    }
-  ],
-  "suppressedCandidates": [
-    {
-      "contentId": "offer-999",
-      "reason": "region_unavailable"
-    }
-  ]
-}
-```
-
-Returning suppressed candidates is useful for traceability, debugging, and optimization analysis.
-
----
-
-# Performance Considerations
-
-## Requirements
-
-The ranking engine must:
-
-- execute in low latency (<100ms ideal)
-- scale horizontally
-- support caching of computed features
-- avoid expensive external calls during ranking
-
----
-
-## Optimization Strategies
-
-- precompute behavioral aggregates
-- cache customer profiles by profile version
-- cache journey-state inputs by journey version
-- cache content metadata by publish version
-- avoid recomputing static scores
-
----
-
-## Cache Boundaries And Invalidation
-
-The ranking engine should cache inputs and derived features, not assume a single ranking result stays valid across materially different sessions.
-
-Recommended rules:
-
-- invalidate profile-dependent feature caches when the profile version changes
-- invalidate journey-dependent feature caches when the active journey changes
-- invalidate content-dependent caches when offers, disclosures, or eligibility references change
-- shorten TTLs when urgency, renewal, or serviceability signals are volatile
-
----
-
-# Summary
+## Summary
 
 The Ranking Engine is the decision layer of the platform.
 

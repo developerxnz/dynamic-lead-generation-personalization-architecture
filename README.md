@@ -196,7 +196,31 @@ These choices reflect the current reference architecture, not a product requirem
 
 ## Documentation Structure
 
-The documents below move from business framing into implementation guidance.
+The documents below now support both a **linear architecture narrative** and **audience-based reading paths**.
+
+## Read By Audience
+
+| Audience | Best starting point | What to expect |
+|---|---|---|
+| **Marketing and growth** | [Marketing and Growth Guide](./docs/audiences/marketing-and-growth.md) | business outcomes, campaign implications, content strategy, and success metrics |
+| **Product and delivery** | [Product and Delivery Guide](./docs/audiences/product-and-delivery.md) | journey design, prioritization, roadmap, measurement, and operating-model choices |
+| **Engineering and architecture** | [Engineering and Architecture Guide](./docs/audiences/engineering-and-architecture.md) | service boundaries, state models, event flows, contracts, and implementation detail |
+
+---
+
+## Audience Guides
+
+| Document | Description |
+|---|---|
+| [marketing-and-growth.md](./docs/audiences/marketing-and-growth.md) | Business-oriented reading path for campaign, content, lead-quality, and growth stakeholders |
+| [product-and-delivery.md](./docs/audiences/product-and-delivery.md) | Product-oriented reading path for journeys, roadmap, prioritization, and measurement |
+| [engineering-and-architecture.md](./docs/audiences/engineering-and-architecture.md) | Engineering-oriented reading path for architecture, services, data flow, and runtime decisions |
+
+---
+
+## Core Narrative
+
+These documents move from business framing into implementation guidance.
 
 ## Architecture
 
@@ -214,8 +238,17 @@ The documents below move from business framing into implementation guidance.
 | Document | Description |
 |---|---|
 | [05-contentful-integration.md](./docs/services/05-contentful-integration.md) | CMS and offer metadata design, governance, and operating model |
-| [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Event-driven customer profile and journey-state service implementation guidance |
-| [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Ranking, suitability, prioritization, and explainability model |
+| [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Service overview, audience summary, and links into detailed state, persistence, and API design |
+| [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Decisioning overview, audience summary, and links into scoring, policy, and runtime details |
+
+### Service Deep Dives
+
+| Document | Description |
+|---|---|
+| [customer-profile-service/01-state-and-persistence.md](./docs/services/customer-profile-service/01-state-and-persistence.md) | Customer and journey state model, scoring responsibilities, persistence split, and storage choices |
+| [customer-profile-service/02-event-processing-and-apis.md](./docs/services/customer-profile-service/02-event-processing-and-apis.md) | Event model, processing guarantees, API contracts, and query/read guidance |
+| [ranking-engine/01-scoring-model-and-policy.md](./docs/services/ranking-engine/01-scoring-model-and-policy.md) | Ranking inputs, weighted scoring model, policy controls, diversity rules, and configuration shape |
+| [ranking-engine/02-runtime-and-contracts.md](./docs/services/ranking-engine/02-runtime-and-contracts.md) | Request and response contracts, runtime algorithm, explainability, and performance boundaries |
 
 ---
 
@@ -232,7 +265,14 @@ The documents below move from business framing into implementation guidance.
 
 | Document | Description |
 |---|---|
-| [10-feedback-and-analytics.md](./docs/operations/10-feedback-and-analytics.md) | Analytics, lead-quality measurement, returning-customer insights, and optimization loops |
+| [10-feedback-and-analytics.md](./docs/operations/10-feedback-and-analytics.md) | Analytics overview, audience summary, and links into success measurement and telemetry design |
+
+### Operations Deep Dives
+
+| Document | Description |
+|---|---|
+| [feedback-and-analytics/01-success-measurement.md](./docs/operations/feedback-and-analytics/01-success-measurement.md) | Outcome model, guardrails, dashboard ownership, and measurement-enablement changes |
+| [feedback-and-analytics/02-event-model-and-dashboards.md](./docs/operations/feedback-and-analytics/02-event-model-and-dashboards.md) | Event taxonomy, Segment-to-Mixpanel flow, dashboard definitions, projections, and experimentation support |
 
 ---
 
