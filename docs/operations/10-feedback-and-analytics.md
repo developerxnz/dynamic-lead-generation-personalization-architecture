@@ -157,6 +157,22 @@ Including `journeyId` is important once the platform supports multiple concurren
 
 ---
 
+## Suggested Event Taxonomy
+
+Implementation becomes easier if events are grouped by purpose.
+
+| Event family | Examples | Primary use |
+|---|---|---|
+| impression events | `asset_impression`, `cta_impression` | view and slot measurement |
+| interaction events | `asset_click`, `calculator_started`, `conversation_opened` | engagement analysis |
+| qualification events | `eligibility_checked`, `serviceability_checked` | suitability and drop-off analysis |
+| conversion events | `quote_started`, `quote_completed`, `callback_requested` | lead-quality and funnel analysis |
+| decision trace events | `active_journey_selected`, `recommendation_served` | personalization debugging and optimization |
+
+This taxonomy helps engineering and analytics teams agree on event ownership.
+
+---
+
 ## Recommended Analytics Architecture
 
 ```mermaid
@@ -171,6 +187,31 @@ flowchart TD
 
 ---
 
+## Decision Trace Detail
+
+To support explainability, the platform should emit lightweight decision-trace events.
+
+Example:
+
+```json
+{
+  "eventType": "recommendation_served",
+  "customerId": "12345",
+  "journeyId": "journey-health-001",
+  "sessionId": "session-001",
+  "metadata": {
+    "activeJourney": "health_insurance",
+    "topRecommendation": "offer-123",
+    "rankingPolicyVersion": "health-v3",
+    "contentRevision": "offer-123@17"
+  }
+}
+```
+
+This is especially useful when product or engineering want to understand why a session resolved the way it did.
+
+---
+
 ## Recommended Technologies
 
 | Capability | Suggested Technology |
@@ -181,6 +222,22 @@ flowchart TD
 | Operational storage | Cosmos DB |
 | Analytical storage | Data Lake / Synapse |
 | Visualization | Power BI |
+
+---
+
+## Feedback Into Decisioning
+
+The analytics stack should produce inputs that are operationally useful, not just reportable.
+
+Recommended feedback outputs:
+
+- active-journey selection quality by scenario
+- provider performance by journey stage
+- CTA effectiveness by vertical
+- ranking weight review candidates
+- AI explanation performance metrics
+
+These outputs should feed configuration review and future model tuning, not directly overwrite live decision logic.
 
 ---
 

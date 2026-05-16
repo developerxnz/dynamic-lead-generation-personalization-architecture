@@ -99,6 +99,23 @@ This helps product and engineering reason about how each asset enters candidate 
 
 ---
 
+## Suggested Content Type Mapping
+
+The implementation becomes clearer if each content type maps to a normalized domain object.
+
+| Contentful type | Normalized domain object | Primary usage |
+|---|---|---|
+| offer | `OfferCandidate` | ranking and CTA generation |
+| provider profile | `ProviderDescriptor` | comparison and explainer content |
+| explainer article | `GuidanceAsset` | research and reassurance slots |
+| CTA definition | `ActionDefinition` | next-best-action rendering |
+| disclosure asset | `DisclosureReference` | compliance support |
+| AI grounding fragment | `GroundingSnippet` | RAG and explanation generation |
+
+This avoids making downstream services understand raw CMS types directly.
+
+---
+
 ## Query Strategy
 
 The CMS query layer should support broad candidate retrieval based on:
@@ -134,6 +151,30 @@ The adapter should transform Contentful entries into stable domain models that i
 
 Normalization is important because the ranking and AI layers should consume a predictable domain model, not raw CMS shapes.
 
+### Example Normalized Asset
+
+```json
+{
+  "assetId": "offer-health-family-001",
+  "assetType": "OfferCandidate",
+  "serviceCategory": "health_insurance",
+  "provider": "Provider A",
+  "funnelStages": ["compare", "quote"],
+  "conversionGoal": "start_quote",
+  "cta": {
+    "type": "get_quote",
+    "label": "Get a family cover quote"
+  },
+  "disclosures": ["disc-health-001"],
+  "retrievalSummary": "Family cover with extras and quote-ready positioning",
+  "lifecycle": {
+    "status": "active",
+    "publishedAt": "2026-05-10T08:00:00Z",
+    "expiresAt": "2026-06-30T23:59:59Z"
+  }
+}
+```
+
 ---
 
 ## Integration Architecture
@@ -158,6 +199,27 @@ from the rest of the platform.
 
 ---
 
+## Publish And Sync Flow
+
+Recommended publish flow:
+
+```mermaid
+flowchart TD
+    A[Editor publishes asset in Contentful] --> B[Webhook or poll detection]
+    B --> C[Contentful adapter refresh]
+    C --> D[Normalized asset update]
+    D --> E[Cache invalidation]
+    D --> F[Vector or AI grounding refresh if needed]
+```
+
+Implementation notes:
+
+- invalidate only the affected normalized assets where possible
+- refresh embeddings only when meaning-bearing fields change
+- record publish revision so decision traces can refer to the exact content version served
+
+---
+
 ## Integration Recommendations
 
 - use GraphQL APIs
@@ -166,6 +228,19 @@ from the rest of the platform.
 - support publish-aware caching
 - emit change events when metadata changes affect personalization
 - version normalized assets so ranking and analytics can reference what was actually served
+
+---
+
+## Caching And Invalidation Detail
+
+Recommended cache boundaries:
+
+- cache raw GraphQL responses only inside the adapter
+- cache normalized assets for downstream retrieval
+- treat publish, unpublish, expiry, and approval changes as invalidation triggers
+- keep AI grounding and vector-index refresh decoupled from live retrieval where possible
+
+This reduces CMS load without allowing stale or non-compliant content to remain in circulation.
 
 ---
 

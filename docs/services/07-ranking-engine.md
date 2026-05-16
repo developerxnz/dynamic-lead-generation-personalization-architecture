@@ -112,6 +112,41 @@ These inputs should improve ranking quality, but they should remain subordinate 
 
 ---
 
+## Suggested Request Contract
+
+A concrete request shape helps make the ranking boundary implementable.
+
+```json
+{
+  "customerProfile": {
+    "customerId": "12345",
+    "leadScore": 78,
+    "location": "NSW"
+  },
+  "activeJourney": {
+    "journeyId": "journey-health-001",
+    "serviceCategory": "health_insurance",
+    "intent": "comparing_providers",
+    "stage": "quote_ready"
+  },
+  "context": {
+    "channel": "web",
+    "campaignSource": "paid_search"
+  },
+  "candidates": [
+    {
+      "contentId": "offer-123",
+      "serviceCategory": "health_insurance",
+      "ctaType": "get_quote",
+      "provider": "Provider A",
+      "priority": 2
+    }
+  ]
+}
+```
+
+---
+
 # Scoring Model
 
 ## Example Weighted Model
@@ -164,6 +199,26 @@ Candidate A:
 
 Total = 32
 ```
+
+---
+
+## Suggested Runtime Algorithm
+
+```text
+for each candidate:
+  normalize raw inputs
+  apply hard suppression and suitability checks
+  compute active-journey fit
+  compute intent, funnel, CTA, and behavioral features
+  apply configurable weights
+  record explanation reasons
+
+apply diversity and slot rules
+sort by total score
+return ranked set + suppression reasons
+```
+
+This is intentionally simple. The platform can grow in sophistication later without losing explainability.
 
 ---
 
@@ -260,6 +315,33 @@ Avoid hardcoding weights.
 
 ---
 
+## Example Config Shape
+
+```json
+{
+  "vertical": "health_insurance",
+  "weights": {
+    "eligibilityFit": 7,
+    "intentAlignment": 6,
+    "funnelAlignment": 5,
+    "ctaLikelihood": 5,
+    "activeJourneyFit": 5,
+    "behavioralRelevance": 4,
+    "categoryMatch": 4,
+    "aiRelevanceSupport": 3,
+    "commercialPriority": 2,
+    "freshness": 2
+  },
+  "diversityRules": {
+    "maxSameProviderInTop3": 1
+  }
+}
+```
+
+This makes it easier to tune by vertical without changing code paths.
+
+---
+
 ## 4. Separation Of Concerns
 
 The ranking engine should not:
@@ -332,6 +414,34 @@ Each ranked item should return:
   ]
 }
 ```
+
+---
+
+## Example Response Contract
+
+```json
+{
+  "rankedRecommendations": [
+    {
+      "contentId": "offer-123",
+      "score": 32,
+      "reasons": [
+        "Active journey fit: health_insurance quote journey",
+        "Eligibility fit: approved for quote flow",
+        "Intent alignment: comparing providers"
+      ]
+    }
+  ],
+  "suppressedCandidates": [
+    {
+      "contentId": "offer-999",
+      "reason": "region_unavailable"
+    }
+  ]
+}
+```
+
+Returning suppressed candidates is useful for traceability, debugging, and optimization analysis.
 
 ---
 
