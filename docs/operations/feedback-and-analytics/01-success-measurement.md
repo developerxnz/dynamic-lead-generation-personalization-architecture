@@ -168,7 +168,7 @@ This makes later uplift claims far more credible.
 Make it easy to tie outcomes back to:
 
 - ranking configuration version
-- CMS content revision
+- Contentful content revision
 - AI prompt or model version where applicable
 - experiment assignment
 

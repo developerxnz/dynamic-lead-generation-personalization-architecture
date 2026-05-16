@@ -40,7 +40,7 @@ Many service businesses already have strong acquisition channels, campaign tooli
 
 - too many customers see generic journeys that do not match their actual needs
 - returning visitors are treated like new leads instead of re-evaluated prospects
-- content platforms know what exists, but not what should be shown
+- Contentful knows what exists, but not what should be shown
 - campaign priorities override customer relevance too aggressively
 - lead volume is measured more easily than lead quality and downstream conversion
 - deterministic-only logic can struggle to capture nuance across complex, returning, or cross-vertical journeys
@@ -65,6 +65,16 @@ The platform is intended to help the business:
 - use AI to improve personalization quality, explanation quality, and assisted-sales guidance
 - make provider prioritization and commercial goals visible within explainable rules
 - create a shared operating model for product, engineering, marketing, and sales
+
+---
+
+## Read By Audience
+
+| Audience | Best starting point | What to expect |
+|---|---|---|
+| **Marketing and growth** | [Marketing and Growth Guide](./docs/audiences/marketing-and-growth.md) | business outcomes, campaign implications, content strategy, and success metrics |
+| **Product and delivery** | [Product and Delivery Guide](./docs/audiences/product-and-delivery.md) | journey design, prioritization, roadmap, measurement, and operating-model choices |
+| **Engineering and architecture** | [Engineering and Architecture Guide](./docs/audiences/engineering-and-architecture.md) | service boundaries, state models, event flows, contracts, and implementation detail |
 
 ---
 
@@ -149,7 +159,7 @@ Each meaningful session should therefore refresh the customer's state, not repla
 
 ### Keep Content And Offers Separate From Decisioning
 
-The CMS and offer catalog should manage:
+Contentful and the offer catalog should manage:
 
 - content assets
 - campaign metadata
@@ -184,7 +194,7 @@ At the same time, authoritative decisions such as suitability policy, hard eligi
 |---|---|
 | Experience and decisioning services | .NET |
 | Operational profile storage | Cosmos DB |
-| CMS and offer metadata | Contentful |
+| Contentful and offer metadata | Contentful |
 | AI services | Azure OpenAI |
 | Semantic search | Azure AI Search |
 | APIs | GraphQL + REST |
@@ -197,24 +207,6 @@ These choices reflect the current reference architecture, not a product requirem
 ## Documentation Structure
 
 The documents below now support both a **linear architecture narrative** and **audience-based reading paths**.
-
-## Read By Audience
-
-| Audience | Best starting point | What to expect |
-|---|---|---|
-| **Marketing and growth** | [Marketing and Growth Guide](./docs/audiences/marketing-and-growth.md) | business outcomes, campaign implications, content strategy, and success metrics |
-| **Product and delivery** | [Product and Delivery Guide](./docs/audiences/product-and-delivery.md) | journey design, prioritization, roadmap, measurement, and operating-model choices |
-| **Engineering and architecture** | [Engineering and Architecture Guide](./docs/audiences/engineering-and-architecture.md) | service boundaries, state models, event flows, contracts, and implementation detail |
-
----
-
-## Audience Guides
-
-| Document | Description |
-|---|---|
-| [marketing-and-growth.md](./docs/audiences/marketing-and-growth.md) | Business-oriented reading path for campaign, content, lead-quality, and growth stakeholders |
-| [product-and-delivery.md](./docs/audiences/product-and-delivery.md) | Product-oriented reading path for journeys, roadmap, prioritization, and measurement |
-| [engineering-and-architecture.md](./docs/audiences/engineering-and-architecture.md) | Engineering-oriented reading path for architecture, services, data flow, and runtime decisions |
 
 ---
 
@@ -237,7 +229,7 @@ These documents move from business framing into implementation guidance.
 
 | Document | Description |
 |---|---|
-| [05-contentful-integration.md](./docs/services/05-contentful-integration.md) | CMS and offer metadata design, governance, and operating model |
+| [05-contentful-integration.md](./docs/services/05-contentful-integration.md) | Contentful and offer metadata design, governance, and operating model |
 | [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Service overview, audience summary, and links into detailed state, persistence, and API design |
 | [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Decisioning overview, audience summary, and links into scoring, policy, and runtime details |
 

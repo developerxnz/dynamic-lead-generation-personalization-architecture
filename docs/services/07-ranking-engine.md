@@ -85,7 +85,7 @@ Use the overview page for orientation, then go deeper based on what you need:
 
 ## What Engineering Should Take Away
 
-- the engine ranks a provided candidate set rather than owning retrieval or CMS logic
+- the engine ranks a provided candidate set rather than owning retrieval or Contentful logic
 - scoring, suppression, and traceability should be configurable and testable
 - runtime contracts and cache invalidation boundaries matter as much as the weight model
 

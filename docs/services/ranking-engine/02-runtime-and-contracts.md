@@ -34,6 +34,7 @@ A concrete request shape helps make the ranking boundary implementable.
       "contentId": "offer-123",
       "serviceCategory": "health_insurance",
       "ctaType": "get_quote",
+      "ctaDeepLink": "/quote/health-insurance?family=true",
       "provider": "Provider A",
       "priority": 2
     }
@@ -156,6 +157,11 @@ Each ranked item should return:
     {
       "contentId": "offer-123",
       "score": 32,
+      "cta": {
+        "type": "get_quote",
+        "label": "Get a quote",
+        "deepLink": "/quote/health-insurance?family=true"
+      },
       "reasons": [
         "Active journey fit: health_insurance quote journey",
         "Eligibility fit: approved for quote flow",
@@ -173,6 +179,8 @@ Each ranked item should return:
 ```
 
 Returning suppressed candidates is useful for traceability, debugging, and optimization analysis.
+
+Returned CTA payloads should include the deep link that the channel will execute, so the final step is explicit and traceable rather than inferred from CTA type alone.
 
 ---
 

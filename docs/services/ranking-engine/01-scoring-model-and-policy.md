@@ -181,7 +181,7 @@ The ranking engine should not:
 - retrieve content
 - infer intent authoritatively
 - own free-form AI interpretation
-- own CMS logic
+- own Contentful logic
 
 It should only:
 
