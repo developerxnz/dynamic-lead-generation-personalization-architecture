@@ -107,18 +107,13 @@ Scores are dynamic projections, not stored constants.
 
 # High-Level Architecture
 
-```text
-Digital And Assisted Events
-        ↓
-Event Ingestion Layer
-        ↓
-Profile Processing Pipeline
-        ↓
-Customer Profile + Journey State Aggregation
-        ↓
-Cosmos DB (Profile And Journey Store)
-        ↓
-Decisioning / Ranking Services
+```mermaid
+flowchart TD
+    A[Digital and assisted events] --> B[Event ingestion layer]
+    B --> C[Profile processing pipeline]
+    C --> D[Customer profile and journey state aggregation]
+    D --> E[Cosmos DB profile and journey store]
+    E --> F[Decisioning and ranking services]
 ```
 
 ---
