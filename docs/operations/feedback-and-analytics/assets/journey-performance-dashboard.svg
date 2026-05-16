@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Journey Performance Dashboard Mockup</title>
+  <desc id="desc">Illustrative dashboard mockup showing journey selection, progression funnels, resume success, abandonment, and secondary journey surfacing.</desc>
+  <rect width="1200" height="760" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="1152" height="712" rx="20" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="48" y="64" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2a44">Journey Performance Dashboard</text>
+  <text x="48" y="92" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#5b6780">Illustrative view of active-journey selection quality and progression by service category</text>
+
+  <rect x="48" y="120" width="360" height="250" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="150" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Active-journey selection mix</text>
+  <circle cx="178" cy="256" r="80" fill="#eef4ff"/>
+  <path d="M178 176 A80 80 0 0 1 246 292 L178 256 Z" fill="#3f7cff"/>
+  <path d="M246 292 A80 80 0 0 1 112 306 L178 256 Z" fill="#54c982"/>
+  <path d="M112 306 A80 80 0 0 1 178 176 L178 256 Z" fill="#845ef7"/>
+  <text x="280" y="214" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Health</text>
+  <text x="280" y="242" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">42%</text>
+  <text x="280" y="274" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Broadband 31%</text>
+  <text x="280" y="306" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Leasing 27%</text>
+
+  <rect x="424" y="120" width="352" height="250" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="444" y="150" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Journey progression funnel</text>
+  <path d="M470 188 H730 L686 228 H514 Z" fill="#dce7ff"/>
+  <path d="M498 246 H702 L666 286 H534 Z" fill="#bcd1ff"/>
+  <path d="M526 304 H674 L642 344 H558 Z" fill="#8ab4ff"/>
+  <path d="M554 362 H646 L620 402 H580 Z" fill="#5c90ff"/>
+  <text x="584" y="213" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Research 100%</text>
+  <text x="582" y="271" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Compare 71%</text>
+  <text x="579" y="329" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Eligibility 49%</text>
+  <text x="583" y="387" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Quote 28%</text>
+
+  <rect x="792" y="120" width="360" height="250" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="812" y="150" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Resume success by journey</text>
+  <line x1="832" y1="320" x2="1112" y2="320" stroke="#c7d2e6"/>
+  <rect x="852" y="248" width="46" height="72" rx="6" fill="#3f7cff"/>
+  <rect x="920" y="224" width="46" height="96" rx="6" fill="#54c982"/>
+  <rect x="988" y="264" width="46" height="56" rx="6" fill="#845ef7"/>
+  <rect x="1056" y="236" width="46" height="84" rx="6" fill="#ffb86b"/>
+  <text x="846" y="342" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Health</text>
+  <text x="908" y="342" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Broadband</text>
+  <text x="989" y="342" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Leasing</text>
+  <text x="1068" y="342" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Other</text>
+
+  <rect x="48" y="390" width="552" height="314" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="420" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Abandonment by stage and vertical</text>
+  <text x="68" y="446" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Higher bars indicate friction points worth prioritizing</text>
+  <line x1="108" y1="652" x2="560" y2="652" stroke="#c7d2e6"/>
+  <rect x="124" y="572" width="26" height="80" rx="5" fill="#8ab4ff"/>
+  <rect x="154" y="524" width="26" height="128" rx="5" fill="#54c982"/>
+  <rect x="184" y="548" width="26" height="104" rx="5" fill="#845ef7"/>
+  <rect x="254" y="540" width="26" height="112" rx="5" fill="#8ab4ff"/>
+  <rect x="284" y="484" width="26" height="168" rx="5" fill="#54c982"/>
+  <rect x="314" y="516" width="26" height="136" rx="5" fill="#845ef7"/>
+  <rect x="384" y="596" width="26" height="56" rx="5" fill="#8ab4ff"/>
+  <rect x="414" y="556" width="26" height="96" rx="5" fill="#54c982"/>
+  <rect x="444" y="580" width="26" height="72" rx="5" fill="#845ef7"/>
+  <text x="126" y="676" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Research</text>
+  <text x="258" y="676" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Compare</text>
+  <text x="390" y="676" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Eligibility</text>
+
+  <rect x="616" y="390" width="536" height="314" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="636" y="420" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Secondary-journey surfacing and conversion</text>
+  <polyline points="652,636 720,614 788,626 856,584 924,596 992,560 1060,572 1128,536" fill="none" stroke="#ff8c42" stroke-width="4"/>
+  <polyline points="652,656 720,642 788,648 856,624 924,630 992,612 1060,620 1128,598" fill="none" stroke="#3f7cff" stroke-width="4"/>
+  <text x="636" y="452" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Orange = surfacing rate, blue = assisted conversion rate</text>
+  <text x="652" y="680" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Week 1</text>
+  <text x="1090" y="680" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Week 8</text>
+</svg>

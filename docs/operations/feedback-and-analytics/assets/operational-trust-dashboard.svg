@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Operational Trust Dashboard Mockup</title>
+  <desc id="desc">Illustrative dashboard mockup showing decision trace coverage, version attachment, telemetry completeness, dashboard freshness, and experiment turnaround.</desc>
+  <rect width="1200" height="760" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="1152" height="712" rx="20" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="48" y="64" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2a44">Operational Trust Dashboard</text>
+  <text x="48" y="92" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#5b6780">Illustrative view of explainability, telemetry quality, and measurement readiness</text>
+
+  <rect x="48" y="120" width="210" height="96" rx="14" fill="#eef4ff" stroke="#cfdcf7"/>
+  <text x="64" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Decision trace coverage</text>
+  <text x="64" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">94.2%</text>
+
+  <rect x="274" y="120" width="210" height="96" rx="14" fill="#eefaf3" stroke="#d0ecd9"/>
+  <text x="290" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Policy version attached</text>
+  <text x="290" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">97.9%</text>
+
+  <rect x="500" y="120" width="210" height="96" rx="14" fill="#f4f0ff" stroke="#ddd4f7"/>
+  <text x="516" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Content revision attached</text>
+  <text x="516" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">95.8%</text>
+
+  <rect x="726" y="120" width="210" height="96" rx="14" fill="#fff7ec" stroke="#f1ddba"/>
+  <text x="742" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Telemetry completeness</text>
+  <text x="742" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">92.6%</text>
+
+  <rect x="952" y="120" width="200" height="96" rx="14" fill="#edf8ff" stroke="#d2e8f6"/>
+  <text x="968" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Experiment turnaround</text>
+  <text x="968" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">5.4 days</text>
+
+  <rect x="48" y="244" width="556" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="274" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Channel telemetry completeness</text>
+  <rect x="96" y="322" width="420" height="24" rx="12" fill="#edf2f8"/>
+  <rect x="96" y="322" width="388" height="24" rx="12" fill="#3f7cff"/>
+  <rect x="96" y="372" width="420" height="24" rx="12" fill="#edf2f8"/>
+  <rect x="96" y="372" width="360" height="24" rx="12" fill="#54c982"/>
+  <rect x="96" y="422" width="420" height="24" rx="12" fill="#edf2f8"/>
+  <rect x="96" y="422" width="332" height="24" rx="12" fill="#845ef7"/>
+  <text x="96" y="314" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Web</text>
+  <text x="96" y="364" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">CRM</text>
+  <text x="96" y="414" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Assisted sales</text>
+  <text x="494" y="338" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">92%</text>
+  <text x="466" y="388" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">86%</text>
+  <text x="438" y="438" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">79%</text>
+
+  <rect x="620" y="244" width="532" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="640" y="274" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Decision trace health over time</text>
+  <polyline points="652,414 720,398 788,388 856,368 924,354 992,338 1060,322 1128,312" fill="none" stroke="#3f7cff" stroke-width="4"/>
+  <polyline points="652,434 720,424 788,420 856,416 924,408 992,400 1060,392 1128,384" fill="none" stroke="#ff8c42" stroke-width="4"/>
+  <text x="640" y="304" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#3f7cff">Full trace coverage</text>
+  <text x="760" y="304" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#ff8c42">Version attachment gaps</text>
+
+  <rect x="48" y="484" width="560" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="514" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Experiment readout readiness</text>
+  <circle cx="176" cy="612" r="74" fill="#eef4ff"/>
+  <path d="M176 538 A74 74 0 1 1 140 677 L176 612 Z" fill="#3f7cff"/>
+  <text x="148" y="618" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1f2a44">82%</text>
+  <text x="290" y="574" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Experiments with clean event coverage</text>
+  <text x="290" y="604" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Prompt/model version attached</text>
+  <text x="290" y="634" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Sufficient sample size within review window</text>
+
+  <rect x="624" y="484" width="528" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="644" y="514" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Freshness and incident watchlist</text>
+  <text x="664" y="564" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Last successful Segment sync</text>
+  <text x="1044" y="564" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">7 min ago</text>
+  <text x="664" y="598" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Last Mixpanel projection refresh</text>
+  <text x="1018" y="598" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">11 min ago</text>
+  <text x="664" y="632" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Open measurement incidents</text>
+  <text x="1062" y="632" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#d45555">2</text>
+  <text x="664" y="666" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Next telemetry quality review</text>
+  <text x="1018" y="666" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">Monday</text>
+</svg>
