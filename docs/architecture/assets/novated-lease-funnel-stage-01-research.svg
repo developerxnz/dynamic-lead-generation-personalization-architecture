@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1080" viewBox="0 0 1400 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Novated lease funnel example, research stage</title>
+  <desc id="desc">Taller research-stage example with more space for educational content on the left and metadata and decisioning details on the right.</desc>
+  <rect width="1400" height="1080" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="1352" height="1032" rx="20" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="48" y="62" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2a44">Novated Leasing Funnel Example 1 - Research and Discovery</text>
+  <text x="48" y="92" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#5b6780">Taller early-funnel example showing educational content, calculator discovery, and the logic behind the match</text>
+
+  <rect x="48" y="120" width="858" height="896" rx="18" fill="#fbfcff" stroke="#d9e1ee"/>
+  <rect x="930" y="120" width="422" height="896" rx="18" fill="#f8fafe" stroke="#d9e1ee"/>
+  <line x1="906" y1="120" x2="906" y2="1016" stroke="#e1e7f0" stroke-width="2"/>
+
+  <rect x="72" y="148" width="810" height="172" rx="18" fill="#123b7a"/>
+  <text x="104" y="186" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#d6e5ff">Hero explainer</text>
+  <text x="104" y="224" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#ffffff">See how a novated lease could reduce the</text>
+  <text x="104" y="258" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#ffffff">running cost of your next EV</text>
+  <text x="104" y="290" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#d6e5ff">Early-funnel education focuses on salary packaging, tax-benefit framing,</text>
+  <text x="104" y="312" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#d6e5ff">and low-friction next steps before any lead-capture action is promoted.</text>
+
+  <rect x="92" y="350" width="382" height="258" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="112" y="370" width="342" height="118" rx="14" fill="#eaf2ff"/>
+  <ellipse cx="284" cy="452" rx="116" ry="32" fill="#d7e0ee"/>
+  <path d="M178 438 C212 404 252 392 326 396 C356 398 386 410 404 430 L404 458 L374 458 C366 482 342 492 318 492 C292 492 268 484 256 458 L220 458 C210 482 184 492 160 492 C136 492 114 482 108 458 L96 458 L96 438 C118 418 140 410 178 438 Z" fill="#324a6a"/>
+  <circle cx="162" cy="460" r="23" fill="#111a29"/>
+  <circle cx="162" cy="460" r="10" fill="#9aa9bf"/>
+  <circle cx="316" cy="460" r="23" fill="#111a29"/>
+  <circle cx="316" cy="460" r="10" fill="#9aa9bf"/>
+  <text x="112" y="526" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">EV explainer card</text>
+  <text x="112" y="552" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Explains how EV running costs, maintenance, and salary sacrifice work together in plain language.</text>
+  <rect x="112" y="570" width="144" height="24" rx="12" fill="#eef4ff"/>
+  <text x="130" y="586" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#1f2a44">Education first</text>
+
+  <rect x="500" y="350" width="382" height="258" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="520" y="370" width="342" height="118" rx="14" fill="#eefaf3"/>
+  <text x="540" y="424" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1f2a44">$278</text>
+  <text x="540" y="452" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Estimated monthly saving</text>
+  <text x="520" y="526" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Calculator teaser card</text>
+  <text x="520" y="552" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Invites the customer to explore savings without moving them into a quote journey too early.</text>
+  <rect x="520" y="566" width="152" height="40" rx="10" fill="#23a55a"/>
+  <text x="560" y="591" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Open calculator</text>
+
+  <rect x="92" y="638" width="790" height="170" rx="16" fill="#fff8ec" stroke="#f0dec1"/>
+  <text x="112" y="674" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Progression intent at this stage</text>
+  <text x="112" y="704" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">The journey favors education and light interaction over direct conversion.</text>
+  <text x="112" y="726" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">The goal is to move the visitor from curiosity to informed comparison.</text>
+  <path d="M112 786 H292 L272 752 H132 Z" fill="#dce7ff"/>
+  <path d="M336 786 H516 L496 752 H356 Z" fill="#bed4ff"/>
+  <path d="M560 786 H740 L720 752 H580 Z" fill="#8ab4ff"/>
+  <text x="170" y="772" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#1f2a44">Discover</text>
+  <text x="391" y="772" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#1f2a44">Research</text>
+  <text x="621" y="772" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Compare next</text>
+
+  <rect x="92" y="836" width="790" height="148" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="112" y="872" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">What the customer sees now</text>
+  <text x="112" y="902" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">1. Education-led hero content</text>
+  <text x="112" y="924" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">2. EV explainer and savings-calculator teaser</text>
+  <text x="112" y="946" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">3. No quote CTA yet because intent and eligibility evidence are still weak</text>
+
+  <text x="954" y="160" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">Matching inputs and decision trace</text>
+  <rect x="954" y="184" width="374" height="108" rx="14" fill="#eef4ff" stroke="#cfdbf4"/>
+  <text x="972" y="210" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Profile and journey</text>
+  <text x="972" y="238" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">service_category: novated_leasing</text>
+  <text x="972" y="258" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">funnel_stage: research</text>
+  <text x="972" y="278" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">intent: exploring_options</text>
+
+  <rect x="954" y="308" width="374" height="176" rx="14" fill="#eefaf3" stroke="#d3ebdc"/>
+  <text x="972" y="334" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Contentful metadata used</text>
+  <text x="972" y="362" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">subtype: explainer_article, calculator_descriptor</text>
+  <text x="972" y="382" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">vehicle_type: ev</text>
+  <text x="972" y="402" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">conversion_goal: calculator_start</text>
+  <text x="972" y="422" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">cta_type: explore_savings</text>
+  <text x="972" y="442" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">compliance_flags: approved, salary_packaging_disclosure</text>
+
+  <rect x="954" y="500" width="374" height="166" rx="14" fill="#f4f0ff" stroke="#ddd4f7"/>
+  <text x="972" y="526" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">AI support signals</text>
+  <text x="972" y="554" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">AI interpretation: customer is asking informational EV</text>
+  <text x="972" y="574" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">cost questions and is not quote ready yet</text>
+  <text x="972" y="594" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">query expansion: tax savings, running costs, employer</text>
+  <text x="972" y="614" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">deductions, EV affordability</text>
+  <text x="972" y="634" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">explanation style: beginner-friendly summary</text>
+
+  <rect x="954" y="682" width="374" height="278" rx="14" fill="#fff8ec" stroke="#f0dec1"/>
+  <text x="972" y="708" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1f2a44">Deterministic rules applied</text>
+  <text x="972" y="736" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">1. Prefer research-stage assets before quote CTAs</text>
+  <text x="972" y="756" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">2. Suppress quote promotion until intent evidence increases</text>
+  <text x="972" y="776" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">3. Require disclosure-backed educational content only</text>
+  <text x="972" y="804" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Outcome: explainer and calculator-teaser content rank</text>
+  <text x="972" y="824" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">above any direct quote action</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1500" viewBox="0 0 1100 1500" role="img" aria-labelledby="title desc">
+  <title id="title">Novated lease app experience example</title>
+  <desc id="desc">More realistic app-style example showing novated-leasing content cards, vehicle imagery, savings content, and CTA handoff inside a mobile app frame.</desc>
+  <rect width="1100" height="1500" fill="#eef2f8"/>
+  <rect x="250" y="36" width="600" height="1428" rx="46" fill="#152033"/>
+  <rect x="278" y="88" width="544" height="1332" rx="34" fill="#f8fbff"/>
+  <rect x="472" y="56" width="156" height="18" rx="9" fill="#2b3648"/>
+
+  <rect x="306" y="118" width="488" height="168" rx="22" fill="#0f5a5e"/>
+  <text x="334" y="158" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#c9f0ef">Good afternoon, Sam</text>
+  <text x="334" y="198" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#ffffff">Your EV shortlist is ready</text>
+  <text x="334" y="232" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#d3fbfa">See estimated monthly savings, compare vehicles, and continue into a quote journey when you are ready.</text>
+
+  <text x="322" y="334" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#1f2a44">Recommended vehicles</text>
+
+  <rect x="306" y="360" width="488" height="262" rx="24" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="330" y="386" width="440" height="132" rx="18" fill="#eaf2ff"/>
+  <ellipse cx="552" cy="478" rx="150" ry="34" fill="#d7e0ee"/>
+  <path d="M420 462 C456 424 508 406 606 410 C650 412 690 428 716 454 L716 490 L674 490 C664 520 632 534 602 534 C568 534 538 520 522 490 L474 490 C462 520 430 534 400 534 C370 534 340 520 332 490 L316 490 L316 462 C346 438 376 426 420 462 Z" fill="#2e476a"/>
+  <circle cx="406" cy="494" r="30" fill="#111a29"/>
+  <circle cx="406" cy="494" r="13" fill="#9aa9bf"/>
+  <circle cx="598" cy="494" r="30" fill="#111a29"/>
+  <circle cx="598" cy="494" r="13" fill="#9aa9bf"/>
+  <text x="330" y="556" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#1f2a44">Tesla Model 3 salary-packaged example</text>
+  <text x="330" y="586" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#4c5a78">Estimated saving: $284 per month</text>
+  <text x="330" y="608" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#4c5a78">Why it matches: EV preference, high calculator engagement, quote-ready intent</text>
+
+  <rect x="306" y="648" width="488" height="208" rx="24" fill="#ffffff" stroke="#d9e1ee"/>
+  <rect x="330" y="672" width="206" height="96" rx="16" fill="#fff3e7"/>
+  <text x="350" y="716" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">$226</text>
+  <text x="350" y="742" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Estimated monthly saving</text>
+  <rect x="552" y="672" width="218" height="96" rx="16" fill="#eefaf3"/>
+  <text x="572" y="716" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2a44">Employer fit</text>
+  <text x="572" y="742" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Already approved for salary packaging</text>
+  <text x="330" y="806" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1f2a44">Why this content is showing</text>
+  <text x="330" y="834" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">The app is showing confidence-building content before handing off into the dedicated quote flow.</text>
+
+  <rect x="306" y="882" width="488" height="180" rx="24" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="330" y="918" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#1f2a44">Next best action</text>
+  <text x="330" y="948" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#4c5a78">Start your novated-lease quote and continue in the dedicated conversion journey.</text>
+  <rect x="330" y="978" width="206" height="46" rx="12" fill="#23a55a"/>
+  <text x="384" y="1006" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">Start quote</text>
+  <rect x="552" y="978" width="186" height="46" rx="12" fill="#eef4ff" stroke="#cfdbf4"/>
+  <text x="605" y="1006" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#1f2a44">Compare another EV</text>
+  <text x="330" y="1048" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Deep link: /quote/novated-lease?vehicle=tesla-model-3</text>
+
+  <rect x="306" y="1088" width="488" height="178" rx="24" fill="#fff8ec" stroke="#f0dec1"/>
+  <text x="330" y="1124" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#1f2a44">Disclosure</text>
+  <text x="330" y="1154" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">Savings are illustrative and depend on income, employer participation,</text>
+  <text x="330" y="1176" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">vehicle choice, and credit approval. Final eligibility is confirmed</text>
+  <text x="330" y="1198" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#4c5a78">during the quote journey.</text>
+</svg>
