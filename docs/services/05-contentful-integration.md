@@ -13,7 +13,7 @@ It should not become the place where:
 - journey selection logic is embedded
 - AI prompts or system decisioning are hardcoded into content entries
 
-The CMS should manage what exists and how it is described. Backend services should decide what should be shown, to whom, and why.
+Contentful should manage what exists and how it is described. Backend services should decide what should be shown, to whom, and why.
 
 ---
 
@@ -54,6 +54,7 @@ Every managed asset should carry a common metadata backbone.
 | funnel_stage | Discover, research, compare, quote, apply, renew, or resume |
 | conversion_goal | Intended business outcome |
 | cta_type | Quote, callback, compare, check eligibility, apply, resume |
+| cta_deep_link | Deep-link destination or route template used when the CTA is rendered |
 | compliance_flags | Approval and disclosure requirements |
 | freshness | Recency and validity relevance |
 | priority | Explicit business control |
@@ -112,13 +113,13 @@ The implementation becomes clearer if each content type maps to a normalized dom
 | disclosure asset | `DisclosureReference` | compliance support |
 | AI grounding fragment | `GroundingSnippet` | RAG and explanation generation |
 
-This avoids making downstream services understand raw CMS types directly.
+This avoids making downstream services understand raw Contentful types directly.
 
 ---
 
 ## Query Strategy
 
-The CMS query layer should support broad candidate retrieval based on:
+The Contentful query layer should support broad candidate retrieval based on:
 
 - service-category alignment
 - region and provider availability
@@ -126,14 +127,14 @@ The CMS query layer should support broad candidate retrieval based on:
 - campaign context
 - lifecycle and approval state
 
-Avoid encoding business rules directly in CMS queries beyond hard constraints such as:
+Avoid encoding business rules directly in Contentful queries beyond hard constraints such as:
 
 - unpublished content
 - expired offers
 - missing compliance approval
 - withdrawn provider assets
 
-This keeps the CMS responsible for content availability, while backend services remain responsible for decision logic.
+This keeps Contentful responsible for content availability, while backend services remain responsible for decision logic.
 
 ---
 
@@ -144,12 +145,13 @@ The adapter should transform Contentful entries into stable domain models that i
 - normalized identifiers
 - provider and service taxonomy
 - structured CTA definitions
+- deep-link targets or route templates for CTA execution
 - references to disclosures and eligibility rules
 - publish and expiry timestamps
 - retrieval-friendly summaries
 - asset version or publish revision
 
-Normalization is important because the ranking and AI layers should consume a predictable domain model, not raw CMS shapes.
+Normalization is important because the ranking and AI layers should consume a predictable domain model, not raw Contentful shapes.
 
 ### Example Normalized Asset
 
@@ -163,7 +165,8 @@ Normalization is important because the ranking and AI layers should consume a pr
   "conversionGoal": "start_quote",
   "cta": {
     "type": "get_quote",
-    "label": "Get a family cover quote"
+    "label": "Get a family cover quote",
+    "deepLink": "/quote/health-insurance?family=true"
   },
   "disclosures": ["disc-health-001"],
   "retrievalSummary": "Family cover with extras and quote-ready positioning",
@@ -224,7 +227,7 @@ Implementation notes:
 
 - use GraphQL APIs
 - normalize responses into domain models
-- isolate CMS logic in infrastructure adapters
+- isolate Contentful logic in infrastructure adapters
 - support publish-aware caching
 - emit change events when metadata changes affect personalization
 - version normalized assets so ranking and analytics can reference what was actually served
@@ -240,13 +243,13 @@ Recommended cache boundaries:
 - treat publish, unpublish, expiry, and approval changes as invalidation triggers
 - keep AI grounding and vector-index refresh decoupled from live retrieval where possible
 
-This reduces CMS load without allowing stale or non-compliant content to remain in circulation.
+This reduces Contentful load without allowing stale or non-compliant content to remain in circulation.
 
 ---
 
 ## Governance And Operating Model
 
-The CMS model should support collaboration across:
+The Contentful model should support collaboration across:
 
 - marketing
 - provider management
@@ -269,6 +272,7 @@ Recommended governance questions:
 - who can publish offer changes
 - who approves AI grounding text
 - who owns compliance-sensitive edits
+- who owns and validates CTA deep-link targets
 - how withdrawn assets are suppressed across channels
 
 ---
@@ -278,7 +282,7 @@ Recommended governance questions:
 Avoid:
 
 - storing ranking rules in content entries
-- making the CMS the source of truth for suitability
+- making Contentful the source of truth for suitability
 - using freeform content fields where structured fields are needed
 - under-modeling approval and lifecycle state
 - treating AI grounding content as uncontrolled editorial text

@@ -65,7 +65,7 @@ Responsibilities:
 Responsibilities:
 
 - query managed content and offer metadata
-- normalize CMS entities into domain models
+- normalize Contentful entities into domain models
 - surface publish, expiry, and metadata changes to downstream services
 
 Suggested implementation:
@@ -125,7 +125,7 @@ Recommended live request order:
 
 1. load customer profile and currently active journey candidates
 2. resolve the active journey for the session
-3. retrieve candidate assets from normalized CMS-backed models
+3. retrieve candidate assets from normalized Contentful-backed models
 4. apply hard qualification and suitability checks
 5. run ranking and slot-composition logic
 6. optionally generate AI-supported explanation text

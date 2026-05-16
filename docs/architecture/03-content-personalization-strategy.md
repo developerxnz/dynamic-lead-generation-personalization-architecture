@@ -63,7 +63,7 @@ The platform may have multiple journey states for a customer, but it should sele
 
 ### 3. Content And Offer Metadata
 
-Provided by the CMS or offer catalog:
+Provided by Contentful or the offer catalog:
 
 - service category
 - subtype
@@ -141,7 +141,7 @@ This avoids forcing the customer into a single permanent category while still ke
 
 The system should first retrieve a broad candidate set, then narrow through deterministic filtering and ranking.
 
-Avoid overly restrictive CMS queries unless needed for hard constraints such as:
+Avoid overly restrictive Contentful queries unless needed for hard constraints such as:
 
 - expired offers
 - unsupported regions
@@ -207,6 +207,7 @@ All managed assets should include universal metadata.
 | funnel_stage | Research, compare, quote, apply, renew, or resume |
 | conversion_goal | Intended business outcome |
 | cta_type | Quote, callback, compare, check eligibility, apply, resume |
+| cta_deep_link | Deep-link destination the CTA should open for the selected journey and channel |
 | compliance_flags | Approval and disclosure requirements |
 | freshness | Recency and validity relevance |
 | priority | Explicit business control |
@@ -275,6 +276,8 @@ Candidates must pass basic relevance thresholds before ranking.
 
 Do not promote offers or CTAs that fail deterministic suitability, eligibility, or compliance constraints.
 
+When a CTA is promoted, its deep link should also be validated for the active journey, channel, and region so the next step lands the customer in the intended flow rather than on a generic page.
+
 ### Rule 3: Active Journey Leads
 
 The most relevant current journey should anchor the session experience.
@@ -330,7 +333,7 @@ Personalization should be designed for:
 
 ### Optimization Strategies
 
-- cache CMS metadata with publish-aware invalidation
+- cache Contentful metadata with publish-aware invalidation
 - precompute intent and engagement signals
 - avoid heavy runtime calculations in ranking
 - reuse candidate sets only when profile, journey, and content versions remain valid
