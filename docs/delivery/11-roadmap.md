@@ -1,6 +1,6 @@
 # Delivery Roadmap
 
-> **Navigation:** [Docs home](../../README.md#documentation-structure) | [End of guide ->](../../README.md#documentation-structure)
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: POC Scope ->](./12-poc-scope.md)
 
 ## Overview
 
@@ -354,6 +354,23 @@ This provides:
 
 ---
 
+## Recommended First POC
+
+Before the full roadmap is executed, the team should align on a focused proof-of-concept that proves the architecture in a visible, demo-friendly way.
+
+The POC should show:
+
+- durable customer profile and multiple concurrent journey states
+- active-journey selection for the current session
+- deterministic qualification and ranking
+- AI-assisted interpretation or explanation without surrendering control of policy decisions
+- measurable next-best-action outcomes
+- one primary end-to-end scenario plus supporting scenarios that show the model generalizes
+
+The detailed scope is defined in [12-poc-scope.md](./12-poc-scope.md).
+
+---
+
 | <- Previous | Next -> |
 |---|---|
-| [Feedback and Analytics](../operations/10-feedback-and-analytics.md) | [Documentation Home](../../README.md#documentation-structure) |
+| [Feedback and Analytics](../operations/10-feedback-and-analytics.md) | [POC Scope](./12-poc-scope.md) |
