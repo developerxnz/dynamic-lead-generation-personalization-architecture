@@ -107,6 +107,16 @@ Rank Candidates
 Return Personalized Results
 ```
 
+#### Measurement Foundation
+
+Implement the minimum measurement capability required to prove success:
+
+- standardized Segment.io event schema
+- customer and journey identifiers
+- recommendation-served events
+- active-journey-selected events
+- initial Mixpanel dashboards for funnel and lead-quality views
+
 ### Expected Outcomes
 
 Phase 1 should provide:
@@ -116,6 +126,7 @@ Phase 1 should provide:
 - stable ranking behavior
 - maintainable architecture foundations
 - low operational complexity
+- a credible baseline for future uplift measurement
 
 ---
 
@@ -182,6 +193,16 @@ Aggregated Projections
 Personalization Optimization
 ```
 
+#### Success Measurement Model
+
+Define and operationalize:
+
+- north-star outcome metrics
+- leading indicators
+- guardrail metrics
+- owner-aligned dashboards
+- baseline versus post-change comparisons
+
 #### Ranking Optimization
 
 Enhance ranking using:
@@ -200,6 +221,7 @@ Phase 2 should provide:
 - more accurate journey handling
 - improved conversion efficiency
 - stronger optimization feedback loops
+- faster detection of which changes are actually improving outcomes
 
 ---
 
@@ -253,6 +275,15 @@ Add:
 - resume guidance for returning customers
 - secondary-journey prompts where appropriate
 
+#### AI Measurement Layer
+
+Measure:
+
+- AI explanation engagement
+- AI-assisted journey selection performance
+- grounded-response quality
+- AI versus non-AI experience deltas
+
 #### Multi-Vertical Expansion
 
 Roll out new service lines primarily through configuration:
@@ -271,6 +302,7 @@ Phase 3 should provide:
 - improved discovery
 - scalable multi-vertical expansion
 - measurable AI-assisted conversion uplift
+- clearer confidence in where AI adds value and where deterministic controls should stay dominant
 
 ---
 
@@ -290,6 +322,7 @@ Enhancements include:
 - AI governance and review processes
 - provider and channel performance optimization
 - stronger operational dashboards
+- mature success-governance reviews
 
 ### Expected Outcomes
 
@@ -298,6 +331,7 @@ Phase 4 should provide:
 - better organizational confidence in the platform
 - faster iteration loops
 - clearer ownership across product, engineering, marketing, and operations
+- a durable measurement operating model that makes optimization repeatable
 
 ---
 
