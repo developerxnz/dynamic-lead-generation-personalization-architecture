@@ -260,6 +260,10 @@ Recommended panels:
 - provider handoff acceptance trend
 - returning-customer reactivation rate
 
+Illustrative mockup:
+
+![Example executive success dashboard](./assets/executive-success-dashboard.svg)
+
 ### 2. Journey Performance Dashboard
 
 Purpose:
@@ -274,6 +278,10 @@ Recommended panels:
 - abandonment rate by stage
 - secondary-journey surfacing rate
 
+Illustrative mockup:
+
+![Example journey performance dashboard](./assets/journey-performance-dashboard.svg)
+
 ### 3. Recommendation Quality Dashboard
 
 Purpose:
@@ -287,6 +295,10 @@ Recommended panels:
 - top recommendation performance by journey
 - suppressed candidate volume by reason
 - ranking policy version comparison
+
+Illustrative mockup:
+
+![Example recommendation quality dashboard](./assets/recommendation-quality-dashboard.svg)
 
 ### 4. AI Experience Dashboard
 
@@ -305,6 +317,10 @@ Recommended panels:
 - fallback and timeout rate by AI task type
 - AI outcome comparison by prompt and model version
 
+Illustrative mockup:
+
+![Example AI experience dashboard](./assets/ai-experience-dashboard.svg)
+
 ### 5. Operational Trust Dashboard
 
 Purpose:
@@ -318,6 +334,10 @@ Recommended panels:
 - sessions with content revision attached
 - telemetry completeness by channel
 - experiment readout turnaround time
+
+Illustrative mockup:
+
+![Example operational trust dashboard](./assets/operational-trust-dashboard.svg)
 
 ---
 

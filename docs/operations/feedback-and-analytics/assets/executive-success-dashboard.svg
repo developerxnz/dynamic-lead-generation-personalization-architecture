@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Executive Success Dashboard Mockup</title>
+  <desc id="desc">Illustrative dashboard mockup showing qualified lead rate, quote completion, callback conversion, provider handoff acceptance, and returning customer reactivation.</desc>
+  <rect width="1200" height="760" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="1152" height="712" rx="20" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="48" y="64" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2a44">Executive Success Dashboard</text>
+  <text x="48" y="92" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#5b6780">Illustrative Mixpanel-style view for qualified conversion and commercial outcomes</text>
+
+  <rect x="48" y="120" width="210" height="96" rx="14" fill="#eef4ff" stroke="#cfdcf7"/>
+  <text x="64" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Qualified lead rate</text>
+  <text x="64" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">28.4%</text>
+  <text x="162" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+3.2 pts</text>
+
+  <rect x="274" y="120" width="210" height="96" rx="14" fill="#eefaf3" stroke="#d0ecd9"/>
+  <text x="290" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Quote completion</text>
+  <text x="290" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">16.9%</text>
+  <text x="384" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+1.4 pts</text>
+
+  <rect x="500" y="120" width="210" height="96" rx="14" fill="#fff7ec" stroke="#f1ddba"/>
+  <text x="516" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Callback conversion</text>
+  <text x="516" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">11.2%</text>
+  <text x="606" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+0.8 pts</text>
+
+  <rect x="726" y="120" width="210" height="96" rx="14" fill="#f4f0ff" stroke="#ddd4f7"/>
+  <text x="742" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Handoff acceptance</text>
+  <text x="742" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">73.1%</text>
+  <text x="839" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+4.6 pts</text>
+
+  <rect x="952" y="120" width="200" height="96" rx="14" fill="#eef6ff" stroke="#d7e3f7"/>
+  <text x="968" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Returning reactivation</text>
+  <text x="968" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">41.8%</text>
+  <text x="1066" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+5.1 pts</text>
+
+  <rect x="48" y="244" width="684" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="274" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Qualified lead rate trend</text>
+  <line x1="88" y1="424" x2="692" y2="424" stroke="#c7d2e6"/>
+  <line x1="88" y1="378" x2="692" y2="378" stroke="#e1e7f0"/>
+  <line x1="88" y1="332" x2="692" y2="332" stroke="#e1e7f0"/>
+  <line x1="88" y1="286" x2="692" y2="286" stroke="#e1e7f0"/>
+  <polyline points="96,398 170,388 244,372 318,360 392,350 466,326 540,310 614,292 688,278" fill="none" stroke="#3f7cff" stroke-width="4"/>
+  <circle cx="688" cy="278" r="5" fill="#3f7cff"/>
+  <text x="88" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Jan</text>
+  <text x="308" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Apr</text>
+  <text x="534" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Jul</text>
+  <text x="666" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Sep</text>
+
+  <rect x="748" y="244" width="404" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="768" y="274" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Outcome trend by channel</text>
+  <text x="768" y="304" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Quote completion, callback conversion, and handoff acceptance</text>
+  <rect x="788" y="386" width="40" height="42" rx="6" fill="#8ab4ff"/>
+  <rect x="840" y="364" width="40" height="64" rx="6" fill="#5c90ff"/>
+  <rect x="892" y="336" width="40" height="92" rx="6" fill="#3f7cff"/>
+  <rect x="958" y="372" width="40" height="56" rx="6" fill="#8de0b4"/>
+  <rect x="1010" y="348" width="40" height="80" rx="6" fill="#54c982"/>
+  <rect x="1062" y="320" width="40" height="108" rx="6" fill="#23a55a"/>
+  <text x="792" y="450" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Web</text>
+  <text x="955" y="450" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Sales</text>
+
+  <rect x="48" y="484" width="540" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="514" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Top providers by handoff acceptance</text>
+  <rect x="68" y="546" width="500" height="28" rx="8" fill="#f5f7fb"/>
+  <rect x="68" y="590" width="420" height="16" rx="8" fill="#d6e4ff"/>
+  <rect x="68" y="622" width="372" height="16" rx="8" fill="#bed4ff"/>
+  <rect x="68" y="654" width="330" height="16" rx="8" fill="#a8c4ff"/>
+  <text x="76" y="565" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#4c5a78">Provider A</text>
+  <text x="76" y="603" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#4c5a78">Provider B</text>
+  <text x="76" y="635" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#4c5a78">Provider C</text>
+  <text x="76" y="667" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#4c5a78">Provider D</text>
+  <text x="510" y="603" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">81%</text>
+  <text x="462" y="635" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">74%</text>
+  <text x="420" y="667" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">66%</text>
+
+  <rect x="604" y="484" width="548" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="624" y="514" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Returning-customer reactivation</text>
+  <path d="M660 654 L660 568 L720 548 L780 592 L840 520 L900 548 L960 500 L1020 536 L1080 484" fill="none" stroke="#845ef7" stroke-width="4"/>
+  <circle cx="1080" cy="484" r="5" fill="#845ef7"/>
+  <text x="660" y="680" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Week 1</text>
+  <text x="1036" y="680" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Week 8</text>
+  <text x="624" y="544" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#5b6780">Resume success and qualified quote restart trend</text>
+</svg>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Recommendation Quality Dashboard Mockup</title>
+  <desc id="desc">Illustrative dashboard mockup showing recommendation click-through, quote-start conversion, top recommendation performance, suppressed candidate reasons, and ranking policy comparison.</desc>
+  <rect width="1200" height="760" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="1152" height="712" rx="20" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="48" y="64" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2a44">Recommendation Quality Dashboard</text>
+  <text x="48" y="92" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#5b6780">Illustrative view of recommendation relevance, conversion contribution, and suppression behavior</text>
+
+  <rect x="48" y="120" width="210" height="96" rx="14" fill="#eef4ff" stroke="#cfdcf7"/>
+  <text x="64" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Recommendation CTR</text>
+  <text x="64" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">12.7%</text>
+  <text x="162" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+1.8 pts</text>
+
+  <rect x="274" y="120" width="210" height="96" rx="14" fill="#eefaf3" stroke="#d0ecd9"/>
+  <text x="290" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Recommendation to quote</text>
+  <text x="290" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">6.4%</text>
+  <text x="380" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+0.9 pts</text>
+
+  <rect x="500" y="120" width="210" height="96" rx="14" fill="#fff7ec" stroke="#f1ddba"/>
+  <text x="516" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Suppression rate</text>
+  <text x="516" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">38.2%</text>
+  <text x="612" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#d45555">-2.1 pts</text>
+
+  <rect x="726" y="120" width="426" height="96" rx="14" fill="#f4f0ff" stroke="#ddd4f7"/>
+  <text x="742" y="150" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Best policy version</text>
+  <text x="742" y="188" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#1f2a44">health-v4</text>
+  <text x="925" y="188" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f8f5f">+11% quote uplift</text>
+
+  <rect x="48" y="244" width="540" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="274" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Top recommendation performance by journey</text>
+  <line x1="108" y1="424" x2="548" y2="424" stroke="#c7d2e6"/>
+  <rect x="132" y="330" width="58" height="94" rx="6" fill="#3f7cff"/>
+  <rect x="224" y="300" width="58" height="124" rx="6" fill="#54c982"/>
+  <rect x="316" y="344" width="58" height="80" rx="6" fill="#845ef7"/>
+  <rect x="408" y="314" width="58" height="110" rx="6" fill="#ff8c42"/>
+  <text x="132" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Family health</text>
+  <text x="226" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Move home</text>
+  <text x="316" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">EV lease</text>
+  <text x="410" y="448" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">Renewal</text>
+
+  <rect x="604" y="244" width="548" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="624" y="274" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Suppressed candidate volume by reason</text>
+  <rect x="644" y="314" width="312" height="22" rx="10" fill="#dce7ff"/>
+  <rect x="644" y="356" width="252" height="22" rx="10" fill="#bed4ff"/>
+  <rect x="644" y="398" width="196" height="22" rx="10" fill="#a8c4ff"/>
+  <text x="644" y="304" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Ineligible</text>
+  <text x="644" y="346" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Region mismatch</text>
+  <text x="644" y="388" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4c5a78">Compliance hold</text>
+  <text x="970" y="330" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">41%</text>
+  <text x="910" y="372" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">33%</text>
+  <text x="854" y="414" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1f2a44">26%</text>
+
+  <rect x="48" y="484" width="640" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="68" y="514" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Ranking policy version comparison</text>
+  <polyline points="88,648 170,620 252,612 334,574 416,566 498,538 580,522 662,494" fill="none" stroke="#3f7cff" stroke-width="4"/>
+  <polyline points="88,666 170,648 252,636 334,614 416,602 498,592 580,584 662,572" fill="none" stroke="#ff8c42" stroke-width="4"/>
+  <text x="92" y="680" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">v2</text>
+  <text x="640" y="680" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5b6780">v4</text>
+  <text x="80" y="546" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#3f7cff">Health policy</text>
+  <text x="180" y="546" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#ff8c42">Broadband policy</text>
+
+  <rect x="704" y="484" width="448" height="220" rx="16" fill="#ffffff" stroke="#d9e1ee"/>
+  <text x="724" y="514" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1f2a44">Recommendation table</text>
+  <rect x="724" y="538" width="408" height="34" rx="8" fill="#f5f7fb"/>
+  <text x="738" y="560" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#4c5a78">Recommendation</text>
+  <text x="944" y="560" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#4c5a78">CTR</text>
+  <text x="1004" y="560" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#4c5a78">Quote</text>
+  <text x="1078" y="560" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#4c5a78">Impact</text>
+  <text x="738" y="602" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">Family extras comparison</text>
+  <text x="948" y="602" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">15.1%</text>
+  <text x="1010" y="602" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">7.2%</text>
+  <text x="1078" y="602" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f8f5f">High</text>
+  <text x="738" y="636" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">Move-home speed guide</text>
+  <text x="948" y="636" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">12.3%</text>
+  <text x="1010" y="636" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">6.0%</text>
+  <text x="1078" y="636" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f8f5f">High</text>
+  <text x="738" y="670" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">EV affordability calculator</text>
+  <text x="948" y="670" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">9.4%</text>
+  <text x="1010" y="670" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#1f2a44">4.7%</text>
+  <text x="1078" y="670" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#ff8c42">Watch</text>
+</svg>
