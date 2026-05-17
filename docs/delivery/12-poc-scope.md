@@ -50,6 +50,8 @@ This gives the demo enough breadth to feel credible without turning the POC into
 
 The primary scenario should be a **returning-customer, multi-journey flow** because it demonstrates more of the architecture than a simple first-visit path.
 
+For a concrete documentation walkthrough of this style of scenario, see [Worked Example: Returning Customer With Multiple Journeys](../architecture/worked-example/01-returning-customer-multi-journey.md).
+
 Recommended scenario:
 
 1. a known customer has an existing journey in one category
