@@ -244,6 +244,12 @@ These documents move from business framing into implementation guidance.
 | [03-content-personalization-strategy.md](./docs/architecture/03-content-personalization-strategy.md) | Offer, content, CTA, and next-best-action decisioning strategy |
 | [04-system-architecture.md](./docs/architecture/04-system-architecture.md) | Technical architecture, service boundaries, and end-to-end decision flow |
 
+### Architecture Deep Dives
+
+| Document | Description |
+|---|---|
+| [worked-example/01-returning-customer-multi-journey.md](./docs/architecture/worked-example/01-returning-customer-multi-journey.md) | Concrete end-to-end scenario showing active-journey selection, retrieval, deterministic ranking, AI-assisted explanation, and telemetry |
+
 ---
 
 ## Services

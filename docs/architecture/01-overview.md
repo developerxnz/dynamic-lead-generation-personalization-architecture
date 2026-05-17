@@ -104,6 +104,8 @@ The loop matters because the platform should not treat conversion as a single-se
 - cross-sell or adjacent-service intent
 - abandoned quote or application recovery
 
+For a concrete walkthrough of how those steps work in one session, see [Worked Example: Returning Customer With Multiple Journeys](./worked-example/01-returning-customer-multi-journey.md).
+
 ---
 
 ## High-Level Architecture
