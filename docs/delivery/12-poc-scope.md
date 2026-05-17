@@ -54,6 +54,8 @@ For a concrete documentation walkthrough of this style of scenario, see [Worked 
 
 For the delivery-focused version showing example payloads, decision trace, and analytics events, see [POC Demo Flow](./14-poc-demo-flow.md).
 
+For the concise presenter version covering the business problem, chosen slice, what is mocked versus real, and what success should look like, see [POC Story And Presentation Narrative](./15-poc-story.md).
+
 Recommended scenario:
 
 1. a known customer has an existing journey in one category

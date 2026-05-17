@@ -1,6 +1,6 @@
 # POC Demo Flow
 
-> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Previous: Ownership And Operating Model <-](./13-ownership-and-operating-model.md)
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Previous: Ownership And Operating Model <-](./13-ownership-and-operating-model.md) | [Next: POC Story And Presentation Narrative ->](./15-poc-story.md)
 
 ## Overview
 
@@ -491,4 +491,4 @@ That is what makes the POC feel like a credible first slice of the platform rath
 
 | <- Previous | Next -> |
 |---|---|
-| [Ownership And Operating Model](./13-ownership-and-operating-model.md) | [Documentation Home](../../README.md#documentation-structure) |
+| [Ownership And Operating Model](./13-ownership-and-operating-model.md) | [POC Story And Presentation Narrative](./15-poc-story.md) |
