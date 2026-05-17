@@ -90,6 +90,56 @@ AI should be treated as:
 
 ---
 
+## What AI Does Not Do
+
+This is the simplest way to read the architecture:
+
+AI helps the platform **understand, explain, and guide**.
+
+AI does **not** decide the protected things that must stay predictable, testable, and auditable.
+
+### AI Does Not Decide
+
+- whether a customer is eligible
+- whether an option is suitable to promote
+- which suppressed provider or offer should bypass policy
+- which compliance rule can be ignored
+- which ranking result should override deterministic constraints
+
+### AI Does Help With
+
+- interpreting messy customer intent
+- summarizing journey context
+- improving semantic retrieval
+- generating grounded explanation text
+- supporting conversational guidance
+
+### Plain-Language Example
+
+If a customer asks:
+
+> "I'm moving house and need internet fast, but I also wanted to finish my health cover comparison"
+
+AI may help the platform:
+
+- understand that both broadband and health journeys are relevant
+- summarize the likely immediate need
+- generate a clear explanation for the recommended next step
+
+AI should **not** on its own:
+
+- decide that the customer is eligible for a broadband offer
+- suppress or unsuppress a provider
+- overrule the deterministic active-journey and ranking logic
+
+### Simple Rule Of Thumb
+
+If the outcome needs to be defended to product, compliance, sales, or an engineering reviewer, it should not depend on AI alone.
+
+That means AI can be very visible in the experience while deterministic systems remain authoritative underneath it.
+
+---
+
 ## Recommended AI Capabilities
 
 ### 1. Journey Interpretation
