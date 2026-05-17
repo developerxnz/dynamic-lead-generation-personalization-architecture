@@ -111,6 +111,67 @@ This structure allows the platform to keep separate state for multiple concurren
 
 ---
 
+## What A Journey Summary Actually Is
+
+A **journey summary** is not the same thing as the full stored journey document or raw event history.
+
+It is the compact, decision-ready view of a journey that downstream systems should usually read during live decisioning.
+
+In plain language:
+
+- the **full journey state** is everything the platform knows about that journey
+- the **journey summary** is the smaller subset that is most useful for choosing what to do next
+
+This matters because orchestration, ranking, and AI prompt assembly should not need to scan full event history on every request.
+
+### What A Journey Summary Should Usually Contain
+
+- journey ID
+- service category
+- current intent
+- current stage
+- resume indicator
+- qualification or suitability status
+- recent behavior summary
+- journey score
+- last meaningful event time
+- short human-readable reason or summary where useful
+
+### What A Journey Summary Should Usually Avoid
+
+- raw event-by-event history
+- large free-form notes
+- full content payloads
+- low-level processing metadata that is only useful for rebuilds or repair
+
+### Example Journey Summary
+
+```json
+{
+  "journey_id": "journey-health-001",
+  "service_category": "health_insurance",
+  "intent": "comparing_options",
+  "stage": "quote_ready",
+  "resume_candidate": true,
+  "qualification_state": {
+    "coverage_region_match": true,
+    "serviceability_confirmed": true,
+    "hard_exclusions": []
+  },
+  "behavior_summary": {
+    "recent_quote_started": true,
+    "provider_comparisons_7d": 4
+  },
+  "journey_score": 0.76,
+  "last_meaningful_event_at": "2026-05-14T08:20:00Z",
+  "ai_journey_summary": "Returning visitor likely ready to compare family cover and resume quote flow"
+}
+```
+
+This is the form that active-journey selection, ranking, and AI support layers should prefer when making live decisions.
+
+---
+
 ## Active Journey Selection
 
 Even when multiple journeys exist, the platform still needs to decide:
@@ -221,6 +282,10 @@ Appropriate AI uses:
 - improving confidence in intent classification
 - interpreting free-text or conversational inputs
 - helping identify which journey is likely most relevant now
+
+In practice, AI should usually read a **journey summary** rather than the raw underlying event stream.
+
+That keeps prompts smaller, makes reasoning easier to inspect, and reduces the risk that prompt assembly becomes a hidden replay engine.
 
 AI should not replace:
 
