@@ -310,6 +310,7 @@ These documents move from business framing into implementation guidance.
 | [12-poc-scope.md](./docs/delivery/12-poc-scope.md) | Focused proof-of-concept scope, success criteria, demo audience, and live-versus-described implementation cut |
 | [13-ownership-and-operating-model.md](./docs/delivery/13-ownership-and-operating-model.md) | Cross-functional ownership matrix for decisioning, content, telemetry, analytics, AI, and operational review |
 | [14-poc-demo-flow.md](./docs/delivery/14-poc-demo-flow.md) | Step-by-step POC walkthrough with example requests, responses, decision trace, and analytics events |
+| [15-poc-story.md](./docs/delivery/15-poc-story.md) | Concise presentation narrative for the POC: business problem, chosen slice, mocked versus real scope, and success criteria |
 
 ---
 
