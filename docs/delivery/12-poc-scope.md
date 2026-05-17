@@ -52,6 +52,8 @@ The primary scenario should be a **returning-customer, multi-journey flow** beca
 
 For a concrete documentation walkthrough of this style of scenario, see [Worked Example: Returning Customer With Multiple Journeys](../architecture/worked-example/01-returning-customer-multi-journey.md).
 
+For the delivery-focused version showing example payloads, decision trace, and analytics events, see [POC Demo Flow](./14-poc-demo-flow.md).
+
 Recommended scenario:
 
 1. a known customer has an existing journey in one category
