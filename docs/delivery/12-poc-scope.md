@@ -1,6 +1,6 @@
 # POC Scope
 
-> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Previous: Delivery Roadmap <-](./11-roadmap.md)
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Previous: Delivery Roadmap <-](./11-roadmap.md) | [Next: Ownership And Operating Model ->](./13-ownership-and-operating-model.md)
 
 ## Overview
 
@@ -274,4 +274,4 @@ That gives all major stakeholders enough evidence to believe the architecture is
 
 | <- Previous | Next -> |
 |---|---|
-| [Delivery Roadmap](./11-roadmap.md) | [Documentation Home](../../README.md#documentation-structure) |
+| [Delivery Roadmap](./11-roadmap.md) | [Ownership And Operating Model](./13-ownership-and-operating-model.md) |
