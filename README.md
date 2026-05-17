@@ -275,7 +275,7 @@ These documents move from business framing into implementation guidance.
 
 | Document | Description |
 |---|---|
-| [08-ai-and-rag-strategy.md](./docs/ai/08-ai-and-rag-strategy.md) | AI boundaries, RAG strategy, and assistive use cases |
+| [08-ai-and-rag-strategy.md](./docs/ai/08-ai-and-rag-strategy.md) | AI boundaries, plain-language limits, RAG strategy, and assistive use cases |
 | [09-vector-search-design.md](./docs/ai/09-vector-search-design.md) | Semantic retrieval for offers, guidance, and lead-support journeys |
 
 ### AI Deep Dives
