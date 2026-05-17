@@ -28,6 +28,21 @@ This keeps the live request path explicit and prevents prompt logic from leaking
 
 AI-assisted journey interpretation should produce a **decision-support payload**, not an authoritative decision.
 
+It should also consume a **journey summary**, not the full raw journey history.
+
+A journey summary is the bounded view of the journey that is most relevant for live decisioning, such as:
+
+- service category
+- current intent
+- current stage
+- qualification state
+- resume indicator
+- recent behavior summary
+- journey score
+- last meaningful event time
+
+This is important because the AI layer should help interpret the current situation, not become a hidden event-processing system.
+
 Suggested shape:
 
 ```json
@@ -72,6 +87,28 @@ Before generation, the orchestration layer should assemble a bounded context pac
 - high-signal customer-profile summary
 - allowed CTA or next-step options
 - disclosure fragments where applicable
+
+### Example Active-Journey Summary
+
+```json
+{
+  "journeyId": "journey-health-001",
+  "serviceCategory": "health_insurance",
+  "intent": "comparing_providers",
+  "stage": "quote_ready",
+  "resumeCandidate": true,
+  "qualificationState": {
+    "coverageRegionMatch": true,
+    "serviceabilityConfirmed": true
+  },
+  "behaviorSummary": {
+    "recentQuoteStarted": true,
+    "providerComparisons7d": 4
+  },
+  "journeyScore": 0.78,
+  "lastMeaningfulEventAt": "2026-05-11T10:15:00Z"
+}
+```
 
 Recommended rules:
 
