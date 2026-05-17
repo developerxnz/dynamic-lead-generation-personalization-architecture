@@ -94,6 +94,27 @@ This makes the experience feel adaptive, intelligent, and increasingly context-a
 
 ---
 
+## Core Definitions
+
+These definitions are intended to make the rest of the documentation easier to read across marketing, product, engineering, and data audiences.
+
+| Term | Plain-language meaning | Why it matters |
+|---|---|---|
+| **Journey** | A service-specific path a customer is currently exploring, progressing, resuming, or renewing. | A customer can have more than one journey at the same time, so the platform cannot assume one fixed path forever. |
+| **Active journey** | The journey that should drive the current session experience right now. | The platform may track multiple journeys, but it still needs one primary context for live decisioning. |
+| **Journey summary** | A compact, decision-ready snapshot of a journey state, such as current intent, stage, qualification status, recent behavior, and score. | AI, ranking, and orchestration should read a bounded summary instead of raw event history. |
+| **Customer summary** | A compact snapshot of cross-journey customer facts such as return status, lead score, and recent meaningful activity. | This gives downstream systems reusable customer context without overloading them with full profile history. |
+| **Next best action** | The most appropriate next thing the platform wants the customer to do, such as start a quote, compare options, check eligibility, request a callback, or resume a flow. | The platform is not just choosing content; it is choosing the best conversion-supporting action for the moment. |
+| **Eligibility** | Whether the customer can proceed based on hard requirements, serviceability, region, employer support, or other factual constraints. | Ineligible actions should not be promoted, even if they look commercially attractive. |
+| **Suitability** | Whether an option is appropriate to show after considering intent, stage, context, and policy constraints. | Something can be technically available but still be the wrong thing to promote in the current journey. |
+| **Retrieval** | The step that finds a broad candidate set of offers, content, tools, and CTAs that could be relevant. | Retrieval discovers possibilities; it should not be the final decision layer. |
+| **Ranking** | The step that orders the remaining candidates after deterministic filters and constraints are applied. | Ranking decides what is safest and most commercially useful to show from the candidate set. |
+| **AI support signals** | AI-generated or AI-assisted signals that help interpretation, retrieval, explanation, or summarization without becoming authoritative policy decisions. | AI can improve relevance and clarity, but deterministic systems remain responsible for protected decisions. |
+
+These definitions are expanded further in the architecture, customer-state, ranking, and AI sections.
+
+---
+
 ## High-Level Platform Flow
 
 ```mermaid
