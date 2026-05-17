@@ -1,6 +1,6 @@
 # Ownership And Operating Model
 
-> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Previous: POC Scope <-](./12-poc-scope.md)
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Previous: POC Scope <-](./12-poc-scope.md) | [Next: POC Demo Flow ->](./14-poc-demo-flow.md)
 
 ## Overview
 
@@ -248,4 +248,4 @@ That split keeps the system governable while still allowing fast iteration.
 
 | <- Previous | Next -> |
 |---|---|
-| [POC Scope](./12-poc-scope.md) | [Documentation Home](../../README.md#documentation-structure) |
+| [POC Scope](./12-poc-scope.md) | [POC Demo Flow](./14-poc-demo-flow.md) |
