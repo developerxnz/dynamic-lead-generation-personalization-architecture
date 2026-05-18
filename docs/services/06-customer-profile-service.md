@@ -14,30 +14,6 @@ It should manage:
 
 ---
 
-## Who Should Read This
-
-| Audience | Why this page matters |
-|---|---|
-| Product | understand what customer and journey state the platform can reliably use |
-| Engineering | understand service ownership, storage choices, and where to go for deeper contracts |
-| Analytics and operations | understand which state is operational versus analytical |
-
----
-
-## Goals
-
-The Customer Profile Service should:
-
-- maintain an up-to-date customer profile
-- maintain multiple concurrent journey states
-- aggregate behavior over time
-- support real-time and near-real-time updates
-- calculate customer-level and journey-level scores
-- expose a consistent API for downstream systems
-- support reprocessing and historical correction
-
----
-
 ## What This Service Owns
 
 - durable customer profile facts
@@ -45,6 +21,8 @@ The Customer Profile Service should:
 - customer-level and journey-level projections
 - event-driven updates and replayable state rebuilds
 - read models used by live decisioning
+
+The service owns current profile and journey projections. Longer-term analytical history and dashboarding stay in the analytics layer.
 
 ---
 
@@ -69,28 +47,6 @@ Use the overview page for orientation, then go deeper based on what you need:
 |---|---|---|
 | [State and Persistence](./customer-profile-service/01-state-and-persistence.md) | product + engineering | customer and journey ownership, persistence split, storage, and projection design |
 | [Event Processing and APIs](./customer-profile-service/02-event-processing-and-apis.md) | engineering | event model, processing guarantees, read payloads, CQRS, and endpoints |
-
-## Key Takeaways
-
-- for product, customer understanding is durable across sessions and multiple journeys can exist in parallel without losing focus on the active one
-- for engineering, the service is event-driven and replayable, and live decisioning should read stable customer-scoped projections rather than raw event streams
-
----
-
-## Summary
-
-The Customer Profile Service is the system of record for current lead understanding.
-
-It transforms raw interactions into structured intelligence used by:
-
-- ranking engines
-- personalization services
-- sales-assist experiences
-- AI interpretation and guidance layers
-
-Its core value is:
-
-> turning fragmented behavior into usable customer profile and journey intelligence for real-time decisioning
 
 ---
 

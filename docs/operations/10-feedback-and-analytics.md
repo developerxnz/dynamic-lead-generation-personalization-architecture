@@ -19,31 +19,6 @@ Analytics should be treated as a core platform capability rather than a secondar
 
 ---
 
-## Goals
-
-The analytics platform should support:
-
-- personalization optimization
-- ranking improvements
-- lead-scoring refinement
-- active-journey refinement
-- conversion analysis
-- experimentation
-- behavioral understanding
-- customer and journey analysis
-
----
-
-## Who Should Read This
-
-| Audience | Why this page matters |
-|---|---|
-| Marketing and growth | understand what business outcomes and dashboards matter |
-| Product and delivery | understand the measurement model and governance expectations |
-| Engineering and data | understand where telemetry, event models, and decision traces fit |
-
----
-
 ## Analytics Architecture At A Glance
 
 ```mermaid
@@ -91,35 +66,6 @@ Use the overview page for orientation, then go deeper based on what you need:
 |---|---|---|
 | [Success Measurement](./feedback-and-analytics/01-success-measurement.md) | marketing + product + analytics | outcome model, guardrails, ownership, and what changes make success easy to measure |
 | [Event Model and Dashboards](./feedback-and-analytics/02-event-model-and-dashboards.md) | engineering + analytics | signals, event taxonomy, Segment-to-Mixpanel flow, dashboard definitions, and projections |
-
----
-
-## What Business Readers Should Take Away
-
-- measurement should prove qualified conversion and journey quality, not just click volume
-- dashboards should be organized around decisions and outcomes
-- ownership for metrics, telemetry quality, and experiment readouts should be explicit
-
-## What Engineering And Data Readers Should Take Away
-
-- analytics must be designed into the platform rather than bolted on later
-- decision traces, versioning, and stable identifiers are required for trustworthy attribution
-- the telemetry path should support both fast reporting and deeper optimization loops
-
----
-
-## Summary
-
-Analytics should help the platform maximize qualified lead outcomes while preserving explainability.
-
-The platform should prioritize:
-
-- structured events
-- journey-aware measurement
-- asynchronous processing
-- replayable history
-- explainable metrics
-- continuous optimization
 
 ---
 
