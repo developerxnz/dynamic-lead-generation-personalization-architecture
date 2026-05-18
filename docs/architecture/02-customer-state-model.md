@@ -217,41 +217,6 @@ This separation keeps the data model cleaner and more scalable.
 
 ---
 
-## What Belongs In The Customer Profile
-
-The profile should contain durable or cross-journey information such as:
-
-- identity and linkage keys
-- household type
-- employment type
-- location
-- budget range
-- life stage
-- cross-journey return behavior
-- overall lead score or customer value signals
-
-These fields are useful regardless of which service journey is currently most active.
-
----
-
-## What Belongs In Journey State
-
-Journey state should contain service-specific and time-sensitive information such as:
-
-- service category
-- current intent
-- current stage
-- urgency
-- switching or renewal state
-- qualification state
-- quote or application progress
-- journey-level behavior summary
-- journey-level AI summary
-
-This is the state that personalization and ranking should use most heavily.
-
----
-
 ## Returning-Customer Logic
 
 Returning customers should not be treated as blank sessions.
@@ -341,17 +306,6 @@ AI can contribute:
 - multi-journey pattern detection
 
 But authoritative scores should remain explainable and reproducible.
-
----
-
-## Design Principles
-
-- separate profile from journey state
-- support multiple journeys per customer
-- preserve observed facts separately from inferred state
-- track return behavior at both customer and journey level
-- let AI improve interpretation without obscuring control logic
-- optimize the model for live decisions, not just storage completeness
 
 ---
 

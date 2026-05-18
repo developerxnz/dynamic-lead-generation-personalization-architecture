@@ -75,19 +75,10 @@ Use the overview page for orientation, then go deeper based on what you need:
 | [Scoring Model and Policy](./ranking-engine/01-scoring-model-and-policy.md) | product + engineering | ranking inputs, weights, policy rules, and configuration |
 | [Runtime and Contracts](./ranking-engine/02-runtime-and-contracts.md) | engineering | request and response shapes, runtime steps, explainability, and performance boundaries |
 
----
+## Key Takeaways
 
-## What Product Should Take Away
-
-- ranking is where relevance, suitability, and commercial priorities are balanced
-- deterministic controls stay authoritative even when AI contributes relevance signals
-- explainability is part of the output, not an afterthought
-
-## What Engineering Should Take Away
-
-- the engine ranks a provided candidate set rather than owning retrieval or Contentful logic
-- scoring, suppression, and traceability should be configurable and testable
-- runtime contracts and cache invalidation boundaries matter as much as the weight model
+- for product, ranking is where relevance, suitability, and commercial priorities are balanced, with deterministic controls remaining authoritative
+- for engineering, the engine ranks a provided candidate set rather than owning retrieval, and scoring, suppression, and traceability should stay configurable and testable
 
 ---
 

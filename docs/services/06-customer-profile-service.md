@@ -70,19 +70,10 @@ Use the overview page for orientation, then go deeper based on what you need:
 | [State and Persistence](./customer-profile-service/01-state-and-persistence.md) | product + engineering | customer and journey ownership, persistence split, storage, and projection design |
 | [Event Processing and APIs](./customer-profile-service/02-event-processing-and-apis.md) | engineering | event model, processing guarantees, read payloads, CQRS, and endpoints |
 
----
+## Key Takeaways
 
-## What Product Should Take Away
-
-- customer understanding is durable across sessions
-- multiple journeys can exist in parallel without losing focus on the active one
-- decisioning reads stable projections rather than raw event streams
-
-## What Engineering Should Take Away
-
-- the service is event-driven and replayable
-- live reads should stay fast by using customer-scoped projections
-- contracts and storage design should preserve deterministic updates plus safe reprocessing
+- for product, customer understanding is durable across sessions and multiple journeys can exist in parallel without losing focus on the active one
+- for engineering, the service is event-driven and replayable, and live decisioning should read stable customer-scoped projections rather than raw event streams
 
 ---
 
