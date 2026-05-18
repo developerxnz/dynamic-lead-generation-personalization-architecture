@@ -64,17 +64,14 @@ The architectural pattern matters more than the exact vendor choices.
 
 ## End-To-End Decisioning Flow
 
-```mermaid
-flowchart TD
-    A[Customer session, trigger, or return visit] --> B[Lead profile refresh]
-    B --> C[Intent, urgency, and eligibility evaluation]
-    C --> D[Offer and content candidate retrieval]
-    D --> E[Suitability and ranking]
-    E --> F[Next-best action selection]
-    F --> G[Experience delivery across web, app, or assisted sales]
-    G --> H[Behavior, lead-quality, and conversion outcomes]
-    H --> B
-```
+The end-to-end decisioning flow is:
+
+1. refresh customer and journey context
+2. evaluate intent, urgency, eligibility, and suitability
+3. retrieve candidate offers and content
+4. rank what remains and choose the next best action
+5. deliver the experience in channel
+6. feed behavior and outcome signals back into the platform
 
 The loop matters because the platform should not treat conversion as a single-session event. It should support:
 
