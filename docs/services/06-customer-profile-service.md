@@ -28,14 +28,7 @@ The service owns current profile and journey projections. Longer-term analytical
 
 ## High-Level Architecture
 
-```mermaid
-flowchart TD
-    A[Digital and assisted events] --> B[Event ingestion layer]
-    B --> C[Profile processing pipeline]
-    C --> D[Customer profile and journey state aggregation]
-    D --> E[Cosmos DB profile and journey store]
-    E --> F[Decisioning and ranking services]
-```
+At a high level, digital and assisted events flow into the ingestion layer, through profile processing, into customer and journey projections stored in Cosmos DB, and then out to decisioning services as stable read models.
 
 ---
 

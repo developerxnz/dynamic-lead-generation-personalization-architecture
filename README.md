@@ -48,18 +48,14 @@ These definitions are expanded further in the architecture, customer-state, rank
 
 ## High-Level Platform Flow
 
-```mermaid
-flowchart TD
-    A[Customer session or trigger] --> B[Lead profile service]
-    B --> C[AI intent and journey interpretation]
-    C --> D[Eligibility and suitability guardrails]
-    D --> E[Offer, content, and semantic retrieval]
-    E --> F[Ranking and suitability engine]
-    F --> G[AI personalization and explanation layer]
-    G --> H[Web, app, call-centre, or assisted sales experience]
-    H --> I[Behavior, outcome, and handoff events]
-    I --> B
-```
+At a high level, the platform works as a loop:
+
+1. a customer session or trigger enters the platform
+2. the profile layer loads current customer and journey context
+3. AI interpretation and deterministic controls help shape the candidate set
+4. retrieval and ranking choose the best next action
+5. the experience is delivered in channel
+6. behavior and outcome events feed back into the profile and analytics layers
 
 This flow is deliberately built around a feedback loop. A customer is not evaluated once and then forgotten. The system should continuously improve its view of both:
 
