@@ -22,28 +22,11 @@ Use this overview page for the retrieval boundary, hybrid query pattern, and mul
 
 ## High-Level Architecture
 
-```mermaid
-flowchart TD
-    A[Managed offers and content] --> B[Embedding generation]
-    B --> C[Vector index]
-    C --> D[Retrieval layer]
-    D --> E[Personalization service]
-    E --> F[Ranking engine]
-    F --> G[Final recommendation set]
-```
+At a high level, managed offers and content are embedded into a vector index, queried through the retrieval layer, and then passed into personalization and ranking before the final recommendation set is assembled.
 
 ---
 
 ## Query Pattern
-
-```mermaid
-flowchart TD
-    A[User query or journey context] --> B[Generate query embedding]
-    B --> C[Vector search]
-    C --> D[Retrieve candidate content]
-    D --> E[Apply metadata filters]
-    E --> F[Pass to ranking engine]
-```
 
 The recommended pattern is:
 

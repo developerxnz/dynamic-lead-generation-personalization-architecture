@@ -92,14 +92,13 @@ AI is most useful when it improves:
 
 ### RAG Flow
 
-```mermaid
-flowchart TD
-    A[User input or journey context] --> B[AI interpretation]
-    B --> C[Metadata and vector retrieval]
-    C --> D[Context assembly]
-    D --> E[LLM response generation]
-    E --> F[Grounded explanation or recommendation]
-```
+RAG should follow a simple sequence:
+
+1. take user input or journey context
+2. interpret it into a retrieval-ready form
+3. retrieve grounded context from metadata and vector search
+4. assemble the final context package
+5. generate the explanation or recommendation from that grounded input
 
 ### RAG Data Sources
 

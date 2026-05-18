@@ -21,15 +21,7 @@ Analytics should be treated as a core platform capability rather than a secondar
 
 ## Analytics Architecture At A Glance
 
-```mermaid
-flowchart TD
-    A[Frontend, CRM, and assisted-sales events] --> B[Segment.io]
-    B --> C[Event stream or queue]
-    C --> D[Analytics processing]
-    D --> E[Aggregated projections]
-    E --> F[Mixpanel dashboards]
-    E --> G[Decisioning feedback loops]
-```
+At a high level, events from frontend, CRM, and assisted-sales channels flow through Segment.io into the event pipeline, are processed into aggregated projections, and then support both Mixpanel dashboards and decisioning feedback loops.
 
 ---
 
