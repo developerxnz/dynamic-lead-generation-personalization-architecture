@@ -13,32 +13,7 @@ It is intended to answer the practical questions product and engineering readers
 - what decision trace should be visible
 - which analytics events prove the POC worked
 
-This flow is intentionally narrow. It is designed to prove the architecture, not to document every possible runtime path.
-
----
-
-## Demo Scenario
-
-Use the same primary scenario described in the POC scope and worked example:
-
-- a known customer has an existing **health insurance** journey
-- the same customer returns through a **broadband** moving-home context
-- the platform must decide which journey should lead
-- the platform should return one clear next-best action plus supporting content
-
-For the narrative walkthrough of the same scenario, see [Worked Example: Returning Customer With Multiple Journeys](../architecture/worked-example/01-returning-customer-multi-journey.md).
-
----
-
-## What The Demo Should Prove
-
-The POC demo should make five things visible:
-
-1. durable customer and journey state exists before the request
-2. the platform selects one active journey for the session
-3. candidate retrieval is broad, then narrowed by deterministic controls
-4. AI helps with explanation, not protected decisions
-5. the result is measurable through explicit decision-trace and conversion events
+This flow is intentionally narrow. For scenario framing and presenter narrative, use [POC Scope](./12-poc-scope.md), [Worked Example: Returning Customer With Multiple Journeys](../architecture/worked-example/01-returning-customer-multi-journey.md), and [POC Story And Presentation Narrative](./15-poc-story.md).
 
 ---
 
@@ -118,10 +93,6 @@ Before the live request, the customer profile service already contains:
 }
 ```
 
-This is what makes the demo believable: the system is not inventing state during the request.
-
----
-
 ## Step 1: Session Enters The Orchestrator
 
 The channel sends one request that includes customer identity plus current-session context.
@@ -140,10 +111,6 @@ The channel sends one request that includes customer identity plus current-sessi
   "region": "NSW"
 }
 ```
-
-The demo should make it clear that current-session context matters, but it does not erase prior customer context.
-
----
 
 ## Step 2: Active-Journey Selection
 
@@ -165,14 +132,6 @@ to select one active journey.
   "reasonSummary": "broadband move-home signals are more current than the older health comparison journey"
 }
 ```
-
-### What Should Be Visible In The Demo
-
-- broadband becomes the active journey
-- health remains available as a secondary journey
-- the reason can be stated in plain language
-
----
 
 ## Step 3: Candidate Retrieval
 
@@ -221,10 +180,6 @@ The content adapter or retrieval layer returns a broad candidate set for the act
   }
 ]
 ```
-
-The demo should emphasize that retrieval finds possibilities. It does not make the final decision.
-
----
 
 ## Step 4: Deterministic Filtering And Ranking
 
@@ -304,14 +259,6 @@ The ranking engine receives the active journey, profile summary, and candidate s
 }
 ```
 
-### What The Demo Should Make Clear
-
-- deterministic rules remain authoritative
-- suppressed candidates are visible and explainable
-- the result is one clear next-best action, not a mixed session
-
----
-
 ## Step 5: Optional AI Explanation
 
 The AI layer can now generate support text for the selected result.
@@ -329,7 +276,7 @@ The AI layer can now generate support text for the selected result.
 }
 ```
 
-The demo should also make clear what AI did **not** do:
+AI should remain visibly bounded:
 
 - it did not select the active journey on its own
 - it did not decide eligibility
@@ -371,13 +318,7 @@ The orchestrator assembles the final payload returned to the channel.
 }
 ```
 
-This is the payload the demo should render live.
-
----
-
 ## Decision Trace The Demo Should Surface
-
-The POC becomes much more convincing if the team can show the reasoning chain, not just the final UI.
 
 ### Minimum Decision Trace
 
@@ -411,8 +352,6 @@ The POC becomes much more convincing if the team can show the reasoning chain, n
 ---
 
 ## Analytics Events The Demo Should Emit
-
-The POC should emit enough events to prove both decision quality and business progression.
 
 ### Minimum Event Set
 
@@ -463,21 +402,6 @@ The POC should emit enough events to prove both decision quality and business pr
 ```
 
 The demo should ideally show these events in Segment and a simple decision/funnel view in Mixpanel.
-
----
-
-## How To Present The Demo
-
-The easiest presentation flow is:
-
-1. show the known customer and parallel journeys
-2. show the live request entering the orchestrator
-3. show the active-journey selection result
-4. show the candidate list being narrowed and ranked
-5. show the final experience payload
-6. show the decision-trace and analytics events
-
-This ordering helps engineering trust the mechanics and helps product trust the business value.
 
 ---
 

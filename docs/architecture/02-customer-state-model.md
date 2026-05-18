@@ -193,19 +193,6 @@ The platform can therefore maintain multiple journeys while still keeping sessio
 
 ---
 
-## Design Goals
-
-The model should:
-
-- separate durable customer profile from service-specific journey state
-- support multiple concurrent journeys per customer
-- make returning-customer behavior first-class
-- preserve observed facts separately from inferred conclusions
-- support AI-assisted interpretation without making AI the source of truth
-- remain explainable to product, sales, operations, and compliance stakeholders
-
----
-
 ## Profile Vs Journey Responsibilities
 
 | Model | What it should contain | What it should avoid |
@@ -263,61 +250,11 @@ AI contributes **interpretation**. The profile and journey entities remain the s
 
 ---
 
-## Service-Specific Signal Examples
-
-### Novated Leasing Journey
-
-- employer eligibility checks
-- EV tax-benefit calculator usage
-- salary-packaging guide consumption
-- budget and vehicle exploration
-
-### Health Insurance Journey
-
-- cover comparison behavior
-- household composition updates
-- hospital versus extras exploration
-- repeat quote attempts near renewal timing
-
-### Broadband Journey
-
-- address availability checks
-- speed-tier comparison
-- move-home flows
-- contract expiry or churn intent signals
-
----
-
 ## Scoring Approach
 
-The model should support both:
+The model should support both a **customer-level score** for broad opportunity and a **journey-level score** for service-specific prioritization.
 
-- a **customer-level score** for broad lead value or overall opportunity
-- a **journey-level score** for service-specific prioritization
-
-Journey-level scoring is especially important when customers are active in more than one service path.
-
-Deterministic scoring should remain the primary operational score initially.
-
-AI can contribute:
-
-- supporting relevance signals
-- journey summaries
-- multi-journey pattern detection
-
-But authoritative scores should remain explainable and reproducible.
-
----
-
-## Summary
-
-The customer state model should be structured around:
-
-- a durable **customer profile**
-- multiple **journey states**
-- an explicit **active-journey selection** step for live decisioning
-
-That gives the platform a cleaner way to support **parallel journeys**, stronger **returning-customer re-engagement**, and more accurate **qualified-conversion-focused personalization**.
+Journey-level scoring matters most when customers are active in more than one service path. AI can contribute supporting relevance signals or summaries, but authoritative scores should remain deterministic, explainable, and reproducible.
 
 ---
 

@@ -85,7 +85,7 @@ Responsibilities:
 
 ---
 
-## Suggested Runtime Topology
+## Runtime Topology
 
 At implementation time, the platform can be split into a small number of clear runtime components.
 
@@ -119,29 +119,18 @@ For session-triggered personalization, the profile and journey reads should use 
 
 ---
 
-## Implementation Notes For Live Requests
+## Live Request Guardrails
 
-Recommended live request order:
-
-1. load customer profile and currently active journey candidates
-2. resolve the active journey for the session
-3. retrieve candidate assets from normalized Contentful-backed models
-4. apply hard qualification and suitability checks
-5. run ranking and slot-composition logic
-6. optionally generate AI-supported explanation text
-7. return the assembled response payload
-
-Recommended latency discipline:
-
-- keep the synchronous path limited to the orchestrator, profile read, retrieval, ranking, and lightweight AI calls
-- move heavy analytics, replay, and non-critical enrichment off the request thread
+- read the latest committed profile and journey projections, or a bounded-staleness equivalent with an explicit freshness target
+- keep the synchronous path limited to the orchestrator, profile reads, retrieval, ranking, and lightweight AI-supported explanation
+- move analytics, replay, and non-critical enrichment off the request thread
 - prefer precomputed projections over repeated raw event scans
 
 ---
 
 ## Suggested Service Contracts
 
-The docs do not need to prescribe final API shapes, but a concrete contract model helps make the architecture implementable.
+The docs do not need to prescribe final API shapes, but a concrete contract model helps make the architecture implementable and gives channels a clear entry point.
 
 | Interaction | Suggested shape | Notes |
 |---|---|---|

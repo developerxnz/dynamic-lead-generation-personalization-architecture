@@ -54,7 +54,7 @@ For a concrete documentation walkthrough of this style of scenario, see [Worked 
 
 For the delivery-focused version showing example payloads, decision trace, and analytics events, see [POC Demo Flow](./14-poc-demo-flow.md).
 
-For the concise presenter version covering the business problem, chosen slice, what is mocked versus real, and what success should look like, see [POC Story And Presentation Narrative](./15-poc-story.md).
+For the concise presenter version covering the chosen slice, reviewer framing, and what is mocked versus real, see [POC Story And Presentation Narrative](./15-poc-story.md).
 
 Recommended scenario:
 
@@ -235,44 +235,6 @@ Minimum events:
 - `recommendation_served`
 - `cta_clicked` or `quote_started`
 - optional `ai_explanation_shown`
-
----
-
-## Suggested Demo Narrative
-
-The presentation should be easy to follow:
-
-1. start with the primary returning-customer, multi-journey scenario
-2. show the known customer and existing journey state
-3. introduce new session context that creates journey ambiguity
-4. show the platform selecting the active journey
-5. show the candidate set being filtered and ranked
-6. show the personalized response, explanation, and telemetry
-7. briefly step through the supporting scenarios to show the same architecture also handles simpler first-visit and resume flows
-
-This sequence keeps the POC aligned to both technical credibility and business clarity.
-
----
-
-## What This POC Sets Up Next
-
-If successful, the POC creates a clean bridge into the broader roadmap:
-
-- stronger behavioral scoring
-- richer returning-customer re-entry logic
-- broader vertical rollout
-- better dashboard coverage
-- deeper AI guidance and retrieval
-
-It should therefore be treated as the first credible slice of the platform, not a throwaway prototype.
-
----
-
-## Summary
-
-The best POC for this platform uses **one primary returning-customer, multi-journey demonstration** plus **supporting first-visit and resume scenarios**.
-
-That gives all major stakeholders enough evidence to believe the architecture is both valuable, reusable, and buildable.
 
 ---
 

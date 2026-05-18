@@ -16,29 +16,6 @@ Its purpose is to:
 
 ---
 
-## Who Should Read This
-
-| Audience | Why this page matters |
-|---|---|
-| Product and growth | understand which levers shape relevance, guardrails, and commercial prioritization |
-| Engineering | understand the ranking boundary and where to find runtime and contract detail |
-| Analytics | understand which ranking inputs and outputs should be measurable |
-
----
-
-## Goals
-
-The ranking engine should:
-
-- produce ordered recommendations
-- optimize for qualified conversion likelihood
-- remain deterministic and explainable
-- support configurable business rules
-- integrate with customer-profile, journey-state, and behavioral signals
-- allow future experimentation and AI-assisted relevance support
-
----
-
 ## Core Responsibilities
 
 The ranking engine is responsible for:
@@ -49,6 +26,8 @@ The ranking engine is responsible for:
 - explaining ranking decisions
 - supporting configuration-based tuning
 - ensuring consistency across similar sessions
+
+Retrieval supplies the candidate set. The ranking engine decides what is safe and best to show from that set.
 
 ---
 
@@ -74,29 +53,6 @@ Use the overview page for orientation, then go deeper based on what you need:
 |---|---|---|
 | [Scoring Model and Policy](./ranking-engine/01-scoring-model-and-policy.md) | product + engineering | ranking inputs, weights, policy rules, and configuration |
 | [Runtime and Contracts](./ranking-engine/02-runtime-and-contracts.md) | engineering | request and response shapes, runtime steps, explainability, and performance boundaries |
-
-## Key Takeaways
-
-- for product, ranking is where relevance, suitability, and commercial priorities are balanced, with deterministic controls remaining authoritative
-- for engineering, the engine ranks a provided candidate set rather than owning retrieval, and scoring, suppression, and traceability should stay configurable and testable
-
----
-
-## Summary
-
-The Ranking Engine is the decision layer of the platform.
-
-It is responsible for:
-
-- selecting the best next actions
-- applying business logic
-- choosing results that best fit the active journey
-- optimizing for qualified lead outcomes
-- ensuring explainability and consistency
-
-The long-term vision is a hybrid system:
-
-> deterministic ranking core + AI-assisted optimization layer
 
 ---
 

@@ -4,7 +4,7 @@
 
 ## Overview
 
-This document frames the platform from a product and engineering perspective: **what problem it solves, why the architecture looks the way it does, and how it supports both new lead generation and returning-customer re-engagement**.
+This document introduces the platform problem, the end-to-end decision flow, and the architectural shape that supports both new lead generation and returning-customer re-engagement.
 
 The platform is intended for service categories such as:
 
@@ -88,19 +88,7 @@ For a concrete walkthrough of how those steps work in one session, see [Worked E
 
 ---
 
-## High-Level Architecture
-
-```mermaid
-flowchart TD
-    A[Customer session or trigger] --> B[Lead profile service]
-    B --> C[Intent and eligibility evaluation]
-    C --> D[Offer and content candidate retrieval]
-    D --> E[Ranking and suitability engine]
-    E --> F[Next-best action selection]
-    F --> G[Web, app, or assisted-sales experience]
-    G --> H[Analytics and feedback loop]
-    H --> B
-```
+## Responsibility Split
 
 Each stage exists to keep responsibilities clear:
 
@@ -153,9 +141,9 @@ AI can help customers understand options and help the system retrieve useful inf
 
 ---
 
-## Vertical-Aware Personalization Model
+## Multi-Vertical By Configuration
 
-The same architecture should support multiple services through metadata and configuration.
+The same architecture should support multiple services through metadata and configuration rather than cloned stacks.
 
 Examples:
 
@@ -163,7 +151,7 @@ Examples:
 - **Health insurance:** show cover comparisons, extras explainers, household-based guidance, and quote CTAs aligned to life stage
 - **Broadband:** show speed guidance, provider comparisons, address-availability checks, and move-home or churn-support CTAs
 
-The underlying platform logic stays consistent even when the visible experience changes by vertical.
+The underlying decisioning pattern stays consistent even when the visible experience changes by vertical.
 
 ---
 
@@ -175,33 +163,6 @@ The underlying platform logic stays consistent even when the visible experience 
 - deterministic rules should handle eligibility, suitability, and campaign constraints before promotion
 - AI should augment rather than replace business logic
 - content and offer management should stay separate from ranking logic
-
----
-
-## Recommended Delivery Approach
-
-### Phase 1 - Decisioning Foundation
-
-- customer profiles and journey states
-- vertical-aware metadata model
-- ranking with suitability guardrails
-- initial analytics for lead quality and handoff outcomes
-
-### Phase 2 - Behavioral And Analytics Optimization
-
-- behavioral scoring
-- returning-customer re-entry logic
-- intent refinement
-- lead-quality analytics by vertical and provider
-- cross-vertical optimization loops
-
-### Phase 3 - AI-Forward Experiences
-
-- conversational guidance
-- semantic retrieval
-- AI-assisted summaries and query expansion
-- richer recommendation explanation
-- broader assisted-sales augmentation
 
 ---
 
