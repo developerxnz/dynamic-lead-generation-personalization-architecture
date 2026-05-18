@@ -17,24 +17,6 @@ For the detailed runtime walkthrough, see [POC Demo Flow](./14-poc-demo-flow.md)
 
 ---
 
-## The Problem To Start With
-
-The story should begin with a simple problem statement:
-
-> we already have campaigns, content, and offers, but we do not yet have a shared decisioning layer that reliably chooses the best journey and next action for each customer session
-
-That creates familiar issues:
-
-- generic landing experiences
-- weak handling of returning customers
-- campaign intent overriding customer context too often
-- limited visibility into why one recommendation was shown instead of another
-- difficulty proving that personalization improved qualified conversion rather than just engagement
-
-The POC exists to show that this can be fixed with a small but credible slice of the architecture.
-
----
-
 ## Why This POC Slice Was Chosen
 
 The chosen slice is:
@@ -64,6 +46,8 @@ It is narrow enough to build and broad enough to feel real.
 > a returning customer comes back with evidence of both an old health-insurance journey and a new broadband need, and the platform chooses the right journey to lead, returns a clear next step, explains it, and proves what happened through analytics
 
 That sentence is usually enough to anchor the rest of the presentation.
+
+It also gives the presenter a simple way to frame the business problem without repeating the broader platform introduction from the README and audience guides.
 
 ---
 

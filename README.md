@@ -249,6 +249,10 @@ These documents move from business framing into implementation guidance.
 | Document | Description |
 |---|---|
 | [worked-example/01-returning-customer-multi-journey.md](./docs/architecture/worked-example/01-returning-customer-multi-journey.md) | Concrete end-to-end scenario showing active-journey selection, retrieval, deterministic ranking, AI-assisted explanation, and telemetry |
+| [content-personalization-strategy/01-runtime-decisioning.md](./docs/architecture/content-personalization-strategy/01-runtime-decisioning.md) | Runtime personalization model covering active-journey selection, candidate retrieval, and ranking flow |
+| [content-personalization-strategy/02-metadata-and-rules.md](./docs/architecture/content-personalization-strategy/02-metadata-and-rules.md) | Content metadata model, personalization dimensions, and deterministic promotion rules |
+| [content-personalization-strategy/03-ai-edge-cases-and-performance.md](./docs/architecture/content-personalization-strategy/03-ai-edge-cases-and-performance.md) | AI usage boundaries, conflict handling, fallback behavior, and performance guidance for personalization |
+| [content-personalization-strategy/04-illustrative-examples.md](./docs/architecture/content-personalization-strategy/04-illustrative-examples.md) | Novated-leasing examples and visuals showing how personalization changes through the funnel |
 
 ---
 

@@ -22,26 +22,6 @@ Across those verticals, the objective is consistent:
 
 ---
 
-## Why Now
-
-Many lead-generation businesses already have:
-
-- capable paid and owned acquisition channels
-- strong campaign operations
-- rich content libraries
-- provider or product relationships
-
-What they often lack is a shared decisioning layer that can answer:
-
-- which service should this customer see first
-- which journey should a returning visitor resume or switch to
-- which offers are genuinely suitable for this customer
-- which action is most likely to convert without degrading lead quality
-
-Without that layer, the experience tends to drift toward generic landing pages, over-reliance on campaign routing, and weak reuse of prior customer context.
-
----
-
 ## Business Goals
 
 The platform should help the business:
@@ -187,17 +167,6 @@ The underlying platform logic stays consistent even when the visible experience 
 
 ---
 
-## Product And Engineering View
-
-| Perspective | What this architecture enables |
-|---|---|
-| Product | A reusable personalization capability that improves qualified conversion, returning-customer journeys, and cross-vertical consistency |
-| Engineering | Clear service boundaries, deterministic decisioning, managed metadata inputs, and scalable event-driven profile updates |
-| Marketing and growth | Better campaign landing experiences, clearer prioritization controls, and more useful lead-quality feedback |
-| Sales and operations | Higher-confidence handoff quality and more context about why a lead was promoted |
-
----
-
 ## Core Principles
 
 - personalization should be dynamic, session-aware, and resilient to changing customer intent
@@ -233,20 +202,6 @@ The underlying platform logic stays consistent even when the visible experience 
 - AI-assisted summaries and query expansion
 - richer recommendation explanation
 - broader assisted-sales augmentation
-
----
-
-## Success Outcomes
-
-The platform should improve:
-
-- quote starts
-- application progression
-- callback requests
-- provider handoff quality
-- conversion by service category
-- reactivation of returning customers
-- explainability for product, operations, compliance, and provider stakeholders
 
 ---
 
