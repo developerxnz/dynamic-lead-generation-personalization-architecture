@@ -96,4 +96,4 @@ Its core value is:
 
 | <- Previous | Next -> |
 |---|---|
-| [Contentful Integration](./05-contentful-integration.md) | [Ranking Engine](./07-ranking-engine.md) |
+| [Activity Metadata](./05-activity-metadata.md) | [Ranking Engine](./07-ranking-engine.md) |

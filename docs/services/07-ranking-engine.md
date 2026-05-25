@@ -6,7 +6,7 @@
 
 The Ranking Engine is the core decisioning component of the platform.
 
-It determines which offers, content items, and CTAs are shown to a lead after candidate retrieval and suitability screening.
+It determines which activities, offers, content items, and CTAs are shown to a lead after candidate retrieval and suitability screening.
 
 It assumes the customer may have multiple journey states, but ranking should operate against the **active journey selected for the current session**.
 

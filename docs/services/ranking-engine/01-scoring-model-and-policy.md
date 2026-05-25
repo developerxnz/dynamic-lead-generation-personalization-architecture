@@ -23,9 +23,9 @@ From the Customer Profile Service:
 - qualification evidence
 - returning-customer signals
 
-### 2. Content And Offer Metadata
+### 2. Activity Metadata
 
-From Contentful or the offer catalog:
+From metadata attached to existing activities:
 
 - service_category
 - subtype
@@ -181,7 +181,7 @@ The ranking engine should not:
 - retrieve content
 - infer intent authoritatively
 - own free-form AI interpretation
-- own Contentful logic
+- own activity-source integration logic
 
 It should only:
 

@@ -21,7 +21,7 @@ This platform is not just a collection of APIs. It is a coordinated decisioning 
 
 - customer state
 - journey state
-- managed content
+- activity metadata
 - deterministic decision logic
 - AI-assisted interpretation
 - telemetry and optimization
@@ -103,9 +103,9 @@ This is the core design choice that keeps the platform testable and auditable.
 
 **Associated docs:** [AI and RAG Strategy](../ai/08-ai-and-rag-strategy.md), [Ranking: Scoring Model and Policy](../services/ranking-engine/01-scoring-model-and-policy.md)
 
-### 4. Contentful Owns Metadata And Managed Copy, Not Decision Logic
+### 4. Activity Metadata Describes Options, Not Decision Logic
 
-The Contentful side of the system should own:
+The activity side of the system should own:
 
 - offers
 - provider and campaign copy
@@ -120,9 +120,9 @@ It should not own:
 - active-journey logic
 - AI prompt behavior
 
-This keeps managed content flexible without making operational logic hard to govern.
+This keeps activity configuration flexible without making operational logic hard to govern.
 
-**Associated docs:** [Contentful Integration](../services/05-contentful-integration.md), [Content Personalization Strategy](../architecture/03-content-personalization-strategy.md)
+**Associated docs:** [Activity Metadata](../services/05-activity-metadata.md), [Content Personalization Strategy](../architecture/03-content-personalization-strategy.md)
 
 ### 5. Async Pipelines Are Not Optional
 
@@ -155,7 +155,7 @@ The system should be able to explain:
 - which candidates were retrieved
 - which candidates were suppressed and why
 - which ranking version produced the result
-- which content revision was shown
+- which activity metadata revision was shown
 - whether AI contributed and which prompt/model version was used
 
 Without this, teams will not be able to debug, govern, or optimize the platform safely.
@@ -173,7 +173,7 @@ The synchronous path should usually involve:
 - channel request into the orchestration API
 - profile and journey projection reads
 - active-journey selection
-- Contentful-backed candidate retrieval
+- activity-backed candidate retrieval
 - deterministic filtering and ranking
 - lightweight explanation assembly
 - response payload back to the caller
@@ -278,11 +278,11 @@ The platform should:
 - support bounded staleness rather than replay on request
 - make freshness expectations explicit
 
-### If Content Changes Midstream
+### If Activity Metadata Changes Midstream
 
 The platform should:
 
-- version content revisions
+- version activity metadata revisions
 - invalidate affected normalized assets
 - preserve traceability for what was actually served
 
@@ -350,7 +350,7 @@ Be explicit about:
 At minimum:
 
 - ranking configuration
-- content revision
+- metadata revision
 - prompt template version
 - model version where applicable
 - experiment assignment

@@ -136,8 +136,7 @@ For long-form content:
 
 Embeddings should be updated when:
 
-- content is published
-- content is materially modified
+- activity metadata or copy is materially modified
 - metadata changes alter meaning
 - AI summary or retrieval-support fields change
 

@@ -114,8 +114,8 @@ Recommended rules:
 
 - prefer compact summaries over raw large documents
 - cap the number of retrieved chunks per answer
-- keep content IDs and publish revisions attached to each chunk
-- separate customer state from managed content so prompts stay readable
+- keep content IDs and metadata revisions attached to each chunk
+- separate customer state from activity content so prompts stay readable
 
 ---
 
@@ -128,7 +128,7 @@ Recommended prompt layers:
 1. **system prompt** - role, safety boundaries, and tone
 2. **task prompt** - explain, summarize, compare, or guide
 3. **journey context** - active journey, stage, and known constraints
-4. **grounding context** - retrieved Contentful content, FAQs, and disclosures
+4. **grounding context** - retrieved activity content, FAQs, and disclosures
 5. **response contract** - required output fields and formatting constraints
 
 Example response contract:
@@ -303,7 +303,7 @@ Recommended evaluation approach:
 2. score responses automatically against the response contract and safety checks
 3. review a sampled subset with a human rubric for relevance, clarity, and grounding
 4. compare AI-assisted and non-AI experiences in production using experiment assignments
-5. tie readouts back to prompt version, model version, grounding set, and content revision
+5. tie readouts back to prompt version, model version, grounding set, and metadata revision
 
 This creates a repeatable operating model for improving prompts and models without losing traceability.
 

@@ -181,7 +181,7 @@ Personalization should be designed for:
 
 ### Optimization Strategies
 
-- cache Contentful metadata with publish-aware invalidation
+- cache activity metadata with change-aware invalidation
 - precompute intent and engagement signals
 - avoid heavy runtime calculations in ranking
 - reuse candidate sets only when profile, journey, and content versions remain valid

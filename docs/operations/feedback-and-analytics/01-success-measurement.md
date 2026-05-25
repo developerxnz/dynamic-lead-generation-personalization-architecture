@@ -65,7 +65,7 @@ Recommended operating metrics:
 
 - decision-trace coverage
 - percentage of sessions with active-journey attribution
-- content revision traceability
+- activity metadata revision traceability
 - ranking policy version traceability
 - experiment cycle time
 
@@ -166,7 +166,7 @@ All channels sending telemetry through Segment.io should emit:
 - service category
 - recommendation identifiers
 - ranking policy version
-- content revision
+- activity metadata revision
 
 ### 2. Add Decision Trace Events
 
@@ -220,7 +220,7 @@ This makes later uplift claims far more credible.
 Make it easy to tie outcomes back to:
 
 - ranking configuration version
-- Contentful content revision
+- activity metadata revision
 - AI prompt or model version where applicable
 - grounding set or retrieved asset version where applicable
 - experiment assignment

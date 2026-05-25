@@ -200,7 +200,7 @@ The ranking engine must:
 - precompute behavioral aggregates
 - cache customer profiles by profile version
 - cache journey-state inputs by journey version
-- cache content metadata by publish version
+- cache activity metadata by metadata version
 - avoid recomputing static scores
 
 ### Cache Boundaries And Invalidation

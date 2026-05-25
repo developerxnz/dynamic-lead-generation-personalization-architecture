@@ -40,14 +40,14 @@ Many service businesses already have strong acquisition channels, campaign tooli
 
 - too many customers see generic journeys that do not match their actual needs
 - returning visitors are treated like new leads instead of re-evaluated prospects
-- Contentful knows what exists, but not what should be shown
+- activity metadata can describe what exists, but it still should not decide what is shown
 - campaign priorities override customer relevance too aggressively
 - lead volume is measured more easily than lead quality and downstream conversion
 - deterministic-only logic can struggle to capture nuance across complex, returning, or cross-vertical journeys
 
 The result is wasted media spend, inconsistent customer journeys, weaker handoff quality, and limited confidence in optimization decisions.
 
-This platform addresses those gaps by combining **structured customer state**, **AI-assisted intent and retrieval**, **deterministic decisioning guardrails**, **managed content metadata**, and **closed-loop analytics** so teams can improve both:
+This platform addresses those gaps by combining **structured customer state**, **AI-assisted intent and retrieval**, **deterministic decisioning guardrails**, **activity metadata**, and **closed-loop analytics** so teams can improve both:
 
 - **new lead generation**
 - **returning-customer re-engagement and repeat conversion**
@@ -85,7 +85,7 @@ At a practical level, the platform should:
 1. observe meaningful customer and session signals
 2. maintain a durable customer profile and evolving journey states over time
 3. use AI and rules together to infer current intent, urgency, and likely conversion stage
-4. retrieve eligible offers and supporting content using structured metadata and semantic retrieval
+4. retrieve eligible activities, offers, and supporting content using structured activity metadata and semantic retrieval
 5. rank candidates using deterministic suitability logic plus AI-assisted relevance signals
 6. generate the best next action, explanation, or guided experience for the current session
 7. measure downstream quality so both rules and AI-assisted journey design improve over time
@@ -148,7 +148,7 @@ The platform aims to:
 - optimize for qualified lead volume, lead quality, and downstream activation or policy conversion
 - embed AI directly into intent interpretation, retrieval, explanation, and guided conversion journeys
 - keep ranking, eligibility, and suitability logic explicit, reviewable, and explainable
-- separate managed content operations from backend decisioning responsibilities
+- separate activity configuration from backend decisioning responsibilities
 - use deterministic controls so AI can be powerful without becoming the system of record for policy decisions
 
 ---
@@ -178,14 +178,14 @@ Customer intent changes quickly in service journeys. A returning visitor may be:
 
 Each meaningful session should therefore refresh the customer's state, not replay a static journey.
 
-### Keep Content And Offers Separate From Decisioning
+### Keep Activities Separate From Decisioning
 
-Contentful and the offer catalog should manage:
+Existing activities and their metadata should manage:
 
-- content assets
-- campaign metadata
-- offer definitions
-- editorial governance
+- customer-visible activity definitions
+- CTA configuration and deep links
+- provider and offer descriptors
+- lifecycle and compliance metadata
 
 Backend services should own:
 
@@ -215,7 +215,7 @@ At the same time, authoritative decisions such as suitability policy, hard eligi
 |---|---|
 | Experience and decisioning services | .NET |
 | Operational profile storage | Cosmos DB |
-| Contentful and offer metadata | Contentful |
+| Activity metadata source | Existing activities plus a metadata adapter |
 | AI services | Azure OpenAI |
 | Semantic search | Azure AI Search |
 | APIs | GraphQL + REST |
@@ -260,7 +260,7 @@ These documents move from business framing into implementation guidance.
 
 | Document | Description |
 |---|---|
-| [05-contentful-integration.md](./docs/services/05-contentful-integration.md) | Contentful and offer metadata design, governance, and operating model |
+| [05-activity-metadata.md](./docs/services/05-activity-metadata.md) | Activity metadata design, governance, and operating model |
 | [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Service overview, audience summary, and links into detailed state, persistence, and API design |
 | [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Decisioning overview, audience summary, and links into scoring, policy, and runtime details |
 
@@ -389,7 +389,7 @@ This platform is designed as an **AI-forward, multi-vertical lead-generation arc
 - AI-assisted interpretation and retrieval
 - deterministic decisioning
 - suitability-aware ranking
-- managed content and offer metadata
+- activity metadata and offer descriptors
 - analytics-driven optimization
 - guided and conversational experiences
 

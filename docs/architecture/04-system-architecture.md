@@ -1,6 +1,6 @@
 # System Architecture
 
-> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Contentful Integration ->](../services/05-contentful-integration.md)
+> **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Activity Metadata ->](../services/05-activity-metadata.md)
 
 ## Overview
 
@@ -38,7 +38,7 @@ Suggested technology:
 Responsibilities:
 
 - determine active service interest
-- retrieve candidate offers and content
+- retrieve candidate activities, offers, and content
 - coordinate eligibility and suitability checks
 - compose the recommendation response
 
@@ -60,17 +60,17 @@ Responsibilities:
 
 ---
 
-### Contentful Adapter
+### Activity Metadata Adapter
 
 Responsibilities:
 
-- query managed content and offer metadata
-- normalize Contentful entities into domain models
-- surface publish, expiry, and metadata changes to downstream services
+- query existing activities and attached metadata
+- normalize activity entities into domain models
+- surface lifecycle, expiry, and metadata changes to downstream services
 
 Suggested implementation:
 
-- GraphQL client
+- REST or GraphQL client over the existing activity source
 - infrastructure adapter layer
 
 ---
@@ -93,7 +93,7 @@ At implementation time, the platform can be split into a small number of clear r
 |---|---|---|
 | Experience orchestration API | Entry point for web, app, and assisted-sales channels | synchronous request/response |
 | Customer profile service | Reads and updates customer profile and journey state | synchronous reads, asynchronous writes |
-| Contentful adapter | Retrieves and normalizes managed assets | synchronous reads plus publish-driven invalidation |
+| Activity metadata adapter | Retrieves and normalizes activities for decisioning | synchronous reads plus change-driven invalidation |
 | Ranking engine | Scores and orders candidates | synchronous in-request execution |
 | Analytics pipeline | Processes behavior and outcome events | asynchronous event processing |
 | AI interpretation layer | Supports journey interpretation, retrieval expansion, and explanations | synchronous for lightweight use cases, asynchronous for heavier enrichment |
@@ -110,7 +110,7 @@ flowchart TD
     B --> C[Select active journey]
     C --> D[Update intent and urgency signals]
     D --> E[Check eligibility and availability]
-    E --> F[Retrieve candidate offers and content]
+    E --> F[Retrieve candidate activities, offers, and content]
     F --> G[Rank and filter for suitability]
     G --> H[Return personalized experience]
 ```
@@ -125,7 +125,7 @@ Recommended live request order:
 
 1. load customer profile and currently active journey candidates
 2. resolve the active journey for the session
-3. retrieve candidate assets from normalized Contentful-backed models
+3. retrieve candidate assets from normalized activity-backed models
 4. apply hard qualification and suitability checks
 5. run ranking and slot-composition logic
 6. optionally generate AI-supported explanation text
@@ -147,7 +147,7 @@ The docs do not need to prescribe final API shapes, but a concrete contract mode
 |---|---|---|
 | Channel -> Orchestrator | `POST /personalization/resolve` | includes customer identity, session context, and optional query text |
 | Orchestrator -> Profile service | `GET /customers/{id}` and `GET /customers/{id}/journeys` | read current profile and candidate journeys |
-| Orchestrator -> Content adapter | `POST /content/query` | request broad candidate set by active-journey context |
+| Orchestrator -> Activity metadata adapter | `POST /activities/query` | request broad candidate set by active-journey context |
 | Orchestrator -> Ranking engine | `POST /ranking/score` | pass profile, active journey, candidates, and context |
 | Channel -> Event collection | `POST /events` | emit behavior, impression, and outcome events asynchronously |
 
@@ -199,14 +199,14 @@ Owns:
 - campaign priority handling
 - next-best-action assembly
 
-### Content Domain
+### Activity Domain
 
 Owns:
 
-- managed copy
+- customer-visible activity definitions
 - provider and offer metadata
-- disclosure content
-- lifecycle status of content assets
+- disclosure references and CTA definitions
+- lifecycle status of activities
 
 ### Analytics Domain
 
@@ -227,7 +227,7 @@ Recommended state placement:
 |---|---|---|
 | Durable customer facts | Profile domain | reused across all journeys |
 | Service-specific journey state | Journey domain | changes faster and needs independent progression |
-| Managed content and offers | Content domain | editorial and campaign governance |
+| Activities and metadata | Activity domain | display and governance state for candidate retrieval |
 | Ranking configuration | Decisioning domain | operational control and explainability |
 | Historical event stream | Analytics domain / event infrastructure | replay and measurement |
 
@@ -249,4 +249,4 @@ This keeps storage decisions aligned with service ownership.
 
 | <- Previous | Next -> |
 |---|---|
-| [Content Personalization Strategy](./03-content-personalization-strategy.md) | [Contentful Integration](../services/05-contentful-integration.md) |
+| [Content Personalization Strategy](./03-content-personalization-strategy.md) | [Activity Metadata](../services/05-activity-metadata.md) |

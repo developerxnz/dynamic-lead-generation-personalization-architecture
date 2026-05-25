@@ -9,7 +9,7 @@ This document defines **who should own which parts of the platform** so marketin
 The goal is not to create bureaucracy. The goal is to prevent recurring confusion about:
 
 - who decides what should be shown
-- who controls business rules versus managed content
+- who controls business rules versus activity configuration
 - who owns telemetry quality and reporting
 - who approves AI and ranking changes
 - who is accountable for qualified conversion outcomes
@@ -26,7 +26,7 @@ Without explicit ownership, this kind of platform usually drifts into one of thr
 
 An ownership matrix helps teams preserve the architecture's intended boundaries:
 
-- **managed content** stays manageable
+- **activity configuration** stays manageable
 - **decisioning** stays explainable
 - **AI** stays assistive rather than authoritative
 - **measurement** stays trusted
@@ -60,7 +60,7 @@ Marketing, content, and commercial teams should own:
 
 - campaign strategy
 - offer packaging and messaging
-- managed content inputs
+- activity and campaign inputs
 - promotional windows
 - provider priorities where commercially appropriate
 
@@ -88,11 +88,11 @@ Operations and commercial teams should own:
 | Capability area | Primary owner | Key partners | What that owner is accountable for |
 |---|---|---|---|
 | Journey strategy and active-journey policy intent | Product / delivery | marketing, commercial, engineering | define which scenarios matter, what should lead the session, and what tradeoffs are acceptable |
-| Managed content and offer metadata | Marketing / content / commercial | product, engineering, compliance | ensure offers, copy, CTA definitions, metadata, and disclosures are current and usable |
+| Activity and offer metadata | Marketing / content / commercial | product, engineering, compliance | ensure offers, copy, CTA definitions, metadata, and disclosures are current and usable |
 | Customer profile and journey projections | Engineering | product, data | maintain durable customer state, journey summaries, and projection reliability |
 | Deterministic eligibility and suitability rules | Product + engineering | compliance, operations | define and implement factual constraints and policy-safe recommendation rules |
 | Ranking configuration and next-best-action logic | Product + engineering | analytics, commercial | balance qualified conversion goals, customer fit, and controlled commercial priorities |
-| Contentful integration and normalization | Engineering | marketing/content | turn managed assets into stable domain objects for retrieval and ranking |
+| Activity metadata integration and normalization | Engineering | marketing/content | turn existing activities into stable domain objects for retrieval and ranking |
 | AI prompts, grounding, and fallback behavior | Engineering | product, compliance, analytics, content | implement safe AI behavior, versioning, observability, and fallback handling |
 | Telemetry schema and event quality | Engineering | analytics, product | ensure required identifiers, versions, and decision traces are emitted correctly |
 | Dashboards, measurement models, and experiment readouts | Analytics / data | product, marketing, engineering | define trusted reporting views and interpret outcome movement |
@@ -126,7 +126,7 @@ The table below helps clarify not just who contributes, but **who should make th
 Should own:
 
 - campaign and offer strategy
-- managed content creation
+- activity content creation
 - metadata completeness for assets
 - provider and promo windows
 - messaging hypotheses

@@ -403,7 +403,7 @@ The POC becomes much more convincing if the team can show the reasoning chain, n
     "activeJourney": "broadband",
     "topRecommendation": "bbd-cta-address-check",
     "rankingPolicyVersion": "broadband-v1",
-    "contentRevision": "bbd-cta-address-check@4"
+    "metadataRevision": "bbd-cta-address-check@4"
   }
 }
 ```

@@ -35,9 +35,9 @@ Also provided by the Customer Profile Service:
 
 The platform may have multiple journey states for a customer, but it should select one as the primary driver for the current session.
 
-### 3. Content And Offer Metadata
+### 3. Activity Metadata
 
-Provided by Contentful or the offer catalog:
+Provided by metadata attached to existing activities:
 
 - service category
 - subtype
@@ -94,7 +94,7 @@ This avoids forcing the customer into a single permanent category while still ke
 
 The system should first retrieve a broad candidate set, then narrow through deterministic filtering and ranking.
 
-Avoid overly restrictive Contentful queries unless needed for hard constraints such as:
+Avoid overly restrictive activity queries unless needed for hard constraints such as:
 
 - expired offers
 - unsupported regions
