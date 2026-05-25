@@ -25,14 +25,7 @@ It should play a major role in the platform, but not own ranking policy, eligibi
 
 ## How To Read This Section
 
-Use this overview page for:
-
-- AI boundaries and responsibilities
-- customer-facing AI use cases
-- RAG purpose and safe usage patterns
-- operating-model expectations
-
-For implementation detail, use:
+Use this overview page for AI boundaries, safe use cases, and operating-model expectations. For runtime detail, use:
 
 | Detail page | Best for | Covers |
 |---|---|---|
@@ -40,53 +33,14 @@ For implementation detail, use:
 
 ---
 
-## Strategic Goals
+## Responsibility Split
 
-The AI layer should:
+| Layer | Owns |
+|---|---|
+| Deterministic systems | ranking, customer and journey scoring, eligibility and suitability rules, provider suppression, campaign logic, and hard business constraints |
+| AI systems | interpretation support, summarization, semantic understanding, query expansion, conversational responses, and explanation generation |
 
-- improve discovery across large multi-vertical content and offer sets
-- support natural-language interactions across service categories
-- help identify the most relevant current journey when multiple journeys exist
-- explain why a recommendation is relevant in human-readable terms
-- reduce friction in quote, callback, and application journeys
-- remain grounded, reviewable, and safe
-
----
-
-## AI Vs Deterministic Systems
-
-### Deterministic Systems (Authoritative)
-
-Responsible for:
-
-- ranking logic
-- customer-level and journey-level scoring
-- eligibility and suitability rules
-- provider suppression and campaign logic
-- hard business constraints
-
-These must be:
-
-- explainable
-- predictable
-- testable
-- auditable
-
-### AI Systems (Interpretation And Experience Layer)
-
-Responsible for:
-
-- intent interpretation support
-- multi-journey disambiguation support
-- summarization
-- semantic understanding
-- conversational responses
-- query expansion
-- explanation generation
-
-AI should be treated as:
-
-> a powerful intelligence layer that improves understanding, discovery, and guidance without becoming the policy engine
+AI should improve understanding, discovery, and guidance without becoming the policy engine.
 
 ---
 
@@ -114,24 +68,6 @@ AI does **not** decide the protected things that must stay predictable, testable
 - generating grounded explanation text
 - supporting conversational guidance
 
-### Plain-Language Example
-
-If a customer asks:
-
-> "I'm moving house and need internet fast, but I also wanted to finish my health cover comparison"
-
-AI may help the platform:
-
-- understand that both broadband and health journeys are relevant
-- summarize the likely immediate need
-- generate a clear explanation for the recommended next step
-
-AI should **not** on its own:
-
-- decide that the customer is eligible for a broadband offer
-- suppress or unsuppress a provider
-- overrule the deterministic active-journey and ranking logic
-
 ### Simple Rule Of Thumb
 
 If the outcome needs to be defended to product, compliance, sales, or an engineering reviewer, it should not depend on AI alone.
@@ -140,109 +76,29 @@ That means AI can be very visible in the experience while deterministic systems 
 
 ---
 
-## Recommended AI Capabilities
+## Where AI Adds Value
 
-### 1. Journey Interpretation
+AI is most useful when it improves:
 
-AI can help infer which journey is most relevant now from:
-
-- form responses
-- click behavior
-- session activity
-- free-text questions
-- prior journey history
-
-Example outputs:
-
-- researching options
-- comparing providers
-- checking eligibility
-- ready for quote
-- returning to resume
-
-### 2. Offer And Content Summarization
-
-AI can generate:
-
-- short offer summaries
-- "why this is relevant" explanations
-- plain-language comparisons
-- CTA context summaries
-
-This improves:
-
-- comprehension
-- confidence
-- conversion readiness
-
-### 3. Personalized Guidance
-
-AI can adapt:
-
-- hero messages
-- onboarding prompts
-- CTA explanations
-- reassurance content
-- objection-handling summaries
-
-based on:
-
-- service category
-- customer profile
-- active journey stage
-- recent behavior
-- returning-customer history
-
-### 4. Conversational Experiences
-
-AI enables:
-
-- quote-prep assistants
-- service discovery guidance
-- contextual help systems
-- eligibility guidance journeys
-- assisted-sales support summaries
-
-### 5. Query Expansion
-
-AI can expand user intent into richer search queries.
-
-Example:
-
-User input:
-> "best broadband plan for working from home"
-
-Expanded into:
-
-- high-speed broadband
-- reliable family household connection
-- upload speed considerations
-- address availability and contract flexibility
+- journey interpretation from messy or incomplete signals
+- summaries and explanations that make recommendations easier to understand
+- personalized guidance across quote, callback, and application journeys
+- conversational support for research and assisted-sales experiences
+- query expansion and semantic retrieval across larger offer and content sets
 
 ---
 
 ## RAG Strategy
 
-### What RAG Should Do
-
-RAG combines:
-
-- retrieval
-- grounding context
-- generation
-
-to produce responses that are more useful, more accurate, and easier to trust.
-
 ### RAG Flow
 
-```mermaid
-flowchart TD
-    A[User input or journey context] --> B[AI interpretation]
-    B --> C[Metadata and vector retrieval]
-    C --> D[Context assembly]
-    D --> E[LLM response generation]
-    E --> F[Grounded explanation or recommendation]
-```
+RAG should follow a simple sequence:
+
+1. take user input or journey context
+2. interpret it into a retrieval-ready form
+3. retrieve grounded context from metadata and vector search
+4. assemble the final context package
+5. generate the explanation or recommendation from that grounded input
 
 ### RAG Data Sources
 
@@ -254,28 +110,6 @@ RAG can use:
 - provider FAQs
 - disclosure and eligibility guidance
 - calculator and tool descriptions
-
-### RAG Use Cases
-
-#### Novated Leasing Guidance
-
-- explain salary packaging concepts
-- describe employer eligibility requirements
-- recommend next calculators or contact actions
-
-#### Health Insurance Discovery
-
-- compare cover tiers in simple language
-- explain hospital versus extras trade-offs
-- guide leads toward an appropriate quote path
-
-#### Broadband Selection
-
-- explain speed tiers and household fit
-- answer moving-house or switching questions
-- recommend address-check or quote actions
-
----
 
 ## Multi-Journey AI Support
 
@@ -322,19 +156,6 @@ To make AI credible in product and engineering review, the platform should defin
 - how hallucination or policy-risk incidents are reviewed
 
 This matters as much as the model choice itself.
-
----
-
-## Summary
-
-AI should be a visible, valuable part of the platform:
-
-- improving journey interpretation
-- improving retrieval and explanation
-- supporting guided and conversational experiences
-- strengthening returning-customer re-engagement
-
-while deterministic systems retain authority over qualification, suitability, ranking, and protected business controls.
 
 ---
 

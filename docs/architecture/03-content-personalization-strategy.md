@@ -45,17 +45,6 @@ The top-level personalization flow is:
 5. rank what remains
 6. return the next-best action and supporting experience
 
-```mermaid
-flowchart TD
-    A[Customer session] --> B[Load profile and journey states]
-    B --> C[Select active journey for this session]
-    C --> D[Retrieve candidate offers and content]
-    D --> E[Apply eligibility and suitability filters]
-    E --> F[Rank remaining candidates]
-    F --> G[Select next best actions]
-    G --> H[Render in journey]
-```
-
 This keeps the architecture readable at the overview level while pushing the heavier detail into focused deep dives.
 
 ---

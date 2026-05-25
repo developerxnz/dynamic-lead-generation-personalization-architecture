@@ -85,7 +85,7 @@ Responsibilities:
 
 ---
 
-## Suggested Runtime Topology
+## Runtime Topology
 
 At implementation time, the platform can be split into a small number of clear runtime components.
 
@@ -104,44 +104,32 @@ This keeps the live request path small while allowing enrichment and analytics t
 
 ## Session Flow
 
-```mermaid
-flowchart TD
-    A[Customer session starts] --> B[Load customer profile and journey states]
-    B --> C[Select active journey]
-    C --> D[Update intent and urgency signals]
-    D --> E[Check eligibility and availability]
-    E --> F[Retrieve candidate activities, offers, and content]
-    F --> G[Rank and filter for suitability]
-    G --> H[Return personalized experience]
-```
+The typical live request path is:
+
+1. load customer profile and journey states
+2. select the active journey
+3. update intent and urgency signals
+4. check eligibility and availability
+5. retrieve candidate offers and content
+6. rank and filter for suitability
+7. return the personalized experience
 
 For session-triggered personalization, the profile and journey reads should use the latest committed projections, or a bounded-staleness equivalent with an explicit freshness target, before candidate retrieval and ranking continue.
 
 ---
 
-## Implementation Notes For Live Requests
+## Live Request Guardrails
 
-Recommended live request order:
-
-1. load customer profile and currently active journey candidates
-2. resolve the active journey for the session
-3. retrieve candidate assets from normalized activity-backed models
-4. apply hard qualification and suitability checks
-5. run ranking and slot-composition logic
-6. optionally generate AI-supported explanation text
-7. return the assembled response payload
-
-Recommended latency discipline:
-
-- keep the synchronous path limited to the orchestrator, profile read, retrieval, ranking, and lightweight AI calls
-- move heavy analytics, replay, and non-critical enrichment off the request thread
+- read the latest committed profile and journey projections, or a bounded-staleness equivalent with an explicit freshness target
+- keep the synchronous path limited to the orchestrator, profile reads, retrieval, ranking, and lightweight AI-supported explanation
+- move analytics, replay, and non-critical enrichment off the request thread
 - prefer precomputed projections over repeated raw event scans
 
 ---
 
 ## Suggested Service Contracts
 
-The docs do not need to prescribe final API shapes, but a concrete contract model helps make the architecture implementable.
+The docs do not need to prescribe final API shapes, but a concrete contract model helps make the architecture implementable and gives channels a clear entry point.
 
 | Interaction | Suggested shape | Notes |
 |---|---|---|

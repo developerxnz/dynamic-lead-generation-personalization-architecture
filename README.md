@@ -2,69 +2,16 @@
 
 ## Overview
 
-This repository defines a presentation-ready architecture for an **AI-powered, multi-vertical lead-generation platform** that helps service businesses convert more of the right customers, not just generate more traffic.
+This repository documents a presentation-ready architecture for an **AI-powered, multi-vertical lead-generation platform**.
 
-It is designed for environments where the same platform must support multiple service categories such as:
+It is designed for service businesses that need one decisioning system across categories such as:
 
 - novated leasing
 - health insurance
 - broadband and utilities
 - adjacent quote-led, callback-led, or application-led services
 
-The core challenge is not content delivery alone. It is deciding, in each session, which combination of:
-
-- offer
-- supporting content
-- comparison or calculator tool
-- next-best call to action
-
-is most likely to move a customer toward a **qualified conversion outcome**, with AI helping interpret intent, surface the best candidates, and adapt the journey in real time.
-
-That decision has to balance:
-
-- current intent
-- eligibility and suitability
-- provider and campaign priorities
-- channel context
-- returning-customer history
-- AI-guided interpretation and recommendation quality
-- explainability for product, sales, operations, and compliance teams
-
-This architecture is built around that problem.
-
----
-
-## Why This Platform Matters
-
-Many service businesses already have strong acquisition channels, campaign tooling, and content operations, but still struggle with the same structural issues:
-
-- too many customers see generic journeys that do not match their actual needs
-- returning visitors are treated like new leads instead of re-evaluated prospects
-- activity metadata can describe what exists, but it still should not decide what is shown
-- campaign priorities override customer relevance too aggressively
-- lead volume is measured more easily than lead quality and downstream conversion
-- deterministic-only logic can struggle to capture nuance across complex, returning, or cross-vertical journeys
-
-The result is wasted media spend, inconsistent customer journeys, weaker handoff quality, and limited confidence in optimization decisions.
-
-This platform addresses those gaps by combining **structured customer state**, **AI-assisted intent and retrieval**, **deterministic decisioning guardrails**, **activity metadata**, and **closed-loop analytics** so teams can improve both:
-
-- **new lead generation**
-- **returning-customer re-engagement and repeat conversion**
-
----
-
-## Strategic Outcomes
-
-The platform is intended to help the business:
-
-- increase qualified lead volume across service categories
-- improve visit-to-quote, visit-to-application, and visit-to-callback conversion
-- re-engage returning customers with more relevant journeys based on prior behavior
-- support cross-sell, renewal, and re-entry use cases without creating separate stacks
-- use AI to improve personalization quality, explanation quality, and assisted-sales guidance
-- make provider prioritization and commercial goals visible within explainable rules
-- create a shared operating model for product, engineering, marketing, and sales
+The platform's core job is to decide which journey should lead the current session, which offer and CTA combination best fits that context, and how to improve **qualified conversion** without surrendering deterministic control over eligibility, suitability, ranking, or compliance.
 
 ---
 
@@ -75,22 +22,6 @@ The platform is intended to help the business:
 | **Marketing and growth** | [Marketing and Growth Guide](./docs/audiences/marketing-and-growth.md) | business outcomes, campaign implications, content strategy, and success metrics |
 | **Product and delivery** | [Product and Delivery Guide](./docs/audiences/product-and-delivery.md) | journey design, prioritization, roadmap, measurement, and operating-model choices |
 | **Engineering and architecture** | [Engineering and Architecture Guide](./docs/audiences/engineering-and-architecture.md) | service boundaries, state models, event flows, contracts, and implementation detail |
-
----
-
-## What The Platform Does
-
-At a practical level, the platform should:
-
-1. observe meaningful customer and session signals
-2. maintain a durable customer profile and evolving journey states over time
-3. use AI and rules together to infer current intent, urgency, and likely conversion stage
-4. retrieve eligible activities, offers, and supporting content using structured activity metadata and semantic retrieval
-5. rank candidates using deterministic suitability logic plus AI-assisted relevance signals
-6. generate the best next action, explanation, or guided experience for the current session
-7. measure downstream quality so both rules and AI-assisted journey design improve over time
-
-This makes the experience feel adaptive, intelligent, and increasingly context-aware without making the decisioning opaque.
 
 ---
 
@@ -117,95 +48,20 @@ These definitions are expanded further in the architecture, customer-state, rank
 
 ## High-Level Platform Flow
 
-```mermaid
-flowchart TD
-    A[Customer session or trigger] --> B[Lead profile service]
-    B --> C[AI intent and journey interpretation]
-    C --> D[Eligibility and suitability guardrails]
-    D --> E[Offer, content, and semantic retrieval]
-    E --> F[Ranking and suitability engine]
-    F --> G[AI personalization and explanation layer]
-    G --> H[Web, app, call-centre, or assisted sales experience]
-    H --> I[Behavior, outcome, and handoff events]
-    I --> B
-```
+At a high level, the platform works as a loop:
+
+1. a customer session or trigger enters the platform
+2. the profile layer loads current customer and journey context
+3. AI interpretation and deterministic controls help shape the candidate set
+4. retrieval and ranking choose the best next action
+5. the experience is delivered in channel
+6. behavior and outcome events feed back into the profile and analytics layers
 
 This flow is deliberately built around a feedback loop. A customer is not evaluated once and then forgotten. The system should continuously improve its view of both:
 
 - **what the customer is trying to do now**
 - **what AI can infer about the best journey, content, and support for that customer**
 - **what tends to convert well for similar customers over time**
-
----
-
-## Architecture Goals
-
-The platform aims to:
-
-- identify which service category and journey type a customer is most likely to convert in
-- tailor journeys for research, comparison, quote, application, callback, renewal, and return-visit scenarios
-- support multiple verticals through configuration and metadata instead of separate architectures
-- optimize for qualified lead volume, lead quality, and downstream activation or policy conversion
-- embed AI directly into intent interpretation, retrieval, explanation, and guided conversion journeys
-- keep ranking, eligibility, and suitability logic explicit, reviewable, and explainable
-- separate activity configuration from backend decisioning responsibilities
-- use deterministic controls so AI can be powerful without becoming the system of record for policy decisions
-
----
-
-## Design Principles
-
-### Optimize For Qualified Conversion
-
-The platform should optimize for outcomes that matter to the business, including:
-
-- quote starts
-- application progression
-- callback requests
-- qualified handoff to providers or internal sales teams
-- activation, policy conversion, or funded outcome where available
-
-Raw engagement is useful context, but it is not the primary success measure.
-
-### Treat Every Session As A Re-Evaluation Event
-
-Customer intent changes quickly in service journeys. A returning visitor may be:
-
-- closer to purchase
-- researching a different product
-- price-comparing after an abandoned quote
-- revisiting because of renewal timing or life-stage change
-
-Each meaningful session should therefore refresh the customer's state, not replay a static journey.
-
-### Keep Activities Separate From Decisioning
-
-Existing activities and their metadata should manage:
-
-- customer-visible activity definitions
-- CTA configuration and deep links
-- provider and offer descriptors
-- lifecycle and compliance metadata
-
-Backend services should own:
-
-- state evaluation
-- eligibility and suitability logic
-- ranking and prioritization
-- next-best-action selection
-- explanation and observability
-
-### Make AI A First-Class Personalization Layer
-
-AI should play an active role in:
-
-- interpreting messy or incomplete customer intent
-- improving retrieval across offers, guides, and tools
-- generating explanations, summaries, and guided next steps
-- supporting conversational and assisted-sales experiences
-- helping teams discover higher-performing patterns over time
-
-At the same time, authoritative decisions such as suitability policy, hard eligibility constraints, and protected campaign controls should remain deterministic and auditable.
 
 ---
 
@@ -239,10 +95,10 @@ These documents move from business framing into implementation guidance.
 
 | Document | Description |
 |---|---|
-| [01-overview.md](./docs/architecture/01-overview.md) | Platform vision, business goals, why now, and multi-vertical lead-generation framing |
-| [02-customer-state-model.md](./docs/architecture/02-customer-state-model.md) | Lead profile, intent, eligibility, renewal, and lead-scoring model |
-| [03-content-personalization-strategy.md](./docs/architecture/03-content-personalization-strategy.md) | Offer, content, CTA, and next-best-action decisioning strategy |
-| [04-system-architecture.md](./docs/architecture/04-system-architecture.md) | Technical architecture, service boundaries, and end-to-end decision flow |
+| [01-overview.md](./docs/architecture/01-overview.md) | Platform framing, business goals, end-to-end flow, and core principles |
+| [02-customer-state-model.md](./docs/architecture/02-customer-state-model.md) | Durable profile, journey state, journey summaries, and active-journey selection |
+| [03-content-personalization-strategy.md](./docs/architecture/03-content-personalization-strategy.md) | Overview of offer, content, CTA, and next-best-action decisioning |
+| [04-system-architecture.md](./docs/architecture/04-system-architecture.md) | Technical architecture, runtime topology, service boundaries, and entry-point contracts |
 
 ### Architecture Deep Dives
 
@@ -295,7 +151,7 @@ These documents move from business framing into implementation guidance.
 
 | Document | Description |
 |---|---|
-| [10-feedback-and-analytics.md](./docs/operations/10-feedback-and-analytics.md) | Analytics overview, audience summary, and links into success measurement and telemetry design |
+| [10-feedback-and-analytics.md](./docs/operations/10-feedback-and-analytics.md) | Analytics overview, measurement boundary, and links into success measurement and telemetry design |
 
 ### Operations Deep Dives
 
@@ -314,7 +170,7 @@ These documents move from business framing into implementation guidance.
 | [12-poc-scope.md](./docs/delivery/12-poc-scope.md) | Focused proof-of-concept scope, success criteria, demo audience, and live-versus-described implementation cut |
 | [13-ownership-and-operating-model.md](./docs/delivery/13-ownership-and-operating-model.md) | Cross-functional ownership matrix for decisioning, content, telemetry, analytics, AI, and operational review |
 | [14-poc-demo-flow.md](./docs/delivery/14-poc-demo-flow.md) | Step-by-step POC walkthrough with example requests, responses, decision trace, and analytics events |
-| [15-poc-story.md](./docs/delivery/15-poc-story.md) | Concise presentation narrative for the POC: business problem, chosen slice, mocked versus real scope, and success criteria |
+| [15-poc-story.md](./docs/delivery/15-poc-story.md) | Concise presentation narrative for the POC: chosen slice, presenter framing, reviewer takeaways, and real-versus-mocked guidance |
 
 ---
 
@@ -357,48 +213,3 @@ Introduce:
 - RAG-based support for more complex research and assisted-sales journeys
 
 At this stage, AI becomes a major part of how the platform interacts with customers and internal teams, while deterministic systems remain authoritative for critical controls.
-
----
-
-## Audience Alignment
-
-This body of work is intended to support both product and engineering discussion.
-
-For **product teams**, it clarifies:
-
-- what business problem the platform solves
-- which customer outcomes it should optimize for
-- how AI improves journey quality, discovery, and assisted conversion
-- how multiple verticals can share one architecture
-- where campaign, provider, and operating priorities fit
-
-For **engineering teams**, it clarifies:
-
-- which services own which responsibilities
-- how profile, AI interpretation, retrieval, ranking, and analytics should interact
-- why deterministic guardrails still matter in an AI-forward platform
-- where AI should be embedded from day one versus scaled over time
-
----
-
-## Summary
-
-This platform is designed as an **AI-forward, multi-vertical lead-generation architecture** that combines:
-
-- structured customer state
-- AI-assisted interpretation and retrieval
-- deterministic decisioning
-- suitability-aware ranking
-- activity metadata and offer descriptors
-- analytics-driven optimization
-- guided and conversational experiences
-
-The architecture prioritizes:
-
-- qualified lead generation
-- returning-customer re-engagement
-- AI-enhanced personalization quality
-- explainability
-- compliance-aware promotion
-- scalability across service categories
-- long-term extensibility

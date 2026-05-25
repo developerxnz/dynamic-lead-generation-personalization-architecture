@@ -11,9 +11,11 @@ It is intentionally shorter and more presentation-oriented than the deeper docs.
 - the business problem
 - why this POC slice was chosen
 - what is real versus mocked
-- what success should look like
+- what reviewers should take away
 
 For the detailed runtime walkthrough, see [POC Demo Flow](./14-poc-demo-flow.md).
+
+For the build scope, success criteria, and what must be shown live, see [POC Scope](./12-poc-scope.md).
 
 ---
 
@@ -48,48 +50,6 @@ It is narrow enough to build and broad enough to feel real.
 That sentence is usually enough to anchor the rest of the presentation.
 
 It also gives the presenter a simple way to frame the business problem without repeating the broader platform introduction from the README and audience guides.
-
----
-
-## The Story Arc To Present
-
-### 1. Start With Customer Reality
-
-Explain that real customers do not behave like a perfect single-funnel flow.
-
-They:
-
-- return
-- switch context
-- carry old intent and new intent at the same time
-- need the platform to decide what matters now
-
-### 2. Show Why Static Routing Is Not Enough
-
-Explain that campaign routing or fixed page flows cannot reliably answer:
-
-- should the old journey resume
-- should the new journey lead
-- should both be visible
-- what next action is safest and most useful
-
-### 3. Show The Platform Response
-
-Then show the architecture doing four things:
-
-1. load durable customer and journey state
-2. select the active journey
-3. retrieve and rank candidates with deterministic controls
-4. add AI explanation and analytics around the result
-
-### 4. End With What Was Proven
-
-Close on what the POC demonstrated:
-
-- the architecture is practical
-- the decision is explainable
-- the AI boundary is safe
-- the telemetry proves what happened
 
 ---
 
@@ -166,31 +126,6 @@ Good engineering reactions sound like:
 
 ---
 
-## What Success Looks Like
-
-The POC should be called successful if reviewers can clearly see all of the following:
-
-### Business And Product Success
-
-- the chosen next-best action feels more relevant than a generic experience
-- the returning-customer and multi-journey problem is explained clearly
-- the demo makes the platform feel useful, not theoretical
-
-### Technical Success
-
-- the system can show profile and journey reads before the decision
-- the active-journey choice is visible and explainable
-- deterministic filtering and ranking can be inspected
-- AI contribution is visible but bounded
-
-### Measurement Success
-
-- Segment.io events are emitted for the decision path
-- the recommendation can be tied to journey and ranking context
-- a simple Mixpanel or equivalent view can show the decision and progression trace
-
----
-
 ## Presenter Notes
 
 If time is short, keep the spoken story simple:
@@ -202,16 +137,6 @@ If time is short, keep the spoken story simple:
 5. "Here is the event trail that proves what happened."
 
 That sequence keeps the presentation easy to follow without losing technical credibility.
-
----
-
-## Summary
-
-The POC story should make one thing clear:
-
-the platform is not just showing content differently; it is making a better, explainable, measurable decision about which journey and next step should lead the session.
-
-That is the reason this POC is worth building.
 
 ---
 

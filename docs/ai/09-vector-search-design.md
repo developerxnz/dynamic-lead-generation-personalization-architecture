@@ -6,28 +6,13 @@
 
 Vector search enables semantic retrieval of offers and content based on meaning rather than exact keyword matching.
 
-In this platform, vector search is used to support:
-
-- semantic offer discovery
-- AI-enhanced personalization
-- conversational experiences
-- hybrid retrieval alongside deterministic ranking
-- multi-journey intent resolution
-
-Vector search should be a core retrieval capability, but not the authority on final outcomes.
+In this platform, managed assets are embedded into a vector index and queried through hybrid retrieval. Vector search should expand and improve candidate discovery, but it should not become the authority on final outcomes.
 
 ---
 
 ## How To Read This Section
 
-Use this overview page for:
-
-- vector-search goals and responsibilities
-- embedding and hybrid-retrieval concepts
-- multi-journey retrieval guidance
-- the boundary between retrieval and ranking
-
-For implementation detail, use:
+Use this overview page for the retrieval boundary, hybrid query pattern, and multi-journey guidance. For implementation detail, use:
 
 | Detail page | Best for | Covers |
 |---|---|---|
@@ -35,127 +20,19 @@ For implementation detail, use:
 
 ---
 
-## Goals
-
-The vector search layer should:
-
-- improve relevance for natural-language questions
-- support large cross-vertical content catalogs
-- enhance RAG-based experiences
-- enable similarity-based discovery
-- complement metadata-based filtering
-- work cleanly with customer profile and journey-state signals
-
----
-
 ## High-Level Architecture
 
-```mermaid
-flowchart TD
-    A[Managed offers and content] --> B[Embedding generation]
-    B --> C[Vector index]
-    C --> D[Retrieval layer]
-    D --> E[Personalization service]
-    E --> F[Ranking engine]
-    F --> G[Final recommendation set]
-```
+At a high level, managed offers and content are embedded into a vector index, queried through the retrieval layer, and then passed into personalization and ranking before the final recommendation set is assembled.
 
 ---
 
-## Core Concepts
+## Query Pattern
 
-### Embeddings
+The recommended pattern is:
 
-Embeddings are numerical representations of meaning.
-
-They should be generated from:
-
-- titles
-- summaries
-- body content
-- provider descriptions
-- CTA context
-- selected metadata signals
-
-These embeddings allow semantic comparison between:
-
-- user questions
-- active journey context
-- offers and guides
-- free-text queries
-
-### Vector Index
-
-A vector index stores:
-
-- embeddings
-- metadata fields
-- searchable text fields
-- references back to canonical content assets
-
-Recommended platform:
-
-- Azure AI Search
-
-### Hybrid Search
-
-The recommended approach is hybrid search, combining:
-
-- keyword search
-- vector similarity search
-- metadata filtering
-
-This preserves both precision and semantic relevance.
-
----
-
-## Embedding Strategy
-
-### What To Embed
-
-Each content item should generate embeddings from:
-
-- title
-- short description
-- long-form body
-- service category context
-- provider context
-- approved AI summary
-- CTA description
-
-### Chunking Strategy
-
-For long-form content:
-
-- split into semantic chunks
-- generate embeddings per chunk
-- store chunk-level references
-- reassemble results at query time
-
-### Update Strategy
-
-Embeddings should be updated when:
-
-- activity metadata or copy is materially modified
-- metadata changes alter meaning
-- AI summary or retrieval-support fields change
-
-Avoid regeneration on every minor edit.
-
----
-
-## Query Flow
-
-### Semantic Retrieval Flow
-
-```mermaid
-flowchart TD
-    A[User query or journey context] --> B[Generate query embedding]
-    B --> C[Vector search]
-    C --> D[Retrieve candidate content]
-    D --> E[Apply metadata filters]
-    E --> F[Pass to ranking engine]
-```
+1. apply deterministic filters such as service category, region, provider availability, and compliance status
+2. run vector similarity across the filtered set
+3. pass the candidate set to deterministic ranking for final ordering
 
 ### Personalization-Aware Retrieval
 
@@ -172,35 +49,7 @@ Example:
 
 > "health cover for a young family with extras"
 
-This is transformed into:
-
-- an embedding query
-- metadata filters for household fit, category, and current stage
-
----
-
-## Hybrid Retrieval Strategy
-
-The recommended approach:
-
-### Step 1: Filter
-
-Apply deterministic filters:
-
-- service category
-- region
-- provider availability
-- compliance status
-
-### Step 2: Vector Search
-
-Apply semantic similarity on the filtered dataset.
-
-### Step 3: Rerank
-
-Use the deterministic ranking engine to finalize ordering.
-
-This allows the platform to combine semantic breadth with decisioning safety.
+This becomes an embedding query plus metadata filters for household fit, category, and current stage.
 
 ---
 
@@ -241,27 +90,6 @@ Responsible for:
 The split should remain:
 
 > vector search discovers candidates; ranking decides what is safe and best to show
-
----
-
-## Operating Considerations
-
-The retrieval layer should expose enough detail to answer:
-
-- which query context was used
-- which embedding model version produced results
-- which metadata filters were applied
-- which source asset or chunk was retrieved
-
-These details matter for debugging, AI governance, and product iteration.
-
----
-
-## Summary
-
-Vector search improves how the platform discovers relevant content and offers.
-
-Its primary value is making AI-assisted and natural-language experiences materially better, while still fitting inside a deterministic personalization and ranking pipeline.
 
 ---
 
