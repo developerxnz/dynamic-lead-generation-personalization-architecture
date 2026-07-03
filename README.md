@@ -46,6 +46,25 @@ These definitions are expanded further in the architecture, customer-state, rank
 
 ---
 
+## ID Glossary
+
+These IDs appear throughout the mock scenarios, AI prompts, ranking responses, and analytics events.
+
+| ID type | Example | Meaning | Typical use |
+|---|---|---|---|
+| `customer_id` | `cust-20481` | The durable customer/profile record. | Joins profile, journey, and analytics data across sessions. |
+| `session_id` | `sess-77821` | One live visit or interaction window. | Ties together the events and decisions for a single session. |
+| `journey_id` | `journey-broadband-118` | One service-specific journey state for a customer. | Used for active-journey selection, ranking context, and event attribution. |
+| `content_id` | `action-bbd-address-check-001` | The content or action chosen for presentation. | Used by ranking, orchestration, and the channel response payload. |
+| `asset_id` | `guide-bbd-moving-home-001` | The canonical underlying asset behind a grounded content item. | Used in AI grounding citations and traceability. |
+| `snippet_id` | `gs-bbd-moving-home-001` | A specific snippet extracted from an asset for prompt grounding. | Prompt-packaging only; not the canonical ID the AI should return. |
+| `ai_response_id` | `air-101` | One accepted AI-generated explanation record. | Used for audit, telemetry, and debugging of AI-assisted responses. |
+| `metadata_revision` | `action-bbd-address-check-001@5` | A versioned metadata record for a content asset. | Shows exactly which metadata revision was used when serving a recommendation. |
+
+In short: `content_id` is what the platform shows, `asset_id` is the canonical asset behind it, and `snippet_id` is a prompt-level slice of that asset used to ground the AI response.
+
+---
+
 ## High-Level Platform Flow
 
 At a high level, the platform works as a loop:

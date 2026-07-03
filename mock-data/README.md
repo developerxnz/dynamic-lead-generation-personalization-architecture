@@ -26,9 +26,9 @@ mock-data/
 
 | Folder | Scenario | Customer | Verticals | Active journey |
 |---|---|---|---|---|
-| `01-primary-returning-multi-journey` | Returning customer with health + broadband journeys | `cust-20481` | health_insurance, broadband | broadband selected |
-| `02-secondary-new-customer` | First-time customer, single health insurance journey | `cust-99001` | health_insurance | health_insurance |
-| `03-secondary-resume-quote` | Returning customer resuming a saved broadband quote | `cust-55312` | broadband | broadband |
+| [`01-primary-returning-multi-journey`](./scenarios/01-primary-returning-multi-journey/README.md) | Returning customer with health + broadband journeys | `cust-20481` | health_insurance, broadband | broadband selected |
+| [`02-secondary-new-customer`](./scenarios/02-secondary-new-customer/README.md) | First-time customer, single health insurance journey | `cust-99001` | health_insurance | health_insurance |
+| [`03-secondary-resume-quote`](./scenarios/03-secondary-resume-quote/README.md) | Returning customer resuming a saved broadband quote | `cust-55312` | broadband | broadband |
 
 ---
 
@@ -49,6 +49,28 @@ Each scenario folder contains 11 numbered files representing the full end-to-end
 | `09-ai-expected-output.json` | Expected AI model response | Deterministic target output for validation |
 | `10-final-response.json` | Final orchestrated experience response | What the channel receives |
 | `11-analytics-events.json` | Expected telemetry events | Events emitted during the session flow |
+
+---
+
+## Scenario Flow
+
+```mermaid
+flowchart TD
+    A["01-customer-profile.json<br/>Customer profile"] --> D["04-active-journey-selection.json<br/>Active journey chosen"]
+    B["02-journey-states.json<br/>Journey states"] --> D
+    C["03-session-request.json<br/>Session trigger"] --> D
+    D --> E["05-candidate-retrieval.json<br/>Broad candidate set"]
+    E --> F["06-ranking-request.json<br/>Ranking engine input"]
+    F --> G["07-ranking-response.json<br/>Ranked recommendations"]
+    D --> H["08-ai-prompt-input.json<br/>AI grounding package"]
+    G --> H
+    H --> I["09-ai-expected-output.json<br/>Expected AI explanation"]
+    G --> J["10-final-response.json<br/>Channel response"]
+    I --> J
+    J --> K["11-analytics-events.json<br/>Telemetry emitted"]
+```
+
+This mirrors the intended runtime flow: customer and journey state are loaded first, the active journey is selected, candidates are retrieved and ranked, AI produces a grounded explanation, the orchestrator assembles the final response, and analytics capture the resulting decision trace.
 
 ---
 

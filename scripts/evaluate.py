@@ -43,6 +43,26 @@ def load_json(path: Path) -> dict:
         return json.load(f)
 
 
+def format_grounding_context(prompt_input: dict) -> str:
+    lines = [
+        "Use only the following grounded assets.",
+        "If you cite grounding_asset_ids, copy the asset_id values exactly as written.",
+        "Do not return snippet_id values.",
+        "",
+    ]
+
+    for item in prompt_input["grounding_context"]:
+        lines.extend(
+            [
+                f"- asset_id: {item['asset_id']}",
+                f"  snippet_id: {item['snippet_id']}",
+                f"  content: {item['content']}",
+            ]
+        )
+
+    return "\n".join(lines)
+
+
 def assemble_user_message(prompt_input: dict) -> str:
     parts = [
         prompt_input["task_prompt"],
@@ -57,7 +77,7 @@ def assemble_user_message(prompt_input: dict) -> str:
         json.dumps(prompt_input["selected_action"], indent=2),
         "",
         "## Grounding context",
-        json.dumps(prompt_input["grounding_context"], indent=2),
+        format_grounding_context(prompt_input),
         "",
         "## Response contract",
         "You must return a JSON object with exactly these fields:",
@@ -70,6 +90,28 @@ def assemble_user_message(prompt_input: dict) -> str:
         "Return only the JSON object. No explanation or prose outside the JSON.",
     ]
     return "\n".join(parts)
+
+
+def normalize_grounding_asset_ids(response_obj: dict, prompt_input: dict) -> dict:
+    normalized = dict(response_obj)
+    grounding_ids = response_obj.get("grounding_asset_ids")
+    if not isinstance(grounding_ids, list):
+        return normalized
+
+    snippet_to_asset = {
+        item["snippet_id"]: item["asset_id"] for item in prompt_input.get("grounding_context", [])
+    }
+    seen = set()
+    normalized_ids = []
+
+    for grounding_id in grounding_ids:
+        canonical_id = snippet_to_asset.get(grounding_id, grounding_id)
+        if canonical_id not in seen:
+            seen.add(canonical_id)
+            normalized_ids.append(canonical_id)
+
+    normalized["grounding_asset_ids"] = normalized_ids
+    return normalized
 
 
 def validate_response(response_obj: dict, prompt_input: dict) -> dict:
@@ -127,6 +169,7 @@ def run_scenario(scenario: str, client: OpenAI) -> dict:
             "raw_response": raw[:200],
         }
 
+    response_obj = normalize_grounding_asset_ids(response_obj, prompt_input)
     validation = validate_response(response_obj, prompt_input)
 
     return {
