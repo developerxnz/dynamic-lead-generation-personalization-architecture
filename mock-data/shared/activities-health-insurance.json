@@ -1,0 +1,278 @@
+{
+  "serviceCategory": "health_insurance",
+  "generatedAt": "2026-07-03T00:00:00Z",
+  "assets": [
+    {
+      "assetId": "offer-health-family-001",
+      "assetType": "OfferCandidate",
+      "serviceCategory": "health_insurance",
+      "subtype": "family_cover",
+      "provider": "Provider H",
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["compare", "quote"],
+      "conversionGoal": "start_quote",
+      "priority": 2,
+      "cta": {
+        "type": "get_quote",
+        "label": "Get a family cover quote",
+        "deepLink": "/health-insurance/quote?type=family&provider=h"
+      },
+      "disclosures": ["disc-health-001", "disc-health-002"],
+      "retrievalSummary": "Family cover with hospital and extras, quote-ready positioning for families comparing providers",
+      "serviceSpecific": {
+        "coverTier": "gold",
+        "householdFit": ["family", "couple_with_children"],
+        "extrasIncluded": true,
+        "hospitalIncluded": true
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Comprehensive family health cover that includes hospital and extras benefits. Ideal for families wanting broad protection.",
+        "approvedExplainerText": "Provider H family cover includes hospital cover from day one and a wide range of extras including dental, optical, and physiotherapy.",
+        "faqFragments": [
+          "Q: Does this cover my children? A: Yes, dependent children up to age 25 are covered under most family cover tiers.",
+          "Q: Can I add extras later? A: Extras can be added or changed at any time with no waiting period for new extras."
+        ],
+        "retrievalTags": ["family health", "hospital cover", "extras", "family insurance", "health quote"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-15T08:00:00Z",
+        "expiresAt": "2026-12-31T23:59:59Z"
+      },
+      "metadataRevision": "offer-health-family-001@22",
+      "complianceFlags": ["standard_health_disclosure", "requires_cooling_off_reminder"]
+    },
+    {
+      "assetId": "offer-health-singles-001",
+      "assetType": "OfferCandidate",
+      "serviceCategory": "health_insurance",
+      "subtype": "singles_cover",
+      "provider": "Provider H",
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["compare", "quote"],
+      "conversionGoal": "start_quote",
+      "priority": 2,
+      "cta": {
+        "type": "get_quote",
+        "label": "Get a singles cover quote",
+        "deepLink": "/health-insurance/quote?type=singles&provider=h"
+      },
+      "disclosures": ["disc-health-001", "disc-health-002"],
+      "retrievalSummary": "Singles hospital and extras cover for individuals comparing health insurance options",
+      "serviceSpecific": {
+        "coverTier": "silver",
+        "householdFit": ["single", "individual"],
+        "extrasIncluded": true,
+        "hospitalIncluded": true
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Hospital and extras cover designed for singles. Includes the essentials at a competitive price point.",
+        "approvedExplainerText": "Provider H singles cover gives you hospital protection plus a core extras package covering dental, optical, and physio.",
+        "faqFragments": [
+          "Q: Can I upgrade to family cover if I start a family? A: Yes, you can switch to family cover at any time.",
+          "Q: Is there a waiting period? A: Standard two-month waiting period for extras; hospital cover starts from day one for accidents."
+        ],
+        "retrievalTags": ["singles health", "individual cover", "hospital", "extras", "singles insurance"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-15T08:00:00Z",
+        "expiresAt": "2026-12-31T23:59:59Z"
+      },
+      "metadataRevision": "offer-health-singles-001@14",
+      "complianceFlags": ["standard_health_disclosure", "requires_cooling_off_reminder"]
+    },
+    {
+      "assetId": "offer-health-hospital-extras-bundle-001",
+      "assetType": "OfferCandidate",
+      "serviceCategory": "health_insurance",
+      "subtype": "bundle",
+      "provider": "Provider K",
+      "region": ["NSW", "VIC", "QLD"],
+      "funnelStages": ["compare", "quote"],
+      "conversionGoal": "start_quote",
+      "priority": 3,
+      "cta": {
+        "type": "get_quote",
+        "label": "Get a hospital and extras bundle quote",
+        "deepLink": "/health-insurance/quote?type=bundle&provider=k"
+      },
+      "disclosures": ["disc-health-001", "disc-health-003"],
+      "retrievalSummary": "Combined hospital and extras bundle from Provider K for customers wanting a single policy covering both",
+      "serviceSpecific": {
+        "coverTier": "platinum",
+        "householdFit": ["single", "couple", "family"],
+        "extrasIncluded": true,
+        "hospitalIncluded": true
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "A single premium bundle covering both hospital and extras under one policy from Provider K.",
+        "approvedExplainerText": "Provider K bundle combines gold hospital and comprehensive extras so you only need one policy, one premium, one claim portal.",
+        "faqFragments": [
+          "Q: Is this cheaper than buying hospital and extras separately? A: For most households the bundle saves up to 15% versus two separate policies.",
+          "Q: Is Provider K available in all states? A: Currently available in NSW, VIC, and QLD only."
+        ],
+        "retrievalTags": ["health bundle", "hospital extras", "combined cover", "health insurance"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-05-20T08:00:00Z",
+        "expiresAt": "2026-12-31T23:59:59Z"
+      },
+      "metadataRevision": "offer-health-hospital-extras-bundle-001@9",
+      "complianceFlags": ["standard_health_disclosure", "requires_cooling_off_reminder", "state_restricted_nsw_vic_qld"]
+    },
+    {
+      "assetId": "action-health-compare-001",
+      "assetType": "ActionDefinition",
+      "serviceCategory": "health_insurance",
+      "subtype": "comparison_tool",
+      "provider": null,
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["discover", "research", "compare"],
+      "conversionGoal": "start_comparison",
+      "priority": 1,
+      "cta": {
+        "type": "compare",
+        "label": "Compare health cover options",
+        "deepLink": "/health-insurance/compare"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Side-by-side health insurance comparison tool for customers researching or ready to compare",
+      "serviceSpecific": {
+        "toolType": "comparison_module",
+        "householdFit": ["single", "couple", "family", "individual"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Compare health insurance options side by side to find the cover that fits your needs and budget.",
+        "approvedExplainerText": "Our comparison tool shows you key features, premiums, waiting periods, and extras across leading providers in one view.",
+        "faqFragments": [
+          "Q: How many providers can I compare at once? A: You can compare up to four providers side by side.",
+          "Q: Is the comparison impartial? A: Yes, results are ranked by relevance to your profile, not by provider commission."
+        ],
+        "retrievalTags": ["compare health", "health insurance comparison", "side by side", "best health cover"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-01T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "action-health-compare-001@6",
+      "complianceFlags": []
+    },
+    {
+      "assetId": "action-health-resume-compare-001",
+      "assetType": "ActionDefinition",
+      "serviceCategory": "health_insurance",
+      "subtype": "resume_flow",
+      "provider": "Provider H",
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["compare", "quote"],
+      "conversionGoal": "resume_comparison",
+      "priority": 1,
+      "cta": {
+        "type": "resume",
+        "label": "Resume your health cover comparison",
+        "deepLink": "/health-insurance/compare/resume"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Resume a previously started health cover comparison for returning customers with an active compare journey",
+      "serviceSpecific": {
+        "resumeEligibility": "requires_resume_candidate_flag_true",
+        "householdFit": ["single", "couple", "family", "individual"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Pick up your health cover comparison right where you left off.",
+        "approvedExplainerText": "Your earlier comparison is saved. Jump back in to finish reviewing your shortlisted options or start a quote.",
+        "faqFragments": [
+          "Q: How long is my comparison saved? A: Your comparison is saved for 30 days.",
+          "Q: Will my selections still be there? A: Yes, your provider shortlist and filter settings are all preserved."
+        ],
+        "retrievalTags": ["resume health", "return to comparison", "saved comparison", "health insurance resume"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-01T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "action-health-resume-compare-001@4",
+      "complianceFlags": []
+    },
+    {
+      "assetId": "guide-health-switching-001",
+      "assetType": "GuidanceAsset",
+      "serviceCategory": "health_insurance",
+      "subtype": "switching_guide",
+      "provider": null,
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["research", "compare"],
+      "conversionGoal": "compare_providers",
+      "priority": 4,
+      "cta": {
+        "type": "read_guide",
+        "label": "How to switch health insurance",
+        "deepLink": "/health-insurance/guides/switching"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Guide explaining how to switch health insurance providers including waiting periods, portability, and what to check",
+      "serviceSpecific": {
+        "contentType": "educational",
+        "householdFit": ["single", "couple", "family", "individual"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "A plain-language guide to switching health insurance so you know what to expect before you commit.",
+        "approvedExplainerText": "Switching health insurance is simpler than most people think. This guide covers portability rules, waiting periods, and the top things to check before you change.",
+        "faqFragments": [
+          "Q: Do I lose my waiting periods if I switch? A: No. Served waiting periods are portable between registered health insurers.",
+          "Q: How long does switching take? A: Most switches complete within a few days and your new cover starts the day your old policy ends."
+        ],
+        "retrievalTags": ["switch health insurance", "change health cover", "portability", "waiting periods", "health guide"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-05-01T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "guide-health-switching-001@3",
+      "complianceFlags": []
+    },
+    {
+      "assetId": "guide-health-families-001",
+      "assetType": "GuidanceAsset",
+      "serviceCategory": "health_insurance",
+      "subtype": "audience_guide",
+      "provider": null,
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["discover", "research"],
+      "conversionGoal": "start_research",
+      "priority": 4,
+      "cta": {
+        "type": "read_guide",
+        "label": "Health insurance for families explained",
+        "deepLink": "/health-insurance/guides/families"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Audience guide for families explaining what health cover to consider, hospital vs extras, and how to choose",
+      "serviceSpecific": {
+        "contentType": "educational",
+        "householdFit": ["family", "couple_with_children"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Everything families should know before choosing health insurance, from hospital tiers to extras benefits.",
+        "approvedExplainerText": "Choosing health insurance for a family involves balancing premium cost, hospital cover level, and which extras matter most for your family.",
+        "faqFragments": [
+          "Q: Should I get hospital and extras? A: Most families benefit from having both, but the right combination depends on your family's health needs.",
+          "Q: What extras matter most for families? A: Dental, optical, and physiotherapy tend to be the most used extras for families with children."
+        ],
+        "retrievalTags": ["family health insurance", "health cover families", "hospital extras families", "family health guide"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-05-01T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "guide-health-families-001@2",
+      "complianceFlags": []
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "description": "AI prompt input for a first-time customer discovering health insurance. Task is to generate a welcoming, non-pressuring comparison CTA explanation.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "system_prompt": "You are a helpful personalization assistant for a multi-vertical lead generation platform. Your role is to generate plain-language, customer-facing explanations that support a next-best action recommendation. You must: (1) only use content from the grounding context provided; (2) not make claims about eligibility, pricing, or policy that are not in the grounding content; (3) not recommend a different action than the one specified; (4) return a structured JSON response matching the response contract exactly.",
+  "task_prompt": "Generate a short, welcoming explanation for why a first-time visitor should compare health insurance options. The explanation should be helpful and informative without being pushy. It should help the customer feel confident taking the next step.",
+  "journey_context": {
+    "journey_id": "journey-health-812",
+    "service_category": "health_insurance",
+    "intent": "researching_options",
+    "stage": "discover",
+    "resume_candidate": false,
+    "qualification_state": {
+      "coverage_region_match": true,
+      "serviceability_confirmed": true
+    },
+    "behavior_summary": {
+      "recent_quote_started": false,
+      "pages_viewed_7d": ["/health-insurance/plans"]
+    },
+    "journey_score": 0.41,
+    "last_meaningful_event_at": "2026-07-03T14:05:00Z"
+  },
+  "customer_context": {
+    "household_type": "single",
+    "location": "VIC",
+    "is_returning_customer": false
+  },
+  "selected_action": {
+    "content_id": "action-health-compare-001",
+    "cta_type": "compare",
+    "cta_label": "Compare health cover options",
+    "cta_deep_link": "/health-insurance/compare"
+  },
+  "grounding_context": [
+    {
+      "snippet_id": "gs-health-comparison-001",
+      "asset_id": "action-health-compare-001",
+      "content": "Comparing health insurance side by side lets you evaluate premiums, hospital cover tiers, extras included, and waiting periods across providers in one view. Results are ranked by relevance to your household profile, not by commission. Comparison results are not financial advice."
+    },
+    {
+      "snippet_id": "gs-health-singles-cover-001",
+      "asset_id": "offer-health-singles-001",
+      "content": "Provider H singles cover offers silver-tier hospital protection and a core extras package including dental, optical, and physio. Two-month waiting period for extras; hospital cover starts immediately for accidents. Upgradeable to family cover at any time without penalty."
+    }
+  ],
+  "response_contract": {
+    "required_fields": ["summary", "key_points", "cta_support_text", "grounding_asset_ids"],
+    "summary_max_words": 40,
+    "key_points_max_count": 3,
+    "cta_support_text_max_words": 25
+  }
+}

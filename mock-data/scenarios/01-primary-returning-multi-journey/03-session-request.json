@@ -1,0 +1,14 @@
+{
+  "scenario": "01-primary-returning-multi-journey",
+  "description": "Incoming orchestrator request from the web channel. Customer has arrived from a paid-search broadband campaign.",
+  "customer_id": "cust-20481",
+  "session_id": "sess-77821",
+  "channel": "web",
+  "entry_point": "paid_search",
+  "campaign_theme": "move-home-broadband",
+  "current_url": "/broadband/moving-home",
+  "query_text": "best internet for new house",
+  "region": "NSW",
+  "device_type": "mobile",
+  "timestamp": "2026-07-03T11:30:00Z"
+}

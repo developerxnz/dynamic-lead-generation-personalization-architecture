@@ -1,0 +1,86 @@
+{
+  "description": "AI grounding snippets used across scenarios. Each snippet is a bounded, approved piece of content used to ground AI responses.",
+  "generatedAt": "2026-07-03T00:00:00Z",
+  "snippets": [
+    {
+      "snippetId": "gs-health-family-cover-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "health_insurance",
+      "linkedAssets": ["offer-health-family-001"],
+      "content": "Family health cover from Provider H includes both hospital and extras. Dependent children up to age 25 are covered. Waiting periods are portable if switching from another registered insurer. Extras include dental, optical, and physiotherapy. Premiums are income-tested for government rebate eligibility.",
+      "tags": ["family health", "hospital cover", "extras", "waiting periods", "rebate"],
+      "approvedAt": "2026-06-01T00:00:00Z",
+      "approvedBy": "content-team"
+    },
+    {
+      "snippetId": "gs-health-singles-cover-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "health_insurance",
+      "linkedAssets": ["offer-health-singles-001"],
+      "content": "Provider H singles cover offers silver-tier hospital protection and a core extras package including dental, optical, and physio. Two-month waiting period for extras; hospital cover starts immediately for accidents. Upgradeable to family cover at any time without penalty.",
+      "tags": ["singles health", "individual cover", "hospital", "extras", "upgrade"],
+      "approvedAt": "2026-06-01T00:00:00Z",
+      "approvedBy": "content-team"
+    },
+    {
+      "snippetId": "gs-health-comparison-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "health_insurance",
+      "linkedAssets": ["action-health-compare-001"],
+      "content": "Comparing health insurance side by side lets you evaluate premiums, hospital cover tiers, extras included, and waiting periods across providers in one view. Results are ranked by relevance to your household profile, not by commission. Comparison results are not financial advice.",
+      "tags": ["health comparison", "compare providers", "premiums", "waiting periods"],
+      "approvedAt": "2026-06-01T00:00:00Z",
+      "approvedBy": "content-team"
+    },
+    {
+      "snippetId": "gs-health-switching-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "health_insurance",
+      "linkedAssets": ["guide-health-switching-001"],
+      "content": "Switching health insurance does not reset waiting periods. Under Australian portability rules, served waiting periods transfer between registered health funds. Switching typically completes in a few business days. Your new cover starts from the day your old policy ends, with no gap.",
+      "tags": ["switching health", "portability", "waiting periods", "no gap"],
+      "approvedAt": "2026-06-01T00:00:00Z",
+      "approvedBy": "content-team"
+    },
+    {
+      "snippetId": "gs-bbd-address-check-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "broadband",
+      "linkedAssets": ["action-bbd-address-check-001"],
+      "content": "Broadband availability varies by address depending on the infrastructure type available: FTTP (fibre to the premises), FTTN (fibre to the node), FTTC, or HFC. Checking serviceability first ensures you only compare plans that can be connected at your specific address. Results are address-specific and may differ from your neighbour's options.",
+      "tags": ["address check", "serviceability", "FTTP", "broadband availability"],
+      "approvedAt": "2026-06-01T00:00:00Z",
+      "approvedBy": "content-team"
+    },
+    {
+      "snippetId": "gs-bbd-moving-home-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "broadband",
+      "linkedAssets": ["guide-bbd-moving-home-001", "action-bbd-address-check-001"],
+      "content": "When moving home, apply for broadband at your new address at least 2 to 4 weeks before moving day. Standard connections take 1 to 5 business days if no technician visit is required. Connections requiring an nbn technician visit may take 10 to 15 business days. Some providers can transfer your existing plan to your new address if the technology type is the same.",
+      "tags": ["moving home broadband", "connection timing", "broadband setup", "technician visit"],
+      "approvedAt": "2026-06-01T00:00:00Z",
+      "approvedBy": "content-team"
+    },
+    {
+      "snippetId": "gs-bbd-fast-family-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "broadband",
+      "linkedAssets": ["offer-bbd-fast-family-001"],
+      "content": "Provider B's fast family plan delivers nbn100 speeds with unlimited data and no lock-in contract. Supports simultaneous 4K streaming on four or more devices. Typical evening speeds of 85 to 95Mbps on FTTP connections. No setup fee on standard installations.",
+      "tags": ["family broadband", "nbn100", "unlimited", "streaming", "Provider B"],
+      "approvedAt": "2026-06-20T00:00:00Z",
+      "approvedBy": "content-team"
+    },
+    {
+      "snippetId": "gs-bbd-resume-quote-001",
+      "assetType": "GroundingSnippet",
+      "serviceCategory": "broadband",
+      "linkedAssets": ["action-bbd-resume-quote-001"],
+      "content": "Saved broadband quotes are kept for 14 days. Resuming a saved quote restores your previous plan selection, address details, and any preferences you entered. You can update your plan before completing the application. Resuming does not affect pricing or availability.",
+      "tags": ["resume broadband", "saved quote", "continue application", "quote expiry"],
+      "approvedAt": "2026-06-01T00:00:00Z",
+      "approvedBy": "content-team"
+    }
+  ]
+}

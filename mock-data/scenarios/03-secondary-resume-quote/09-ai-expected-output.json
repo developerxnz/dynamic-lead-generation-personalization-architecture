@@ -1,0 +1,32 @@
+{
+  "scenario": "03-secondary-resume-quote",
+  "description": "Expected AI model output for the resume CTA explanation. Low-friction, reassuring tone. No pressure to complete.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Your broadband quote is still saved. Pick up right where you left off and complete your application in just a few minutes.",
+    "key_points": [
+      "Your plan selection, address details, and preferences are all saved",
+      "You can update your plan choice before completing if you want to",
+      "Resuming does not affect pricing or availability"
+    ],
+    "cta_support_text": "Your quote is ready and waiting — just pick up where you stopped.",
+    "grounding_asset_ids": [
+      "action-bbd-resume-quote-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 20,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 13,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-303",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 690
+}

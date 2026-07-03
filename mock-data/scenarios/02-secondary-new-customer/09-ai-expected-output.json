@@ -1,0 +1,33 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "description": "Expected AI model output for the comparison CTA explanation for a first-time health insurance visitor.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Comparing health cover options side by side is the easiest way to find what suits you without committing to anything.",
+    "key_points": [
+      "See premiums, hospital cover tiers, and extras for multiple providers in one place",
+      "Results are matched to your profile, not ranked by commission",
+      "No personal details required to compare — just pick what matters to you"
+    ],
+    "cta_support_text": "Start comparing to see which options suit a singles policy in VIC.",
+    "grounding_asset_ids": [
+      "action-health-compare-001",
+      "offer-health-singles-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 21,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 14,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-202",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 740
+}

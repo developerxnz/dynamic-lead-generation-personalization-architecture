@@ -1,0 +1,34 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "customer_id": "cust-99001",
+  "journeys": [
+    {
+      "journey_id": "journey-health-812",
+      "customer_id": "cust-99001",
+      "service_category": "health_insurance",
+      "status": "active",
+      "intent": "researching_options",
+      "stage": "discover",
+      "urgency": "low",
+      "switching_intent": "unknown",
+      "renewal_window_days": null,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 0,
+        "pages_viewed_7d": ["/health-insurance/plans"]
+      },
+      "decision_support": {
+        "journey_score": 0.41,
+        "ai_journey_summary": "New visitor exploring health insurance for the first time. Currently in discovery. Comparison CTA is the recommended next step to move from browsing to active evaluation."
+      },
+      "last_meaningful_event_at": "2026-07-03T14:05:00Z"
+    }
+  ]
+}

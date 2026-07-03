@@ -1,0 +1,14 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "description": "Incoming orchestrator request from the web channel. Customer arrived via organic search, no prior identity resolved.",
+  "customer_id": "cust-99001",
+  "session_id": "sess-33901",
+  "channel": "web",
+  "entry_point": "organic_search",
+  "campaign_theme": null,
+  "current_url": "/health-insurance/plans",
+  "query_text": "health insurance options for singles",
+  "region": "VIC",
+  "device_type": "desktop",
+  "timestamp": "2026-07-03T14:05:00Z"
+}

@@ -1,0 +1,60 @@
+{
+  "scenario": "01-primary-returning-multi-journey",
+  "description": "Candidate retrieval query and results for the active broadband moving-home journey, plus limited secondary support for the health comparison journey.",
+  "retrieval_query": {
+    "active_journey": {
+      "service_category": "broadband",
+      "stage": "research",
+      "intent": "moving_home"
+    },
+    "secondary_journey": {
+      "service_category": "health_insurance",
+      "stage": "compare",
+      "intent": "comparing_options",
+      "max_secondary_candidates": 1
+    },
+    "context": {
+      "region": "NSW",
+      "channel": "web",
+      "lifecycle_status_filter": "active"
+    }
+  },
+  "candidates_returned": [
+    {
+      "asset_id": "action-bbd-address-check-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "funnel_stage_match": "research",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "offer-bbd-fast-family-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "broadband",
+      "funnel_stage_match": "research",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "guide-bbd-moving-home-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "broadband",
+      "funnel_stage_match": "research",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "action-health-resume-compare-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "health_insurance",
+      "funnel_stage_match": "compare",
+      "retrieval_source": "secondary_journey"
+    }
+  ],
+  "total_candidates": 4,
+  "retrieval_duration_ms": 18,
+  "excluded_at_retrieval": [
+    {
+      "asset_id": "offer-bbd-fibre-premium-001",
+      "reason": "state_restricted_nsw_vic_qld — included for NSW but de-prioritised: stage mismatch (quote stage, customer is in research)"
+    }
+  ]
+}

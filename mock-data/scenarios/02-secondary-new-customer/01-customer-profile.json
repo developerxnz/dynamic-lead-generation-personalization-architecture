@@ -1,0 +1,23 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "description": "First-time customer. No prior profile. Single health insurance journey created from session signals during this visit.",
+  "customer_id": "cust-99001",
+  "identity": {
+    "known_customer": false,
+    "account_linked": false,
+    "anonymous_ids": ["web-anon-4471"]
+  },
+  "profile": {
+    "household_type": "single",
+    "employment_type": "full_time",
+    "location": "VIC",
+    "budget_range": "mid",
+    "life_stage": "young_professional"
+  },
+  "customer_summary": {
+    "is_returning_customer": false,
+    "last_meaningful_event_at": "2026-07-03T14:05:00Z",
+    "repeat_sessions_30d": 1,
+    "lead_score": 42
+  }
+}
