@@ -1,5 +1,11 @@
 {
   "name": "Lead Gen Platform",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/copilot-cli:1": {}
+  },
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
