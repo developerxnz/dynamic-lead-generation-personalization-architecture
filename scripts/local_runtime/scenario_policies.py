@@ -371,4 +371,536 @@ SCENARIO_POLICIES = {
         ],
         "expected_ai_output_file": "09-ai-expected-output.json",
     },
+    "05-progression-stage-01-health-discovery": {
+        "selection": {
+            "description": "Active-journey selection result for stage 1. Only one health insurance journey exists for this new customer.",
+            "selection_method": "deterministic_single_journey",
+            "reason_summary": "Only one journey exists for this customer. Health insurance discovery for couples is the clear active path.",
+            "ai_confidence": 0.94,
+            "ai_reason_summary": "Single journey and clear health insurance discovery intent for a couple household. No ambiguity.",
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for stage 1 of the progression. Broad set for a new couple household researching health insurance in VIC.",
+            "primary_candidates": [
+                "action-health-compare-001",
+                "offer-health-hospital-extras-bundle-001",
+                "guide-health-switching-001",
+            ],
+            "secondary_candidates": [],
+            "excluded": [
+                {
+                    "asset_id": "offer-health-family-001",
+                    "reason": "household_fit_mismatch — customer profile is couple, not family",
+                },
+                {
+                    "asset_id": "offer-health-singles-001",
+                    "reason": "household_fit_mismatch — customer profile is couple, not single",
+                },
+                {
+                    "asset_id": "action-health-resume-compare-001",
+                    "reason": "resume_candidate_false — no saved comparison needs to be resumed",
+                },
+            ],
+            "duration_ms": 13,
+        },
+        "ranking": {
+            "description": "Ranking response for stage 1. Comparison ranks first so the new customer can evaluate options before committing to a quote.",
+            "ranked": [
+                (
+                    "action-health-compare-001",
+                    30,
+                    [
+                        "Active journey fit: health insurance discovery journey",
+                        "Funnel stage match: discover — comparison is the right next step",
+                        "Intent alignment: researching_options",
+                        "Couple household benefits from comparing options before starting a quote",
+                        "Priority score: 1",
+                    ],
+                ),
+                (
+                    "offer-health-hospital-extras-bundle-001",
+                    24,
+                    [
+                        "Household fit: couple household is eligible for the bundle",
+                        "Region match: Provider K bundle is available in VIC",
+                        "Useful quote-ready follow-up once comparison has narrowed the field",
+                    ],
+                ),
+                (
+                    "guide-health-switching-001",
+                    13,
+                    [
+                        "Service category match",
+                        "Helpful supporting content for a customer still learning the category",
+                        "Lower priority than comparison for a first visit",
+                    ],
+                ),
+            ],
+            "suppressed": [],
+            "duration_ms": 8,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
+    "06-progression-stage-02-multi-journey": {
+        "selection": {
+            "description": "Active-journey selection result for stage 2. Broadband is selected because current move-home signals are stronger than the older health comparison journey.",
+            "selection_method": "deterministic_with_ai_support",
+            "reason_summary": "Broadband move-home signals are more current than the older health comparison journey. Session entry point, campaign theme, current URL, and query text all point to a broadband moving-home intent.",
+            "ai_confidence": 0.9,
+            "ai_reason_summary": "Session context strongly suggests a move-home broadband intent. Health comparison is still relevant but should remain secondary.",
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for stage 2. Broadband leads the session, while the earlier health comparison journey is retained as secondary support.",
+            "primary_candidates": [
+                "action-bbd-address-check-001",
+                "offer-bbd-fast-family-001",
+                "guide-bbd-moving-home-001",
+            ],
+            "secondary_candidates": ["action-health-resume-compare-001"],
+            "excluded": [
+                {
+                    "asset_id": "offer-bbd-fibre-premium-001",
+                    "reason": "state_restricted_nsw_vic_qld — included for VIC but de-prioritised: stage mismatch (quote stage, customer is in research)",
+                }
+            ],
+            "duration_ms": 17,
+        },
+        "ranking": {
+            "description": "Ranking response for stage 2. Address check ranks first because serviceability is still unknown at the new address.",
+            "ranked": [
+                (
+                    "action-bbd-address-check-001",
+                    35,
+                    [
+                        "Active journey fit: broadband moving-home journey",
+                        "Intent alignment: moving_home — serviceability check is the required first step",
+                        "Serviceability not yet confirmed: address check must precede plan comparison",
+                        "CTA alignment: check_eligibility",
+                        "High urgency signal from active journey",
+                        "Campaign alignment: move-home-broadband",
+                        "Priority score: 1",
+                    ],
+                ),
+                (
+                    "offer-bbd-fast-family-001",
+                    27,
+                    [
+                        "Active journey fit: broadband",
+                        "Household fit: couple household is compatible with the fast family plan",
+                        "Funnel stage match: research",
+                        "Intent support: moving home customers benefit from seeing plan options early",
+                    ],
+                ),
+                (
+                    "guide-bbd-moving-home-001",
+                    18,
+                    [
+                        "Active journey fit: broadband moving-home journey",
+                        "Funnel stage match: research",
+                        "Supports informed decision before address check",
+                    ],
+                ),
+            ],
+            "suppressed": [
+                {
+                    "content_id": "action-health-resume-compare-001",
+                    "reason": "secondary_journey_not_primary — health comparison journey is retained as secondary prompt only, not in main ranked set",
+                }
+            ],
+            "duration_ms": 10,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
+    "07-progression-stage-03-resume-quote": {
+        "selection": {
+            "description": "Active-journey selection result for stage 3. Only one broadband journey exists and it has a strong resume candidate signal.",
+            "selection_method": "deterministic_single_journey",
+            "reason_summary": "Single broadband journey with resume_candidate true and a high journey score. Customer returned directly to the broadband section after an abandoned quote 6 days ago.",
+            "ai_confidence": 0.97,
+            "ai_reason_summary": "Returning customer with a saved broadband quote. Direct return visit strongly suggests intent to complete. Resume flow is unambiguously the right path.",
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for stage 3. Resume candidate is true, so retrieval targets quote-stage broadband actions.",
+            "primary_candidates": [
+                "action-bbd-resume-quote-001",
+                "offer-bbd-fast-family-001",
+                "action-bbd-compare-plans-001",
+            ],
+            "secondary_candidates": [],
+            "candidate_notes": {
+                "action-bbd-resume-quote-001": "Resume CTA is the primary candidate given resume_candidate flag is true",
+                "offer-bbd-fast-family-001": "Included as fallback comparison option if customer wants to reconsider plan",
+                "action-bbd-compare-plans-001": "Included as secondary option in case customer wants to restart comparison",
+            },
+            "excluded": [
+                {
+                    "asset_id": "guide-bbd-moving-home-001",
+                    "reason": "funnel_stage_mismatch — guide is for discover/research stages, customer is in quote stage",
+                }
+            ],
+            "duration_ms": 12,
+        },
+        "ranking": {
+            "description": "Ranking response for stage 3. Resume CTA ranks first because the saved broadband quote should be the lowest-friction next action.",
+            "ranked": [
+                (
+                    "action-bbd-resume-quote-001",
+                    42,
+                    [
+                        "Active journey fit: broadband quote_in_progress journey",
+                        "Resume candidate flag is true — quote was started and not completed",
+                        "Intent alignment: ready_to_buy",
+                        "Serviceability already confirmed — no need to restart from address check",
+                        "High journey score (0.84) indicates strong purchase intent",
+                        "Urgency is high",
+                        "Priority score: 1",
+                        "Resume bias policy applied: returning customer with saved quote receives maximum resume weight",
+                    ],
+                ),
+                (
+                    "offer-bbd-fast-family-001",
+                    18,
+                    [
+                        "Service category match: broadband",
+                        "Available as a fallback if customer wants to reconsider plan before resuming",
+                        "Household fit: couple profile is compatible with fast family plan",
+                    ],
+                ),
+                (
+                    "action-bbd-compare-plans-001",
+                    14,
+                    [
+                        "Service category match: broadband",
+                        "Secondary fallback if customer wants to start comparison from scratch",
+                    ],
+                ),
+            ],
+            "suppressed": [],
+            "duration_ms": 8,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
+    "08-progression-stage-04-compliance-after-move": {
+        "selection": {
+            "description": "Active-journey selection result for stage 4. Only one health insurance compare journey exists, so it is selected directly.",
+            "selection_method": "deterministic_single_journey",
+            "reason_summary": "Only one journey exists for this customer. Health insurance comparison journey is the clear active path after the move.",
+            "ai_confidence": 0.96,
+            "ai_reason_summary": "Single active journey and clear compare-stage health insurance session signals after the move. No ambiguity.",
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for stage 4. Broad comparison-stage health retrieval includes a bundle that will later be suppressed in Tasmania.",
+            "primary_candidates": [
+                "action-health-compare-001",
+                "offer-health-hospital-extras-bundle-001",
+                "guide-health-switching-001",
+            ],
+            "secondary_candidates": [],
+            "candidate_notes": {
+                "offer-health-hospital-extras-bundle-001": "Included by broad retrieval because intent and household fit are strong. Expected to be suppressed later because the bundle is state-restricted to NSW, VIC, and QLD."
+            },
+            "excluded": [
+                {
+                    "asset_id": "offer-health-family-001",
+                    "reason": "household_fit_mismatch — customer profile is couple, not family",
+                },
+                {
+                    "asset_id": "offer-health-singles-001",
+                    "reason": "household_fit_mismatch — customer profile is couple, not single",
+                },
+                {
+                    "asset_id": "action-health-resume-compare-001",
+                    "reason": "resume_candidate_false — no saved comparison needs to be resumed",
+                },
+            ],
+            "duration_ms": 16,
+        },
+        "ranking": {
+            "description": "Ranking response for stage 4. Compare CTA stays first while the Provider K bundle is suppressed for compliance in Tasmania.",
+            "ranked": [
+                (
+                    "action-health-compare-001",
+                    32,
+                    [
+                        "Active journey fit: health insurance comparison journey",
+                        "Funnel stage match: compare",
+                        "Intent alignment: switching_provider",
+                        "Comparison keeps the customer on a compliant path while evaluating options",
+                        "Priority score: 1",
+                    ],
+                ),
+                (
+                    "guide-health-switching-001",
+                    18,
+                    [
+                        "Service category match: health_insurance",
+                        "Supports compare-stage customers with portability and waiting-period guidance",
+                        "Useful educational content before starting a quote",
+                    ],
+                ),
+            ],
+            "suppressed": [
+                {
+                    "content_id": "offer-health-hospital-extras-bundle-001",
+                    "reason": "compliance_state_restriction — Provider K bundle carries state_restricted_nsw_vic_qld and cannot be promoted in TAS",
+                }
+            ],
+            "duration_ms": 10,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
+    "09-supplemental-eligibility-failure": {
+        "selection": {
+            "description": "Active-journey selection result for the eligibility-failure scenario. Broadband still leads because the customer is clearly trying to solve a move-home internet need.",
+            "selection_method": "deterministic_single_journey",
+            "reason_summary": "Only one journey exists for this customer. Broadband moving-home intent still leads the session even though eligibility checks have already identified an address-level serviceability problem.",
+            "ai_confidence": 0.91,
+            "ai_reason_summary": "The customer still needs help with broadband at the new address. The journey remains valid even though some downstream actions are now blocked by serviceability.",
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for the eligibility-failure scenario. Broad retrieval still pulls broadband actions, then deterministic eligibility rules suppress the ineligible offer later.",
+            "primary_candidates": [
+                "action-bbd-address-check-001",
+                "offer-bbd-fast-family-001",
+                "guide-bbd-moving-home-001",
+            ],
+            "secondary_candidates": [],
+            "excluded": [
+                {
+                    "asset_id": "offer-bbd-fibre-premium-001",
+                    "reason": "access_technology_mismatch — premium fibre requires FTTP and is excluded after the address check showed no serviceable fibre path",
+                }
+            ],
+            "duration_ms": 15,
+        },
+        "ranking": {
+            "description": "Ranking response for the eligibility-failure scenario. The moving-home guide leads because quote-ready broadband offers are blocked by the failed serviceability check.",
+            "ranked": [
+                (
+                    "guide-bbd-moving-home-001",
+                    26,
+                    [
+                        "Active journey fit: broadband moving-home journey",
+                        "Eligibility-safe fallback after failed serviceability check",
+                        "Guide helps the customer understand connection timing and what to do next",
+                        "Keeps the session useful without promoting an ineligible offer",
+                    ],
+                ),
+                (
+                    "action-bbd-address-check-001",
+                    15,
+                    [
+                        "Serviceability tool remains available if the customer needs to retry with corrected address details",
+                        "Lower priority because an address-level failure is already recorded",
+                    ],
+                ),
+            ],
+            "suppressed": [
+                {
+                    "content_id": "offer-bbd-fast-family-001",
+                    "reason": "eligibility_serviceability_failure — fast family broadband cannot be promoted because the recorded address failed serviceability checks",
+                }
+            ],
+            "duration_ms": 9,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
+    "10-supplemental-three-concurrent-journeys": {
+        "selection": {
+            "description": "Active-journey selection result for the three-concurrent-journeys scenario. Broadband leads even though health insurance and novated leasing journeys also exist.",
+            "selection_method": "deterministic_with_ai_support",
+            "reason_summary": "Broadband move-home signals are the clearest and most time-sensitive. Health insurance and novated leasing remain in state, but they do not lead the current session.",
+            "ai_confidence": 0.89,
+            "ai_reason_summary": "Broadband is the best match for the current session. Health remains a reasonable secondary prompt and novated leasing should stay deferred.",
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for the three-concurrent-journeys scenario. Broadband drives the main candidate set, with one secondary health resume action retained for continuity.",
+            "primary_candidates": [
+                "action-bbd-address-check-001",
+                "offer-bbd-fast-family-001",
+                "guide-bbd-moving-home-001",
+            ],
+            "secondary_candidates": ["action-health-resume-compare-001"],
+            "excluded": [
+                {
+                    "asset_id": "offer-bbd-fibre-premium-001",
+                    "reason": "state_restricted_nsw_vic_qld — included for VIC but de-prioritised because the customer is still in a research-stage move-home flow",
+                }
+            ],
+            "duration_ms": 19,
+        },
+        "ranking": {
+            "description": "Ranking response for the three-concurrent-journeys scenario. Address check stays first because broadband availability must be confirmed before the customer can act on plan options.",
+            "ranked": [
+                (
+                    "action-bbd-address-check-001",
+                    36,
+                    [
+                        "Active journey fit: broadband moving-home journey",
+                        "Intent alignment: moving_home — address serviceability is the first required step",
+                        "Move-home urgency is highest among the customer's concurrent journeys",
+                        "Priority score: 1",
+                    ],
+                ),
+                (
+                    "offer-bbd-fast-family-001",
+                    26,
+                    [
+                        "Active journey fit: broadband",
+                        "Household fit: family profile is compatible with the fast family plan",
+                        "Strong follow-up option once availability is confirmed",
+                    ],
+                ),
+                (
+                    "guide-bbd-moving-home-001",
+                    17,
+                    [
+                        "Active journey fit: broadband moving-home journey",
+                        "Useful supporting content before availability is confirmed",
+                    ],
+                ),
+            ],
+            "suppressed": [
+                {
+                    "content_id": "action-health-resume-compare-001",
+                    "reason": "secondary_journey_not_primary — health comparison is retained as a supporting prompt only, not promoted in the main ranked set",
+                }
+            ],
+            "duration_ms": 11,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
+    "11-supplemental-resume-expired": {
+        "selection": {
+            "description": "Active-journey selection result for the resume-expired scenario. Broadband remains the active journey even though the saved quote can no longer be resumed.",
+            "selection_method": "deterministic_single_journey",
+            "reason_summary": "Only one journey exists for this customer. Broadband still leads the session, but the earlier resume path is no longer valid because the saved quote expired.",
+            "ai_confidence": 0.9,
+            "ai_reason_summary": "The customer still has clear broadband purchase intent, but the expired saved quote means the session should restart from a safer compare path rather than a resume action.",
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for the resume-expired scenario. Resume is excluded and the session falls back to compare-stage broadband actions.",
+            "primary_candidates": [
+                "action-bbd-compare-plans-001",
+                "offer-bbd-fast-family-001",
+                "guide-bbd-moving-home-001",
+            ],
+            "secondary_candidates": [],
+            "excluded": [
+                {
+                    "asset_id": "action-bbd-resume-quote-001",
+                    "reason": "resume_window_expired — saved broadband quotes are only resumable for 14 days",
+                }
+            ],
+            "duration_ms": 13,
+        },
+        "ranking": {
+            "description": "Ranking response for the resume-expired scenario. Compare plans becomes the lead action because the old saved quote can no longer be resumed.",
+            "ranked": [
+                (
+                    "action-bbd-compare-plans-001",
+                    30,
+                    [
+                        "Active journey fit: broadband quote recovery journey",
+                        "Resume path is no longer valid because the quote save window expired",
+                        "Comparison is the safest restart path without overpromising saved progress",
+                        "Priority score: 2",
+                    ],
+                ),
+                (
+                    "offer-bbd-fast-family-001",
+                    22,
+                    [
+                        "Service category match: broadband",
+                        "Household fit: couple profile is compatible with the fast family plan",
+                        "Useful follow-up once the customer has re-entered comparison",
+                    ],
+                ),
+                (
+                    "guide-bbd-moving-home-001",
+                    13,
+                    [
+                        "Provides background help if the customer wants to review setup timing before restarting",
+                    ],
+                ),
+            ],
+            "suppressed": [
+                {
+                    "content_id": "action-bbd-resume-quote-001",
+                    "reason": "lifecycle_resume_expired — saved quote aged beyond the 14-day resume window",
+                }
+            ],
+            "duration_ms": 8,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
+    "12-supplemental-ai-deterministic-conflict": {
+        "selection": {
+            "description": "Active-journey selection result for the AI-vs-deterministic-control scenario. Deterministic session-alignment rules keep health insurance active even though the AI hint would have chosen broadband.",
+            "selection_method": "deterministic_with_ai_support",
+            "reason_summary": "Current session signals are explicitly about switching health cover, so health insurance leads the session. A saved broadband quote remains valuable, but it does not override the current health-focused visit.",
+            "ai_confidence": 0.76,
+            "ai_reason_summary": "A saved broadband quote looks like the highest short-term conversion opportunity, so AI would surface it. Deterministic controls should still keep the health journey active because current-session intent is explicit.",
+            "ai_suggested_journey_id": "journey-broadband-88044",
+            "deterministic_override": True,
+        },
+        "retrieval": {
+            "description": "Candidate retrieval for the AI-vs-deterministic-control scenario. Retrieval follows the deterministically selected health journey, not the AI-preferred broadband journey.",
+            "primary_candidates": [
+                "action-health-compare-001",
+                "offer-health-hospital-extras-bundle-001",
+                "guide-health-switching-001",
+            ],
+            "secondary_candidates": [],
+            "excluded": [
+                {
+                    "asset_id": "offer-health-family-001",
+                    "reason": "household_fit_mismatch — customer profile is couple, not family",
+                },
+                {
+                    "asset_id": "offer-health-singles-001",
+                    "reason": "household_fit_mismatch — customer profile is couple, not single",
+                },
+                {
+                    "asset_id": "action-health-resume-compare-001",
+                    "reason": "resume_candidate_false — the active health journey is compare-stage but does not have a resumable saved comparison",
+                }
+            ],
+            "duration_ms": 16,
+        },
+        "ranking": {
+            "description": "Ranking response for the AI-vs-deterministic-control scenario. Health comparison remains the lead action because deterministic journey selection protected the current-session intent.",
+            "ranked": [
+                (
+                    "action-health-compare-001",
+                    29,
+                    [
+                        "Active journey fit: health insurance comparison journey",
+                        "Current session intent is explicitly health-focused",
+                        "Deterministic session-alignment rules keep the session on the health path",
+                        "Priority score: 1",
+                    ],
+                ),
+                (
+                    "offer-health-hospital-extras-bundle-001",
+                    24,
+                    [
+                        "Household fit: couple profile is eligible for the bundle",
+                        "Region match: Provider K bundle is available in VIC",
+                        "Quote-ready follow-up once the customer has compared options",
+                    ],
+                ),
+                (
+                    "guide-health-switching-001",
+                    16,
+                    [
+                        "Supports switching-provider questions without overriding the comparison CTA",
+                    ],
+                ),
+            ],
+            "suppressed": [],
+            "duration_ms": 9,
+        },
+        "expected_ai_output_file": "09-ai-expected-output.json",
+    },
 }

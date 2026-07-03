@@ -1,0 +1,48 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Candidate retrieval for the resume-expired scenario. Resume is excluded and the session falls back to compare-stage broadband actions.",
+  "retrieval_query": {
+    "active_journey": {
+      "service_category": "broadband",
+      "stage": "quote_in_progress",
+      "intent": "ready_to_buy"
+    },
+    "secondary_journey": null,
+    "context": {
+      "region": "VIC",
+      "channel": "web",
+      "lifecycle_status_filter": "active"
+    }
+  },
+  "candidates_returned": [
+    {
+      "asset_id": "action-bbd-compare-plans-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "funnel_stage_match": "compare",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "offer-bbd-fast-family-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "broadband",
+      "funnel_stage_match": "compare",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "guide-bbd-moving-home-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "broadband",
+      "funnel_stage_match": "research",
+      "retrieval_source": "primary_journey"
+    }
+  ],
+  "total_candidates": 3,
+  "retrieval_duration_ms": 13,
+  "excluded_at_retrieval": [
+    {
+      "asset_id": "action-bbd-resume-quote-001",
+      "reason": "resume_window_expired — saved broadband quotes are only resumable for 14 days"
+    }
+  ]
+}

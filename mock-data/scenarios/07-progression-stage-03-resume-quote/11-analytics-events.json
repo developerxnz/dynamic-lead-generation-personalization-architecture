@@ -1,0 +1,76 @@
+{
+  "scenario": "07-progression-stage-03-resume-quote",
+  "description": "Analytics events for stage 3 of the same-customer progression.",
+  "events": [
+    {
+      "event_type": "active_journey_selected",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-03",
+      "journey_id": "journey-broadband-77120",
+      "timestamp": "2026-06-25T09:45:00Z",
+      "metadata": {
+        "candidate_journeys": ["journey-broadband-77120"],
+        "selected_service_category": "broadband",
+        "selection_method": "deterministic_single_journey",
+        "ai_confidence": 0.97,
+        "resume_candidate": true
+      }
+    },
+    {
+      "event_type": "recommendation_served",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-03",
+      "journey_id": "journey-broadband-77120",
+      "timestamp": "2026-06-25T09:45:02Z",
+      "metadata": {
+        "active_journey": "broadband",
+        "top_recommendation": "action-bbd-resume-quote-001",
+        "ranking_policy_version": "broadband-v1",
+        "metadata_revision": "action-bbd-resume-quote-001@3",
+        "candidates_ranked": 3,
+        "candidates_suppressed": 0,
+        "resume_bias_applied": true
+      }
+    },
+    {
+      "event_type": "cta_impression",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-03",
+      "journey_id": "journey-broadband-77120",
+      "timestamp": "2026-06-25T09:45:03Z",
+      "metadata": {
+        "content_id": "action-bbd-resume-quote-001",
+        "cta_type": "resume",
+        "label": "Pick up where you left off",
+        "position": "primary"
+      }
+    },
+    {
+      "event_type": "ai_response_accepted",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-03",
+      "journey_id": "journey-broadband-77120",
+      "timestamp": "2026-06-25T09:45:02Z",
+      "metadata": {
+        "response_id": "air-503",
+        "ai_task_type": "cta_explanation",
+        "prompt_template_version": "poc-cta-explainer-v1",
+        "grounding_asset_ids": ["action-bbd-resume-quote-001"],
+        "accepted": true,
+        "latency_ms": 700
+      }
+    },
+    {
+      "event_type": "eligibility_checked",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-03",
+      "journey_id": "journey-broadband-77120",
+      "timestamp": "2026-06-25T09:45:00Z",
+      "metadata": {
+        "check_type": "serviceability",
+        "result": "confirmed",
+        "note": "Serviceability was confirmed earlier in the move-home journey and loaded from stored qualification state."
+      }
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "scenario": "08-progression-stage-04-compliance-after-move",
+  "description": "Final response for stage 4 of the same-customer progression. Compliance suppression keeps the state-restricted bundle out of the promoted health experience after the move.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-04",
+  "active_journey": {
+    "journey_id": "journey-health-77120",
+    "service_category": "health_insurance"
+  },
+  "next_best_action": {
+    "content_id": "action-health-compare-001",
+    "cta_type": "compare",
+    "label": "Compare health cover options",
+    "deep_link": "/health-insurance/compare",
+    "ranking_score": 32,
+    "ranking_policy_version": "health-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "guide-health-switching-001",
+      "cta_type": "read_guide",
+      "label": "How to switch health insurance",
+      "deep_link": "/health-insurance/guides/switching"
+    }
+  ],
+  "secondary_journey_prompt": null,
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-504",
+    "summary": "Comparing health cover options first makes it easier to see what fits before you commit to switching.",
+    "cta_support_text": "Compare options side by side before you start your next quote.",
+    "grounding_asset_ids": ["action-health-compare-001", "guide-health-switching-001"]
+  },
+  "decision_trace": {
+    "profile_read": "known customer, couple household, TAS, lead score 72",
+    "journey_read": "one journey loaded: health insurance compare, switching intent active",
+    "active_journey_selected": "health insurance — only journey, no ambiguity",
+    "retrieval": "3 candidates returned; Provider K bundle retained for policy evaluation despite broad retrieval",
+    "filtering": "Provider K bundle suppressed at ranking due to state restriction in TAS",
+    "ranking": "comparison CTA ranked first (score 32)",
+    "ai_explanation": "accepted — grounded on comparison and switching guide assets"
+  },
+  "metadata_revision": "action-health-compare-001@6",
+  "response_generated_at": "2026-07-02T10:15:02Z"
+}

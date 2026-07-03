@@ -1,0 +1,63 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Analytics events for the three-concurrent-journeys scenario.",
+  "events": [
+    {
+      "event_type": "active_journey_selected",
+      "customer_id": "cust-88022",
+      "session_id": "sess-88022-01",
+      "journey_id": "journey-broadband-88022",
+      "timestamp": "2026-07-06T09:30:00Z",
+      "metadata": {
+        "candidate_journeys": ["journey-broadband-88022", "journey-health-88022", "journey-novated-88022"],
+        "selected_service_category": "broadband",
+        "selection_method": "deterministic_with_ai_support",
+        "ai_confidence": 0.89
+      }
+    },
+    {
+      "event_type": "recommendation_served",
+      "customer_id": "cust-88022",
+      "session_id": "sess-88022-01",
+      "journey_id": "journey-broadband-88022",
+      "timestamp": "2026-07-06T09:30:02Z",
+      "metadata": {
+        "active_journey": "broadband",
+        "top_recommendation": "action-bbd-address-check-001",
+        "ranking_policy_version": "broadband-v1",
+        "metadata_revision": "action-bbd-address-check-001@5",
+        "candidates_ranked": 3,
+        "candidates_suppressed": 1,
+        "secondary_prompt_content_id": "action-health-resume-compare-001"
+      }
+    },
+    {
+      "event_type": "cta_impression",
+      "customer_id": "cust-88022",
+      "session_id": "sess-88022-01",
+      "journey_id": "journey-broadband-88022",
+      "timestamp": "2026-07-06T09:30:03Z",
+      "metadata": {
+        "content_id": "action-bbd-address-check-001",
+        "cta_type": "check_eligibility",
+        "label": "Check broadband options at your new address",
+        "position": "primary"
+      }
+    },
+    {
+      "event_type": "ai_response_accepted",
+      "customer_id": "cust-88022",
+      "session_id": "sess-88022-01",
+      "journey_id": "journey-broadband-88022",
+      "timestamp": "2026-07-06T09:30:02Z",
+      "metadata": {
+        "response_id": "air-602",
+        "ai_task_type": "cta_explanation",
+        "prompt_template_version": "poc-cta-explainer-v1",
+        "grounding_asset_ids": ["action-bbd-address-check-001", "guide-bbd-moving-home-001"],
+        "accepted": true,
+        "latency_ms": 735
+      }
+    }
+  ]
+}

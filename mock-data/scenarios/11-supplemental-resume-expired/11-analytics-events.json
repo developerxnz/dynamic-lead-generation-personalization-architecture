@@ -1,0 +1,75 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Analytics events for the resume-expired scenario.",
+  "events": [
+    {
+      "event_type": "active_journey_selected",
+      "customer_id": "cust-88033",
+      "session_id": "sess-88033-01",
+      "journey_id": "journey-broadband-88033",
+      "timestamp": "2026-07-07T18:20:00Z",
+      "metadata": {
+        "candidate_journeys": ["journey-broadband-88033"],
+        "selected_service_category": "broadband",
+        "selection_method": "deterministic_single_journey",
+        "ai_confidence": 0.9,
+        "resume_window_expired": true
+      }
+    },
+    {
+      "event_type": "candidate_suppressed",
+      "customer_id": "cust-88033",
+      "session_id": "sess-88033-01",
+      "journey_id": "journey-broadband-88033",
+      "timestamp": "2026-07-07T18:20:01Z",
+      "metadata": {
+        "content_id": "action-bbd-resume-quote-001",
+        "suppression_class": "lifecycle",
+        "suppression_reason": "lifecycle_resume_expired"
+      }
+    },
+    {
+      "event_type": "recommendation_served",
+      "customer_id": "cust-88033",
+      "session_id": "sess-88033-01",
+      "journey_id": "journey-broadband-88033",
+      "timestamp": "2026-07-07T18:20:02Z",
+      "metadata": {
+        "active_journey": "broadband",
+        "top_recommendation": "action-bbd-compare-plans-001",
+        "ranking_policy_version": "broadband-v1",
+        "metadata_revision": "action-bbd-compare-plans-001@7",
+        "candidates_ranked": 3,
+        "candidates_suppressed": 1
+      }
+    },
+    {
+      "event_type": "cta_impression",
+      "customer_id": "cust-88033",
+      "session_id": "sess-88033-01",
+      "journey_id": "journey-broadband-88033",
+      "timestamp": "2026-07-07T18:20:03Z",
+      "metadata": {
+        "content_id": "action-bbd-compare-plans-001",
+        "cta_type": "compare",
+        "label": "Compare broadband plans",
+        "position": "primary"
+      }
+    },
+    {
+      "event_type": "ai_response_accepted",
+      "customer_id": "cust-88033",
+      "session_id": "sess-88033-01",
+      "journey_id": "journey-broadband-88033",
+      "timestamp": "2026-07-07T18:20:02Z",
+      "metadata": {
+        "response_id": "air-603",
+        "ai_task_type": "cta_explanation",
+        "prompt_template_version": "poc-cta-explainer-v1",
+        "grounding_asset_ids": ["offer-bbd-fast-family-001", "action-bbd-address-check-001"],
+        "accepted": true,
+        "latency_ms": 690
+      }
+    }
+  ]
+}

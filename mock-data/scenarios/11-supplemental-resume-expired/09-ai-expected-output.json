@@ -1,0 +1,33 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Expected AI model output for the resume-expired scenario.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Comparing broadband plans again is the easiest way to pick the right option and move forward confidently.",
+    "key_points": [
+      "You can compare speed tiers, prices, and contract terms side by side",
+      "Address-specific availability matters when narrowing down plans",
+      "A no-lock-in option is available if flexibility matters"
+    ],
+    "cta_support_text": "Start with comparison so the next broadband step is straightforward.",
+    "grounding_asset_ids": [
+      "offer-bbd-fast-family-001",
+      "action-bbd-address-check-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 15,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 9,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-603",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 690
+}

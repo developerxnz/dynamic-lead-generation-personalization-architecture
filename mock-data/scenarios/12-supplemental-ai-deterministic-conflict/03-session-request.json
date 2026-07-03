@@ -1,0 +1,14 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "description": "Incoming orchestrator request for the AI-vs-deterministic-control scenario. Current session signals are clearly health-insurance focused.",
+  "customer_id": "cust-88044",
+  "session_id": "sess-88044-01",
+  "channel": "web",
+  "entry_point": "organic_search",
+  "campaign_theme": null,
+  "current_url": "/health-insurance/compare",
+  "query_text": "switch couples health cover",
+  "region": "VIC",
+  "device_type": "desktop",
+  "timestamp": "2026-07-08T12:05:00Z"
+}

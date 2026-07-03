@@ -1,0 +1,45 @@
+{
+  "scenario": "07-progression-stage-03-resume-quote",
+  "description": "Final response for stage 3 of the same-customer progression. Resume is the lead action for the saved broadband quote.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-03",
+  "active_journey": {
+    "journey_id": "journey-broadband-77120",
+    "service_category": "broadband"
+  },
+  "next_best_action": {
+    "content_id": "action-bbd-resume-quote-001",
+    "cta_type": "resume",
+    "label": "Pick up where you left off",
+    "deep_link": "/broadband/quote/resume",
+    "ranking_score": 42,
+    "ranking_policy_version": "broadband-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "cta_type": "compare",
+      "label": "See fast family broadband plans",
+      "deep_link": "/broadband/compare?household=family&speed=nbn100"
+    }
+  ],
+  "secondary_journey_prompt": null,
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-503",
+    "summary": "Your broadband quote is still saved, so you can pick up where you left off without starting over.",
+    "cta_support_text": "Your quote is ready to resume whenever you're ready.",
+    "grounding_asset_ids": ["action-bbd-resume-quote-001"]
+  },
+  "decision_trace": {
+    "profile_read": "known customer, couple household, VIC, lead score 76",
+    "journey_read": "one journey loaded: broadband quote_in_progress, resume_candidate true",
+    "active_journey_selected": "broadband — only journey, high resume signal",
+    "retrieval": "3 candidates returned; moving-home guide excluded (stage mismatch)",
+    "filtering": "no suppressions at ranking",
+    "ranking": "resume CTA ranked first (score 42, resume bias applied)",
+    "ai_explanation": "accepted — grounded on resume quote asset"
+  },
+  "metadata_revision": "action-bbd-resume-quote-001@3",
+  "response_generated_at": "2026-06-25T09:45:02Z"
+}

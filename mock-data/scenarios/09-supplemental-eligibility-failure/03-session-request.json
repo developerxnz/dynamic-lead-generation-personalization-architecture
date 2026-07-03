@@ -1,0 +1,14 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Incoming orchestrator request for the eligibility-failure scenario. The customer returns to the move-home broadband flow after a failed serviceability result.",
+  "customer_id": "cust-88011",
+  "session_id": "sess-88011-01",
+  "channel": "web",
+  "entry_point": "organic_search",
+  "campaign_theme": null,
+  "current_url": "/broadband/moving-home",
+  "query_text": "internet for new apartment",
+  "region": "NSW",
+  "device_type": "mobile",
+  "timestamp": "2026-07-05T08:15:00Z"
+}

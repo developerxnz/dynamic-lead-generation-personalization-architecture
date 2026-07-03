@@ -1,0 +1,23 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Supplementary scenario covering three concurrent journeys. One customer is simultaneously evaluating broadband, health insurance, and novated leasing.",
+  "customer_id": "cust-88022",
+  "identity": {
+    "known_customer": true,
+    "account_linked": true,
+    "anonymous_ids": ["web-anon-88022"]
+  },
+  "profile": {
+    "household_type": "family",
+    "employment_type": "full_time",
+    "location": "VIC",
+    "budget_range": "mid",
+    "life_stage": "growing_family"
+  },
+  "customer_summary": {
+    "is_returning_customer": true,
+    "last_meaningful_event_at": "2026-07-06T09:30:00Z",
+    "repeat_sessions_30d": 7,
+    "lead_score": 81
+  }
+}

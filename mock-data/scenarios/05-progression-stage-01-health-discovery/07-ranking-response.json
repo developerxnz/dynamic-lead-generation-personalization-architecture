@@ -1,0 +1,53 @@
+{
+  "scenario": "05-progression-stage-01-health-discovery",
+  "description": "Ranking response for stage 1. Comparison ranks first so the new customer can evaluate options before committing to a quote.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-health-compare-001",
+      "score": 30,
+      "cta": {
+        "type": "compare",
+        "label": "Compare health cover options",
+        "deep_link": "/health-insurance/compare"
+      },
+      "reasons": [
+        "Active journey fit: health insurance discovery journey",
+        "Funnel stage match: discover — comparison is the right next step",
+        "Intent alignment: researching_options",
+        "Couple household benefits from comparing options before starting a quote",
+        "Priority score: 1"
+      ]
+    },
+    {
+      "content_id": "offer-health-hospital-extras-bundle-001",
+      "score": 24,
+      "cta": {
+        "type": "get_quote",
+        "label": "Get a hospital and extras bundle quote",
+        "deep_link": "/health-insurance/quote?type=bundle&provider=k"
+      },
+      "reasons": [
+        "Household fit: couple household is eligible for the bundle",
+        "Region match: Provider K bundle is available in VIC",
+        "Useful quote-ready follow-up once comparison has narrowed the field"
+      ]
+    },
+    {
+      "content_id": "guide-health-switching-001",
+      "score": 13,
+      "cta": {
+        "type": "read_guide",
+        "label": "How to switch health insurance",
+        "deep_link": "/health-insurance/guides/switching"
+      },
+      "reasons": [
+        "Service category match",
+        "Helpful supporting content for a customer still learning the category",
+        "Lower priority than comparison for a first visit"
+      ]
+    }
+  ],
+  "suppressed_candidates": [],
+  "ranking_policy_version": "health-v1",
+  "ranking_duration_ms": 8
+}

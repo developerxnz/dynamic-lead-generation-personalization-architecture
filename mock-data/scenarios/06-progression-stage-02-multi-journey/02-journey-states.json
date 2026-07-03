@@ -1,0 +1,62 @@
+{
+  "scenario": "06-progression-stage-02-multi-journey",
+  "customer_id": "cust-77120",
+  "journeys": [
+    {
+      "journey_id": "journey-health-77120",
+      "customer_id": "cust-77120",
+      "service_category": "health_insurance",
+      "status": "active",
+      "intent": "comparing_options",
+      "stage": "compare",
+      "urgency": "medium",
+      "switching_intent": "passive",
+      "renewal_window_days": null,
+      "resume_candidate": true,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 2,
+        "pages_viewed_7d": ["/health-insurance/compare", "/health-insurance/providers/k"]
+      },
+      "decision_support": {
+        "journey_score": 0.64,
+        "ai_journey_summary": "Customer has an earlier health comparison journey with enough engagement to justify a resume prompt if health becomes relevant again."
+      },
+      "last_meaningful_event_at": "2026-06-15T10:10:00Z"
+    },
+    {
+      "journey_id": "journey-broadband-77120",
+      "customer_id": "cust-77120",
+      "service_category": "broadband",
+      "status": "active",
+      "intent": "moving_home",
+      "stage": "research",
+      "urgency": "high",
+      "switching_intent": "active",
+      "renewal_window_days": null,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": false,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 0,
+        "pages_viewed_7d": ["/broadband/moving-home", "/broadband/guides/moving-home"]
+      },
+      "decision_support": {
+        "journey_score": 0.78,
+        "ai_journey_summary": "Customer has just entered a move-home broadband journey. Serviceability is not yet confirmed, so address check should lead the session if broadband wins."
+      },
+      "last_meaningful_event_at": "2026-06-20T11:20:00Z"
+    }
+  ]
+}

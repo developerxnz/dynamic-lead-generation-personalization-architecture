@@ -1,0 +1,14 @@
+{
+  "scenario": "08-progression-stage-04-compliance-after-move",
+  "description": "Incoming orchestrator request for stage 4. Returning customer now comparing health insurance from Tasmania after completing the move.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-04",
+  "channel": "web",
+  "entry_point": "organic_search",
+  "campaign_theme": null,
+  "current_url": "/health-insurance/compare",
+  "query_text": "compare health insurance tas",
+  "region": "TAS",
+  "device_type": "desktop",
+  "timestamp": "2026-07-02T10:15:00Z"
+}

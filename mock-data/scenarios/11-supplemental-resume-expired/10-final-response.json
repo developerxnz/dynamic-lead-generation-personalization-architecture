@@ -1,0 +1,45 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Final response for the resume-expired scenario. The journey stays active, but lifecycle rules replace resume with a fresh comparison path.",
+  "customer_id": "cust-88033",
+  "session_id": "sess-88033-01",
+  "active_journey": {
+    "journey_id": "journey-broadband-88033",
+    "service_category": "broadband"
+  },
+  "next_best_action": {
+    "content_id": "action-bbd-compare-plans-001",
+    "cta_type": "compare",
+    "label": "Compare broadband plans",
+    "deep_link": "/broadband/compare",
+    "ranking_score": 30,
+    "ranking_policy_version": "broadband-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "cta_type": "compare",
+      "label": "See fast family broadband plans",
+      "deep_link": "/broadband/compare?household=family&speed=nbn100"
+    }
+  ],
+  "secondary_journey_prompt": null,
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-603",
+    "summary": "Comparing broadband plans again is the easiest way to pick the right option and move forward confidently.",
+    "cta_support_text": "Start with comparison so the next broadband step is straightforward.",
+    "grounding_asset_ids": ["offer-bbd-fast-family-001", "action-bbd-address-check-001"]
+  },
+  "decision_trace": {
+    "profile_read": "known customer, couple household, VIC, lead score 74",
+    "journey_read": "one journey loaded: broadband quote_in_progress with expired resume window",
+    "active_journey_selected": "broadband — only journey, but resume is no longer valid",
+    "retrieval": "3 candidates returned; resume action excluded at retrieval",
+    "filtering": "expired resume lifecycle rule prevented saved-quote promotion",
+    "ranking": "compare plans CTA ranked first (score 30)",
+    "ai_explanation": "accepted — grounded on broadband comparison support assets"
+  },
+  "metadata_revision": "action-bbd-compare-plans-001@7",
+  "response_generated_at": "2026-07-07T18:20:02Z"
+}

@@ -1,0 +1,33 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Expected AI model output for the eligibility-failure scenario.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "This guide helps you understand broadband timing and address checks before you choose what to do next.",
+    "key_points": [
+      "Broadband options can vary from one address to the next",
+      "Moving-home connections can take anywhere from a few business days to a couple of weeks",
+      "Some providers can transfer your existing plan if the technology type matches"
+    ],
+    "cta_support_text": "Read the guide first so your next broadband step is clearer.",
+    "grounding_asset_ids": [
+      "guide-bbd-moving-home-001",
+      "action-bbd-address-check-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 16,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 11,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-601",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 710
+}

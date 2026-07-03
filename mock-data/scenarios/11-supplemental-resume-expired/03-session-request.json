@@ -1,0 +1,14 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Incoming orchestrator request for the resume-expired scenario. Returning customer comes back to broadband after the saved quote aged past the resume window.",
+  "customer_id": "cust-88033",
+  "session_id": "sess-88033-01",
+  "channel": "web",
+  "entry_point": "direct",
+  "campaign_theme": null,
+  "current_url": "/broadband",
+  "query_text": null,
+  "region": "VIC",
+  "device_type": "desktop",
+  "timestamp": "2026-07-07T18:20:00Z"
+}

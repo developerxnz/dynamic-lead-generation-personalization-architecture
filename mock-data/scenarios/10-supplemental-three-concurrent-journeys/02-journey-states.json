@@ -1,0 +1,90 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "customer_id": "cust-88022",
+  "journeys": [
+    {
+      "journey_id": "journey-broadband-88022",
+      "customer_id": "cust-88022",
+      "service_category": "broadband",
+      "status": "active",
+      "intent": "moving_home",
+      "stage": "research",
+      "urgency": "high",
+      "switching_intent": "active",
+      "renewal_window_days": null,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": false,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 2,
+        "pages_viewed_7d": ["/broadband/moving-home", "/broadband/address-check"]
+      },
+      "decision_support": {
+        "journey_score": 0.83,
+        "ai_journey_summary": "Broadband is the most urgent journey because the move-home timeline requires availability checks before plan comparison can progress."
+      },
+      "last_meaningful_event_at": "2026-07-06T09:30:00Z"
+    },
+    {
+      "journey_id": "journey-health-88022",
+      "customer_id": "cust-88022",
+      "service_category": "health_insurance",
+      "status": "active",
+      "intent": "switching_provider",
+      "stage": "compare",
+      "urgency": "medium",
+      "switching_intent": "active",
+      "renewal_window_days": 19,
+      "resume_candidate": true,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 3,
+        "pages_viewed_7d": ["/health-insurance/compare", "/health-insurance/providers/h"]
+      },
+      "decision_support": {
+        "journey_score": 0.68,
+        "ai_journey_summary": "The health comparison journey is still relevant, but it is secondary to the immediate move-home broadband need."
+      },
+      "last_meaningful_event_at": "2026-07-03T11:10:00Z"
+    },
+    {
+      "journey_id": "journey-novated-88022",
+      "customer_id": "cust-88022",
+      "service_category": "novated_leasing",
+      "status": "active",
+      "intent": "researching_options",
+      "stage": "discover",
+      "urgency": "medium",
+      "switching_intent": "passive",
+      "renewal_window_days": null,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 1,
+        "pages_viewed_7d": ["/novated-leasing", "/novated-leasing/guide"]
+      },
+      "decision_support": {
+        "journey_score": 0.74,
+        "ai_journey_summary": "Novated leasing interest exists, but there are no current-session signals that it should lead this visit."
+      },
+      "last_meaningful_event_at": "2026-07-04T16:00:00Z"
+    }
+  ]
+}

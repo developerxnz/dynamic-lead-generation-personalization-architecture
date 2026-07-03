@@ -1,0 +1,14 @@
+{
+  "scenario": "05-progression-stage-01-health-discovery",
+  "description": "Incoming orchestrator request from the web channel. First-time visit for couples health insurance research.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-01",
+  "channel": "web",
+  "entry_point": "organic_search",
+  "campaign_theme": null,
+  "current_url": "/health-insurance/plans",
+  "query_text": "best health insurance for couples",
+  "region": "VIC",
+  "device_type": "mobile",
+  "timestamp": "2026-05-10T09:00:00Z"
+}

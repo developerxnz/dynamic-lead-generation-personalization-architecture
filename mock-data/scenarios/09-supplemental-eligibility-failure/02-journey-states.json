@@ -1,0 +1,34 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "customer_id": "cust-88011",
+  "journeys": [
+    {
+      "journey_id": "journey-broadband-88011",
+      "customer_id": "cust-88011",
+      "service_category": "broadband",
+      "status": "active",
+      "intent": "moving_home",
+      "stage": "research",
+      "urgency": "high",
+      "switching_intent": "active",
+      "renewal_window_days": null,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": false,
+        "hard_exclusions": ["address_not_serviceable"],
+        "suppression_flags": ["eligibility_serviceability_failure"]
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 1,
+        "pages_viewed_7d": ["/broadband/moving-home", "/broadband/address-check", "/broadband/guides/moving-home"]
+      },
+      "decision_support": {
+        "journey_score": 0.78,
+        "ai_journey_summary": "The customer still needs to solve broadband for a move, but the recorded address failed serviceability checks so deterministic eligibility rules must block quote-ready promotion."
+      },
+      "last_meaningful_event_at": "2026-07-05T08:15:00Z"
+    }
+  ]
+}

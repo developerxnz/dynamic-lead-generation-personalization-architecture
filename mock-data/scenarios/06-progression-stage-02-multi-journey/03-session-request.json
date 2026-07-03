@@ -1,0 +1,14 @@
+{
+  "scenario": "06-progression-stage-02-multi-journey",
+  "description": "Incoming orchestrator request for stage 2. Returning customer arrives from a paid broadband move-home campaign while a health comparison journey is still on file.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-02",
+  "channel": "web",
+  "entry_point": "paid_search",
+  "campaign_theme": "move-home-broadband",
+  "current_url": "/broadband/moving-home",
+  "query_text": "internet for a new apartment",
+  "region": "VIC",
+  "device_type": "desktop",
+  "timestamp": "2026-06-20T11:20:00Z"
+}

@@ -1,0 +1,50 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "description": "Ranking response for the AI-vs-deterministic-control scenario. Health comparison remains the lead action because deterministic journey selection protected the current-session intent.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-health-compare-001",
+      "score": 29,
+      "cta": {
+        "type": "compare",
+        "label": "Compare health cover options",
+        "deep_link": "/health-insurance/compare"
+      },
+      "reasons": [
+        "Active journey fit: health insurance comparison journey",
+        "Current session intent is explicitly health-focused",
+        "Deterministic session-alignment rules keep the session on the health path",
+        "Priority score: 1"
+      ]
+    },
+    {
+      "content_id": "offer-health-hospital-extras-bundle-001",
+      "score": 24,
+      "cta": {
+        "type": "get_quote",
+        "label": "Get a hospital and extras bundle quote",
+        "deep_link": "/health-insurance/quote?type=bundle&provider=k"
+      },
+      "reasons": [
+        "Household fit: couple profile is eligible for the bundle",
+        "Region match: Provider K bundle is available in VIC",
+        "Quote-ready follow-up once the customer has compared options"
+      ]
+    },
+    {
+      "content_id": "guide-health-switching-001",
+      "score": 16,
+      "cta": {
+        "type": "read_guide",
+        "label": "How to switch health insurance",
+        "deep_link": "/health-insurance/guides/switching"
+      },
+      "reasons": [
+        "Supports switching-provider questions without overriding the comparison CTA"
+      ]
+    }
+  ],
+  "suppressed_candidates": [],
+  "ranking_policy_version": "health-v1",
+  "ranking_duration_ms": 9
+}

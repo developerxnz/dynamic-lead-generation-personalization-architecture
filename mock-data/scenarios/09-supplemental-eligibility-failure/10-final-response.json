@@ -1,0 +1,45 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Final response for the eligibility-failure scenario. Deterministic eligibility suppression removes the ineligible broadband offer and falls back to educational guidance.",
+  "customer_id": "cust-88011",
+  "session_id": "sess-88011-01",
+  "active_journey": {
+    "journey_id": "journey-broadband-88011",
+    "service_category": "broadband"
+  },
+  "next_best_action": {
+    "content_id": "guide-bbd-moving-home-001",
+    "cta_type": "read_guide",
+    "label": "Broadband when moving home",
+    "deep_link": "/broadband/guides/moving-home",
+    "ranking_score": 26,
+    "ranking_policy_version": "broadband-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "action-bbd-address-check-001",
+      "cta_type": "check_eligibility",
+      "label": "Check broadband options at your new address",
+      "deep_link": "/broadband/address-check"
+    }
+  ],
+  "secondary_journey_prompt": null,
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-601",
+    "summary": "This guide helps you understand broadband timing and address checks before you choose what to do next.",
+    "cta_support_text": "Read the guide first so your next broadband step is clearer.",
+    "grounding_asset_ids": ["guide-bbd-moving-home-001", "action-bbd-address-check-001"]
+  },
+  "decision_trace": {
+    "profile_read": "known customer, family household, NSW, lead score 63",
+    "journey_read": "one journey loaded: broadband moving_home with failed serviceability state",
+    "active_journey_selected": "broadband — only journey, still current despite eligibility failure",
+    "retrieval": "3 candidates returned; premium fibre excluded at retrieval",
+    "filtering": "fast family broadband suppressed because the address failed serviceability checks",
+    "ranking": "moving-home guide ranked first (score 26)",
+    "ai_explanation": "accepted — grounded on moving-home guide and address-check assets"
+  },
+  "metadata_revision": "guide-bbd-moving-home-001@4",
+  "response_generated_at": "2026-07-05T08:15:02Z"
+}

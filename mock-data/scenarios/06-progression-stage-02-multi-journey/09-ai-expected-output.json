@@ -1,0 +1,33 @@
+{
+  "scenario": "06-progression-stage-02-multi-journey",
+  "description": "Expected AI model output for stage 2 of the same-customer progression.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Because you're moving soon, the best next step is to check which broadband options are actually available at your new address.",
+    "key_points": [
+      "Availability depends on your exact address, not just the suburb",
+      "Checking first means you only compare plans that can actually be connected",
+      "It helps you plan your setup timing before moving day"
+    ],
+    "cta_support_text": "Start with your new address so you only see plans that fit that location.",
+    "grounding_asset_ids": [
+      "action-bbd-address-check-001",
+      "guide-bbd-moving-home-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 18,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 14,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-502",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 810
+}

@@ -1,0 +1,31 @@
+{
+  "scenario": "07-progression-stage-03-resume-quote",
+  "description": "Active-journey selection result for stage 3. Only one broadband journey exists and it has a strong resume candidate signal.",
+  "selected_journey_id": "journey-broadband-77120",
+  "selected_service_category": "broadband",
+  "selection_method": "deterministic_single_journey",
+  "reason_summary": "Single broadband journey with resume_candidate true and a high journey score. Customer returned directly to the broadband section after an abandoned quote 6 days ago.",
+  "candidate_journeys": [
+    {
+      "journey_id": "journey-broadband-77120",
+      "service_category": "broadband",
+      "journey_score": 0.84,
+      "recency_score": 0.81,
+      "session_signal_alignment": "strong",
+      "campaign_alignment": false,
+      "selection_reasons": [
+        "Only active journey for this customer",
+        "resume_candidate is true — quote started but not completed",
+        "Customer returned to broadband section directly",
+        "High journey score indicates strong purchase intent",
+        "Serviceability already confirmed"
+      ]
+    }
+  ],
+  "ai_interpretation": {
+    "suggested_journey_id": "journey-broadband-77120",
+    "confidence": 0.97,
+    "reason_summary": "Returning customer with a saved broadband quote. Direct return visit strongly suggests intent to complete. Resume flow is unambiguously the right path."
+  },
+  "deterministic_override": false
+}

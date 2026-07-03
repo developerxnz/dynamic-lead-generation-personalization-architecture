@@ -1,0 +1,37 @@
+{
+  "scenario": "07-progression-stage-03-resume-quote",
+  "customer_id": "cust-77120",
+  "journeys": [
+    {
+      "journey_id": "journey-broadband-77120",
+      "customer_id": "cust-77120",
+      "service_category": "broadband",
+      "status": "active",
+      "intent": "ready_to_buy",
+      "stage": "quote_in_progress",
+      "urgency": "high",
+      "switching_intent": "active",
+      "renewal_window_days": null,
+      "resume_candidate": true,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": true,
+        "quote_started_at": "2026-06-19T16:20:00Z",
+        "quote_abandoned_at": "2026-06-19T16:38:00Z",
+        "quote_completion_pct": 60,
+        "provider_comparisons_7d": 2,
+        "pages_viewed_7d": ["/broadband/compare", "/broadband/quote?provider=b&plan=nbn100", "/broadband/quote/address-details"]
+      },
+      "decision_support": {
+        "journey_score": 0.84,
+        "ai_journey_summary": "The move-home broadband journey has advanced to a saved quote. Resume is the lowest-friction next step because serviceability is already confirmed and the customer reached the address-details step."
+      },
+      "last_meaningful_event_at": "2026-06-19T16:38:00Z"
+    }
+  ]
+}

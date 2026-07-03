@@ -1,0 +1,68 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Ranking engine request for the eligibility-failure scenario. The active broadband journey is valid, but deterministic eligibility must block quote-ready promotion after a failed serviceability result.",
+  "customer_profile": {
+    "customer_id": "cust-88011",
+    "lead_score": 63,
+    "location": "NSW",
+    "household_type": "family",
+    "is_returning_customer": true
+  },
+  "active_journey": {
+    "journey_id": "journey-broadband-88011",
+    "service_category": "broadband",
+    "intent": "moving_home",
+    "stage": "research",
+    "urgency": "high",
+    "resume_candidate": false,
+    "qualification_state": {
+      "coverage_region_match": true,
+      "serviceability_confirmed": false,
+      "hard_exclusions": ["address_not_serviceable"],
+      "suppression_flags": ["eligibility_serviceability_failure"]
+    }
+  },
+  "context": {
+    "channel": "web",
+    "campaign_source": "organic_search",
+    "campaign_theme": null,
+    "session_id": "sess-88011-01",
+    "must_enforce_eligibility": true
+  },
+  "candidates": [
+    {
+      "content_id": "action-bbd-address-check-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "cta_type": "check_eligibility",
+      "cta_deep_link": "/broadband/address-check",
+      "provider": null,
+      "priority": 1,
+      "funnel_stage": "research",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "broadband",
+      "cta_type": "compare",
+      "cta_deep_link": "/broadband/compare?household=family&speed=nbn100",
+      "provider": "Provider B",
+      "priority": 2,
+      "funnel_stage": "compare",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "content_id": "guide-bbd-moving-home-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "broadband",
+      "cta_type": "read_guide",
+      "cta_deep_link": "/broadband/guides/moving-home",
+      "provider": null,
+      "priority": 3,
+      "funnel_stage": "research",
+      "retrieval_source": "primary_journey"
+    }
+  ],
+  "ranking_policy_version": "broadband-v1"
+}

@@ -1,0 +1,42 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Ranking response for the eligibility-failure scenario. The moving-home guide leads because quote-ready broadband offers are blocked by the failed serviceability check.",
+  "ranked_recommendations": [
+    {
+      "content_id": "guide-bbd-moving-home-001",
+      "score": 26,
+      "cta": {
+        "type": "read_guide",
+        "label": "Broadband when moving home",
+        "deep_link": "/broadband/guides/moving-home"
+      },
+      "reasons": [
+        "Active journey fit: broadband moving-home journey",
+        "Eligibility-safe fallback after failed serviceability check",
+        "Guide helps the customer understand connection timing and what to do next",
+        "Keeps the session useful without promoting an ineligible offer"
+      ]
+    },
+    {
+      "content_id": "action-bbd-address-check-001",
+      "score": 15,
+      "cta": {
+        "type": "check_eligibility",
+        "label": "Check broadband options at your new address",
+        "deep_link": "/broadband/address-check"
+      },
+      "reasons": [
+        "Serviceability tool remains available if the customer needs to retry with corrected address details",
+        "Lower priority because an address-level failure is already recorded"
+      ]
+    }
+  ],
+  "suppressed_candidates": [
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "reason": "eligibility_serviceability_failure — fast family broadband cannot be promoted because the recorded address failed serviceability checks"
+    }
+  ],
+  "ranking_policy_version": "broadband-v1",
+  "ranking_duration_ms": 9
+}

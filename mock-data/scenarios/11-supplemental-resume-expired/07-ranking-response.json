@@ -1,0 +1,55 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Ranking response for the resume-expired scenario. Compare plans becomes the lead action because the old saved quote can no longer be resumed.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-bbd-compare-plans-001",
+      "score": 30,
+      "cta": {
+        "type": "compare",
+        "label": "Compare broadband plans",
+        "deep_link": "/broadband/compare"
+      },
+      "reasons": [
+        "Active journey fit: broadband quote recovery journey",
+        "Resume path is no longer valid because the quote save window expired",
+        "Comparison is the safest restart path without overpromising saved progress",
+        "Priority score: 2"
+      ]
+    },
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "score": 22,
+      "cta": {
+        "type": "compare",
+        "label": "See fast family broadband plans",
+        "deep_link": "/broadband/compare?household=family&speed=nbn100"
+      },
+      "reasons": [
+        "Service category match: broadband",
+        "Household fit: couple profile is compatible with the fast family plan",
+        "Useful follow-up once the customer has re-entered comparison"
+      ]
+    },
+    {
+      "content_id": "guide-bbd-moving-home-001",
+      "score": 13,
+      "cta": {
+        "type": "read_guide",
+        "label": "Broadband when moving home",
+        "deep_link": "/broadband/guides/moving-home"
+      },
+      "reasons": [
+        "Provides background help if the customer wants to review setup timing before restarting"
+      ]
+    }
+  ],
+  "suppressed_candidates": [
+    {
+      "content_id": "action-bbd-resume-quote-001",
+      "reason": "lifecycle_resume_expired — saved quote aged beyond the 14-day resume window"
+    }
+  ],
+  "ranking_policy_version": "broadband-v1",
+  "ranking_duration_ms": 8
+}
