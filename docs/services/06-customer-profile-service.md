@@ -45,4 +45,4 @@ Use the overview page for orientation, then go deeper based on what you need:
 
 | <- Previous | Next -> |
 |---|---|
-| [Contentful Integration](./05-contentful-integration.md) | [Ranking Engine](./07-ranking-engine.md) |
+| [Activity Metadata](./05-activity-metadata.md) | [Ranking Engine](./07-ranking-engine.md) |

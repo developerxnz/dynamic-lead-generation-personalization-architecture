@@ -23,7 +23,7 @@ Recommended fields:
 | `funnelStage` | stage-aware retrieval |
 | `region` | regional eligibility filtering |
 | `ctaType` | next-step alignment |
-| `contentRevision` | traceability back to Contentful publish state |
+| `metadataRevision` | traceability back to the activity metadata state |
 | `embeddingModelVersion` | embedding refresh and experiment governance |
 | `plainText` | keyword fallback and hybrid search |
 | `vector` | semantic similarity search |
@@ -37,7 +37,7 @@ This keeps retrieval inspectable instead of turning the vector layer into a blac
 Recommended ingestion flow:
 
 ```text
-Contentful publish event
+Activity metadata update event
         ↓
 Normalization and field extraction
         ↓
@@ -54,7 +54,7 @@ Implementation guidance:
 
 - separate normalization from embedding generation so retries do not re-fetch content unnecessarily
 - upsert by `chunkId` so partial document refresh is possible
-- refresh only changed chunks when the content revision changes
+- refresh only changed chunks when the metadata revision changes
 - emit index-health telemetry for failed embedding or indexing operations
 
 ---
@@ -93,7 +93,7 @@ Suggested response shape:
       "vectorScore": 0.82,
       "keywordScore": 0.31,
       "serviceCategory": "health_insurance",
-      "contentRevision": "offer-health-family-001@17"
+      "metadataRevision": "offer-health-family-001@17"
     }
   ]
 }
@@ -128,7 +128,7 @@ Typical pattern:
 Recommended cache boundaries:
 
 - cache query embeddings briefly for repeated same-session requests
-- cache retrieval results only when journey, region, and content revision inputs have not changed
+- cache retrieval results only when journey, region, and metadata revision inputs have not changed
 - avoid long-lived caches for volatile quote-ready or urgency-sensitive journeys
 
 This reduces repeated embedding and search cost without allowing stale retrieval context to dominate live decisions.

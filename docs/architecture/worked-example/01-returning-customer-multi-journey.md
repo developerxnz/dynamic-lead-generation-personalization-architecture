@@ -169,7 +169,7 @@ The health journey is not deleted or ignored. It simply does not lead this sessi
 
 ## Step 2: Broad Candidate Retrieval
 
-The system then retrieves a broad candidate set from managed content and offer metadata.
+The system then retrieves a broad candidate set from existing activities and their metadata.
 
 This is deliberately broader than the final answer because retrieval should discover possibilities, while downstream logic decides what is safe and useful to show.
 
@@ -318,7 +318,7 @@ The session should emit structured telemetry through Segment.io so the team can 
 | Event | What it captures |
 |---|---|
 | `active_journey_selected` | broadband selected over health insurance, with decision context |
-| `recommendation_served` | ranked candidates, policy version, content revision, and suppression reasons |
+| `recommendation_served` | ranked candidates, policy version, metadata revision, and suppression reasons |
 | `ai_explanation_shown` | explanation variant, prompt version, and model version where used |
 | `cta_clicked` | customer clicked the address-check CTA |
 | `eligibility_checked` | address or serviceability result returned |

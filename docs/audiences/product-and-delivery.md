@@ -65,7 +65,7 @@ One of the most important delivery decisions is knowing what should be easy to t
 
 Good candidates for configuration:
 
-- content metadata
+- activity metadata
 - provider and campaign priorities
 - vertical-specific scoring weights
 - CTA labels and deep-link destinations
@@ -81,7 +81,7 @@ Good candidates for code-owned or tightly controlled logic:
 
 This distinction keeps the platform adaptable without making it fragile.
 
-**Associated docs:** [Contentful Integration](../services/05-contentful-integration.md), [Ranking: Scoring Model and Policy](../services/ranking-engine/01-scoring-model-and-policy.md)
+**Associated docs:** [Activity Metadata](../services/05-activity-metadata.md), [Ranking: Scoring Model and Policy](../services/ranking-engine/01-scoring-model-and-policy.md)
 
 ### 3. Active-Journey Selection Is A Product Decision As Much As A Technical One
 
@@ -281,7 +281,7 @@ Rollout becomes easier when teams treat capabilities separately:
 
 Dependencies should be called out clearly between:
 
-- Contentful model readiness
+- activity metadata readiness
 - customer-profile and journey-state availability
 - ranking configuration
 - dashboard and telemetry readiness

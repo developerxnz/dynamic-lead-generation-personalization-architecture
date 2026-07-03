@@ -8,11 +8,11 @@ This document defines the metadata model and decisioning rules that make content
 
 ---
 
-## Content Metadata Strategy
+## Activity Metadata Strategy
 
 ### Required Metadata Model
 
-All managed assets should include universal metadata.
+Each activity exposed to decisioning should include universal metadata.
 
 | Field | Purpose |
 |---|---|
@@ -120,7 +120,7 @@ Avoid showing:
 
 ## Summary
 
-Metadata makes broad retrieval possible. Rules make promotion safe and explainable.
+Metadata on activities makes broad retrieval possible. Rules make promotion safe and explainable.
 
 Those two layers should stay distinct:
 

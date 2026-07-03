@@ -15,7 +15,7 @@ In this architecture, personalization is a coordinated decision across:
 - customer profile
 - journey states
 - business constraints
-- managed metadata
+- activity metadata
 - deterministic ranking
 - AI-assisted interpretation and explanation
 
@@ -40,7 +40,7 @@ The top-level personalization flow is:
 
 1. load customer profile and journey states
 2. select the active journey for the session
-3. retrieve a broad candidate set of offers, content, tools, and CTAs
+3. retrieve a broad candidate set of activities, offers, content, tools, and CTAs
 4. apply deterministic eligibility and suitability checks
 5. rank what remains
 6. return the next-best action and supporting experience
@@ -56,7 +56,7 @@ Use this overview page for the high-level strategy, then go deeper based on what
 | Detail page | Best for | Covers |
 |---|---|---|
 | [Runtime Decisioning](./content-personalization-strategy/01-runtime-decisioning.md) | product + engineering | core personalization model, active-journey selection, candidate retrieval, and ranking flow |
-| [Metadata and Rules](./content-personalization-strategy/02-metadata-and-rules.md) | product + content + engineering | content metadata model, personalization dimensions, and decisioning rules |
+| [Metadata and Rules](./content-personalization-strategy/02-metadata-and-rules.md) | product + content + engineering | activity metadata model, personalization dimensions, and decisioning rules |
 | [AI, Edge Cases, and Performance](./content-personalization-strategy/03-ai-edge-cases-and-performance.md) | product + engineering | AI boundaries, conflict handling, fallback logic, and runtime performance guidance |
 | [Illustrative Examples](./content-personalization-strategy/04-illustrative-examples.md) | product + content + delivery | novated-leasing progression examples and companion visuals |
 
@@ -64,7 +64,7 @@ Use this overview page for the high-level strategy, then go deeper based on what
 
 ## Summary
 
-The content personalization strategy is the layer that turns customer state, journey state, managed content metadata, and deterministic decisioning into one clear next-best experience.
+The content personalization strategy is the layer that turns customer state, journey state, activity metadata, and deterministic decisioning into one clear next-best experience.
 
 The overview should stay simple:
 

@@ -40,7 +40,7 @@ The goal is to:
 Core capabilities:
 
 - Cosmos DB customer profiles and journey states
-- Contentful metadata strategy
+- activity metadata strategy on existing activities
 - initial ranking engine
 - candidate retrieval
 - active-journey selection
@@ -59,9 +59,9 @@ Implement:
 - aggregation logic
 - qualification signal foundations
 
-#### Content And Offer Metadata Strategy
+#### Activity Metadata Strategy
 
-Enhance managed content models with:
+Enhance existing activities with:
 
 - service-category metadata
 - provider metadata
@@ -252,7 +252,7 @@ Enhancements include:
 
 Implement:
 
-- vector index for managed content
+- vector index for activity content and guidance
 - metadata-aware retrieval
 - semantic candidate generation
 - journey-aware query expansion

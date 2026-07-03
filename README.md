@@ -71,7 +71,7 @@ This flow is deliberately built around a feedback loop. A customer is not evalua
 |---|---|
 | Experience and decisioning services | .NET |
 | Operational profile storage | Cosmos DB |
-| Contentful and offer metadata | Contentful |
+| Activity metadata source | Existing activities plus a metadata adapter |
 | AI services | Azure OpenAI |
 | Semantic search | Azure AI Search |
 | APIs | GraphQL + REST |
@@ -116,9 +116,9 @@ These documents move from business framing into implementation guidance.
 
 | Document | Description |
 |---|---|
-| [05-contentful-integration.md](./docs/services/05-contentful-integration.md) | Contentful and offer metadata design, governance, and operating model |
-| [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Service overview, ownership boundary, and links into state, persistence, and API design |
-| [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Decisioning overview, ranking boundary, and links into scoring, policy, and runtime details |
+| [05-activity-metadata.md](./docs/services/05-activity-metadata.md) | Activity metadata design, governance, and operating model |
+| [06-customer-profile-service.md](./docs/services/06-customer-profile-service.md) | Service overview, audience summary, and links into detailed state, persistence, and API design |
+| [07-ranking-engine.md](./docs/services/07-ranking-engine.md) | Decisioning overview, audience summary, and links into scoring, policy, and runtime details |
 
 ### Service Deep Dives
 

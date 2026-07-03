@@ -206,7 +206,7 @@ Example:
     "activeJourney": "health_insurance",
     "topRecommendation": "offer-123",
     "rankingPolicyVersion": "health-v3",
-    "contentRevision": "offer-123@17"
+    "metadataRevision": "offer-123@17"
   }
 }
 ```
@@ -331,7 +331,7 @@ Recommended panels:
 
 - sessions with full decision trace
 - sessions with ranking policy version attached
-- sessions with content revision attached
+- sessions with metadata revision attached
 - telemetry completeness by channel
 - experiment readout turnaround time
 

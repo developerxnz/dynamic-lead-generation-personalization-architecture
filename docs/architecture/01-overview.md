@@ -54,7 +54,7 @@ The reference implementation uses:
 - .NET
 - Azure
 - Cosmos DB
-- Contentful
+- existing activity platform with attached metadata
 - Azure OpenAI
 - Azure AI Search
 

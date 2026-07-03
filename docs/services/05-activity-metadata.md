@@ -1,34 +1,34 @@
-# Contentful Integration
+# Activity Metadata
 
 > **Navigation:** [Docs home](../../README.md#documentation-structure) | [Next: Customer Profile Service ->](./06-customer-profile-service.md)
 
 ## Overview
 
-Contentful should remain the source of truth for managed content, campaign copy, provider descriptions, and offer metadata.
+Existing activities should remain the source of truth for what can be shown to a customer, with the required personalization metadata added directly onto those activities.
 
 It should not become the place where:
 
 - ranking policy lives
 - suitability rules are enforced
 - journey selection logic is embedded
-- AI prompts or system decisioning are hardcoded into content entries
+- AI prompts or system decisioning are hardcoded into activity records
 
-Contentful should manage what exists and how it is described. Backend services should decide what should be shown, to whom, and why.
+Activities should describe what exists and how it is configured. Backend services should decide what should be shown, to whom, and why.
 
 ---
 
-## Role Of Contentful In The Platform
+## Role Of Activity Metadata In The Platform
 
-Contentful is most valuable when it supports fast operational change without destabilizing decision systems.
+Activity metadata is most valuable when it makes existing activities retrievable and governable without destabilizing decision systems.
 
 It should enable teams to manage:
 
-- offers
-- provider content
-- disclosures
-- CTAs
-- educational assets
-- campaign copy
+- offers and offer variants
+- provider-specific activity definitions
+- disclosures and supporting guidance
+- CTAs and deep links
+- educational or comparison activities
+- campaign-aware variants where needed
 
 while the platform handles:
 
@@ -39,11 +39,11 @@ while the platform handles:
 
 ---
 
-## Recommended Content Model
+## Recommended Activity Metadata Model
 
 ### Universal Metadata Fields
 
-Every managed asset should carry a common metadata backbone.
+Every activity should carry a common metadata backbone.
 
 | Field | Purpose |
 |---|---|
@@ -59,6 +59,7 @@ Every managed asset should carry a common metadata backbone.
 | freshness | Recency and validity relevance |
 | priority | Explicit business control |
 | lifecycle_status | Draft, approved, active, expired, withdrawn |
+| metadata_revision | Traceable version of the activity metadata used in decisions |
 | campaign_owner | Operational accountability |
 
 ### Service-Specific Extensions
@@ -79,13 +80,13 @@ To support AI-assisted experiences well, the model should also allow:
 - structured objections or reassurance points
 - retrieval tags or semantic hints
 
-These fields improve AI grounding without moving control away from approved content.
+These fields improve AI grounding without moving control away from approved activity definitions.
 
 ---
 
-## Content Types To Model Explicitly
+## Activity Types To Model Explicitly
 
-Recommended first-class content types:
+Recommended first-class activity types:
 
 - offer
 - provider profile
@@ -96,15 +97,15 @@ Recommended first-class content types:
 - disclosure or compliance asset
 - AI grounding fragment
 
-This helps product and engineering reason about how each asset enters candidate retrieval and final slot composition.
+This helps product and engineering reason about how each activity enters candidate retrieval and final slot composition.
 
 ---
 
-## Suggested Content Type Mapping
+## Suggested Activity Type Mapping
 
-The implementation becomes clearer if each content type maps to a normalized domain object.
+The implementation becomes clearer if each activity type maps to a normalized domain object.
 
-| Contentful type | Normalized domain object | Primary usage |
+| Activity type | Normalized domain object | Primary usage |
 |---|---|---|
 | offer | `OfferCandidate` | ranking and CTA generation |
 | provider profile | `ProviderDescriptor` | comparison and explainer content |
@@ -113,13 +114,13 @@ The implementation becomes clearer if each content type maps to a normalized dom
 | disclosure asset | `DisclosureReference` | compliance support |
 | AI grounding fragment | `GroundingSnippet` | RAG and explanation generation |
 
-This avoids making downstream services understand raw Contentful types directly.
+This avoids making downstream services understand raw activity-source shapes directly.
 
 ---
 
 ## Query Strategy
 
-The Contentful query layer should support broad candidate retrieval based on:
+The activity query layer should support broad candidate retrieval based on:
 
 - service-category alignment
 - region and provider availability
@@ -127,31 +128,31 @@ The Contentful query layer should support broad candidate retrieval based on:
 - campaign context
 - lifecycle and approval state
 
-Avoid encoding business rules directly in Contentful queries beyond hard constraints such as:
+Avoid encoding business rules directly in activity queries beyond hard constraints such as:
 
-- unpublished content
+- inactive activities
 - expired offers
 - missing compliance approval
 - withdrawn provider assets
 
-This keeps Contentful responsible for content availability, while backend services remain responsible for decision logic.
+This keeps activity metadata responsible for availability and description, while backend services remain responsible for decision logic.
 
 ---
 
 ## Normalization Requirements
 
-The adapter should transform Contentful entries into stable domain models that include:
+The adapter should transform activities into stable domain models that include:
 
 - normalized identifiers
 - provider and service taxonomy
 - structured CTA definitions
 - deep-link targets or route templates for CTA execution
 - references to disclosures and eligibility rules
-- publish and expiry timestamps
+- metadata and expiry timestamps
 - retrieval-friendly summaries
-- asset version or publish revision
+- asset version or metadata revision
 
-Normalization is important because the ranking and AI layers should consume a predictable domain model, not raw Contentful shapes.
+Normalization is important because the ranking and AI layers should consume a predictable domain model, not raw activity-source shapes.
 
 ### Example Normalized Asset
 
@@ -172,9 +173,10 @@ Normalization is important because the ranking and AI layers should consume a pr
   "retrievalSummary": "Family cover with extras and quote-ready positioning",
   "lifecycle": {
     "status": "active",
-    "publishedAt": "2026-05-10T08:00:00Z",
+    "metadataUpdatedAt": "2026-05-10T08:00:00Z",
     "expiresAt": "2026-06-30T23:59:59Z"
-  }
+  },
+  "metadataRevision": "offer-health-family-001@17"
 }
 ```
 
@@ -184,7 +186,7 @@ Normalization is important because the ranking and AI layers should consume a pr
 
 ```mermaid
 flowchart TD
-    A[Contentful entries] --> B[Contentful adapter]
+    A[Existing activities] --> B[Activity metadata adapter]
     B --> C[Normalized domain models]
     C --> D[Candidate retrieval]
     C --> E[AI grounding and retrieval index]
@@ -193,23 +195,23 @@ flowchart TD
 
 The adapter layer should isolate:
 
-- Contentful schema details
-- GraphQL query logic
-- publish-state handling
+- activity-source schema details
+- query logic
+- metadata-state handling
 - cache invalidation behavior
 
 from the rest of the platform.
 
 ---
 
-## Publish And Sync Flow
+## Update And Sync Flow
 
-Recommended publish flow:
+Recommended update flow:
 
 ```mermaid
 flowchart TD
-    A[Editor publishes asset in Contentful] --> B[Webhook or poll detection]
-    B --> C[Contentful adapter refresh]
+    A[Activity metadata is updated] --> B[Change event or scheduled sync]
+    B --> C[Activity metadata adapter refresh]
     C --> D[Normalized asset update]
     D --> E[Cache invalidation]
     D --> F[Vector or AI grounding refresh if needed]
@@ -219,16 +221,16 @@ Implementation notes:
 
 - invalidate only the affected normalized assets where possible
 - refresh embeddings only when meaning-bearing fields change
-- record publish revision so decision traces can refer to the exact content version served
+- record metadata revision so decision traces can refer to the exact activity version served
 
 ---
 
 ## Integration Recommendations
 
-- use GraphQL APIs
+- use the existing activity APIs
 - normalize responses into domain models
-- isolate Contentful logic in infrastructure adapters
-- support publish-aware caching
+- isolate activity-source logic in infrastructure adapters
+- support change-aware caching
 - emit change events when metadata changes affect personalization
 - version normalized assets so ranking and analytics can reference what was actually served
 
@@ -238,18 +240,18 @@ Implementation notes:
 
 Recommended cache boundaries:
 
-- cache raw GraphQL responses only inside the adapter
+- cache raw source responses only inside the adapter
 - cache normalized assets for downstream retrieval
-- treat publish, unpublish, expiry, and approval changes as invalidation triggers
+- treat metadata updates, expiry, and approval changes as invalidation triggers
 - keep AI grounding and vector-index refresh decoupled from live retrieval where possible
 
-This reduces Contentful load without allowing stale or non-compliant content to remain in circulation.
+This reduces source-system load without allowing stale or non-compliant activities to remain in circulation.
 
 ---
 
 ## Governance And Operating Model
 
-The Contentful model should support collaboration across:
+The activity metadata model should support collaboration across:
 
 - marketing
 - provider management
@@ -269,11 +271,11 @@ That requires explicit fields for:
 
 Recommended governance questions:
 
-- who can publish offer changes
+- who can change activity metadata
 - who approves AI grounding text
 - who owns compliance-sensitive edits
 - who owns and validates CTA deep-link targets
-- how withdrawn assets are suppressed across channels
+- how withdrawn activities are suppressed across channels
 
 ---
 
@@ -281,8 +283,8 @@ Recommended governance questions:
 
 Avoid:
 
-- storing ranking rules in content entries
-- making Contentful the source of truth for suitability
+- storing ranking rules in activity metadata
+- making the activity source the source of truth for suitability
 - using freeform content fields where structured fields are needed
 - under-modeling approval and lifecycle state
 - treating AI grounding content as uncontrolled editorial text
@@ -291,9 +293,9 @@ Avoid:
 
 ## Summary
 
-Contentful should act as the platform's managed content and metadata system, not its decision engine.
+Activity metadata should act as the platform's source of describable, retrievable options, not its decision engine.
 
-Its job is to make high-quality, well-governed assets available for:
+Its job is to make high-quality, well-governed activities available for:
 
 - deterministic candidate retrieval
 - AI grounding and semantic retrieval

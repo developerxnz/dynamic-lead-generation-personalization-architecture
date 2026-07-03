@@ -344,7 +344,7 @@ The orchestrator assembles the final payload returned to the channel.
     "activeJourney": "broadband",
     "topRecommendation": "bbd-cta-address-check",
     "rankingPolicyVersion": "broadband-v1",
-    "contentRevision": "bbd-cta-address-check@4"
+    "metadataRevision": "bbd-cta-address-check@4"
   }
 }
 ```

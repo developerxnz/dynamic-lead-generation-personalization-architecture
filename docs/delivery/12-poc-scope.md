@@ -227,7 +227,7 @@ The POC should carry a minimal but consistent data shape:
 - active journey selected
 - recommendation ID
 - ranking policy version
-- content revision where applicable
+- activity metadata revision where applicable
 
 Minimum events:
 
