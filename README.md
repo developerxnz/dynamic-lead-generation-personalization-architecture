@@ -150,6 +150,34 @@ python scripts/run_scenario.py 02-secondary-new-customer --ai-mode expected
 python scripts/validate_scenarios.py --ai-mode expected
 ```
 
+Example command line flows for testing specific scenario groups:
+
+```bash
+# core reference scenarios
+python scripts/run_scenario.py 01-primary-returning-multi-journey --ai-mode expected
+python scripts/run_scenario.py 04-secondary-compliance-suppression --ai-mode expected
+
+# same-customer progression stages
+python scripts/run_scenario.py 05-progression-stage-01-health-discovery --ai-mode expected
+python scripts/validate_scenarios.py \
+  05-progression-stage-01-health-discovery \
+  06-progression-stage-02-multi-journey \
+  07-progression-stage-03-resume-quote \
+  08-progression-stage-04-compliance-after-move \
+  --ai-mode expected
+
+# supplemental control scenarios
+python scripts/validate_scenarios.py \
+  09-supplemental-eligibility-failure \
+  10-supplemental-three-concurrent-journeys \
+  11-supplemental-resume-expired \
+  12-supplemental-ai-deterministic-conflict \
+  --ai-mode expected
+
+# full deterministic regression suite
+python scripts/validate_scenarios.py --ai-mode expected
+```
+
 To run the same harness with the local Ollama model:
 
 ```bash

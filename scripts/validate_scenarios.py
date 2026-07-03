@@ -31,6 +31,7 @@ def _normalize_event_payload(payload: dict, ai_mode: str) -> dict:
             if event["event_type"] == "ai_response_accepted":
                 event["metadata"]["response_id"] = "__dynamic__"
                 event["metadata"]["latency_ms"] = "__dynamic__"
+                event["metadata"]["grounding_asset_ids"] = "__dynamic__"
     return normalized
 
 
@@ -40,6 +41,7 @@ def _normalize_final_response(payload: dict, ai_mode: str) -> dict:
         normalized["explanation"]["ai_response_id"] = "__dynamic__"
         normalized["explanation"]["summary"] = "__dynamic__"
         normalized["explanation"]["cta_support_text"] = "__dynamic__"
+        normalized["explanation"]["grounding_asset_ids"] = "__dynamic__"
     return normalized
 
 
