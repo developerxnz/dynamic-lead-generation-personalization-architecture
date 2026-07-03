@@ -102,13 +102,14 @@ These choices reflect the current reference architecture, not a product requirem
 
 ## Local AI Evaluation In The Devcontainer
 
-The devcontainer includes the GitHub CLI, the GitHub Copilot CLI, and an `ollama` sidecar container for running the POC AI scenarios locally.
+The devcontainer includes the GitHub CLI, the GitHub Copilot CLI, an `ollama` sidecar container for running the POC AI scenarios locally, and a **Cosmos DB Emulator** sidecar for local state and event persistence.
 
 When the devcontainer is created, it will:
 
 1. install the Python dependencies from `requirements.txt`
-2. wait for Ollama to become reachable at `http://ollama:11434`
-3. pull the default model configured by `OLLAMA_MODEL` if it is not already present
+2. wait for the Cosmos DB Emulator readiness probe at `http://cosmosdb:8080/ready`
+3. wait for Ollama to become reachable at `http://ollama:11434`
+4. pull the default model configured by `OLLAMA_MODEL` if it is not already present
 
 The default model is `llama3.1:8b`. You can override it before running the evaluation script:
 
@@ -126,6 +127,48 @@ To re-pull or switch models manually at any time:
 ./scripts/pull-model.sh phi4:14b
 python scripts/evaluate.py
 ```
+
+To smoke-test the Cosmos DB Emulator from inside the devcontainer:
+
+```bash
+./scripts/wait-for-cosmos.sh
+python scripts/check-cosmos.py
+```
+
+To seed and reset a scenario's durable state in the emulator:
+
+```bash
+python scripts/seed_scenario.py 02-secondary-new-customer
+python scripts/inspect_scenario_state.py 02-secondary-new-customer
+python scripts/reset_scenario_state.py 02-secondary-new-customer
+```
+
+To run the local deterministic harness from the checked-in fixtures:
+
+```bash
+python scripts/run_scenario.py 02-secondary-new-customer --ai-mode expected
+python scripts/validate_scenarios.py --ai-mode expected
+```
+
+To run the same harness with the local Ollama model:
+
+```bash
+python scripts/run_scenario.py 04-secondary-compliance-suppression --ai-mode ollama
+python scripts/validate_scenarios.py 04-secondary-compliance-suppression --ai-mode ollama
+```
+
+Once the Cosmos DB Emulator is running and seeded, you can load profile and journey state from Cosmos instead of the fixture files:
+
+```bash
+python scripts/run_scenario.py 02-secondary-new-customer --source cosmos --ai-mode ollama
+```
+
+Default local endpoints:
+
+- Cosmos readiness: `http://cosmosdb:8080/ready`
+- Cosmos API endpoint: `http://cosmosdb:8081`
+- Cosmos Data Explorer: `http://localhost:1234`
+- Ollama API endpoint: `http://ollama:11434`
 
 ---
 
