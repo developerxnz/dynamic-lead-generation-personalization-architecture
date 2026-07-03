@@ -1,0 +1,242 @@
+{
+  "serviceCategory": "broadband",
+  "generatedAt": "2026-07-03T00:00:00Z",
+  "assets": [
+    {
+      "assetId": "offer-bbd-fast-family-001",
+      "assetType": "OfferCandidate",
+      "serviceCategory": "broadband",
+      "subtype": "family_plan",
+      "provider": "Provider B",
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT"],
+      "funnelStages": ["research", "compare"],
+      "conversionGoal": "start_application",
+      "priority": 2,
+      "cta": {
+        "type": "compare",
+        "label": "See fast family broadband plans",
+        "deepLink": "/broadband/compare?household=family&speed=nbn100"
+      },
+      "disclosures": ["disc-bbd-001"],
+      "retrievalSummary": "High-speed family broadband plan from Provider B, suitable for households with multiple devices and streaming needs",
+      "serviceSpecific": {
+        "speedTier": "nbn100",
+        "accessTechnology": "FTTP",
+        "contractLength": "no_lock_in",
+        "dataLimit": "unlimited",
+        "householdFit": ["family", "couple", "shared_household"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "A high-speed, unlimited broadband plan from Provider B built for families with lots of devices, streaming, and gaming.",
+        "approvedExplainerText": "Provider B's fast family plan delivers nbn100 speeds with unlimited data and no lock-in contract. Ideal for households that stream 4K, video call, and work from home simultaneously.",
+        "faqFragments": [
+          "Q: How fast is nbn100? A: nbn100 supports download speeds up to 100Mbps, enough for 4K streaming on four or more devices at once.",
+          "Q: Is there a setup fee? A: No setup fee on standard installations. New connections may require an nbn technician visit."
+        ],
+        "retrievalTags": ["fast broadband", "family internet", "nbn100", "unlimited broadband", "home internet"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-20T08:00:00Z",
+        "expiresAt": "2026-09-30T23:59:59Z"
+      },
+      "metadataRevision": "offer-bbd-fast-family-001@8",
+      "complianceFlags": ["standard_broadband_disclosure"]
+    },
+    {
+      "assetId": "offer-bbd-fibre-premium-001",
+      "assetType": "OfferCandidate",
+      "serviceCategory": "broadband",
+      "subtype": "premium_plan",
+      "provider": "Provider A",
+      "region": ["NSW", "VIC", "QLD"],
+      "funnelStages": ["compare", "quote"],
+      "conversionGoal": "start_application",
+      "priority": 1,
+      "cta": {
+        "type": "get_quote",
+        "label": "Check premium fibre availability",
+        "deepLink": "/broadband/fibre/availability?provider=a&tier=premium"
+      },
+      "disclosures": ["disc-bbd-001", "disc-bbd-002"],
+      "retrievalSummary": "Premium fibre-to-the-premises plan from Provider A for customers who need maximum speed and reliability",
+      "serviceSpecific": {
+        "speedTier": "nbn1000",
+        "accessTechnology": "FTTP",
+        "contractLength": "12_months",
+        "dataLimit": "unlimited",
+        "householdFit": ["family", "power_user", "home_business"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Provider A's premium fibre plan delivers gigabit-class speeds for households where connectivity is critical.",
+        "approvedExplainerText": "With nbn1000 speeds on FTTP infrastructure, Provider A's premium plan is designed for customers who need the fastest, most reliable connection available.",
+        "faqFragments": [
+          "Q: Is FTTP available at my address? A: FTTP availability depends on your address. Check availability using the address tool.",
+          "Q: Do I need special hardware? A: A compatible modem router is required. Provider A can supply or you can use your own compatible device."
+        ],
+        "retrievalTags": ["fibre broadband", "gigabit internet", "nbn1000", "premium broadband", "FTTP"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-10T08:00:00Z",
+        "expiresAt": "2026-12-31T23:59:59Z"
+      },
+      "metadataRevision": "offer-bbd-fibre-premium-001@11",
+      "complianceFlags": ["standard_broadband_disclosure", "state_restricted_nsw_vic_qld"]
+    },
+    {
+      "assetId": "action-bbd-address-check-001",
+      "assetType": "ActionDefinition",
+      "serviceCategory": "broadband",
+      "subtype": "eligibility_check",
+      "provider": null,
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["discover", "research"],
+      "conversionGoal": "check_serviceability",
+      "priority": 1,
+      "cta": {
+        "type": "check_eligibility",
+        "label": "Check broadband options at your new address",
+        "deepLink": "/broadband/address-check"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Address-level serviceability check for customers moving home who need to know what broadband options are available",
+      "serviceSpecific": {
+        "checkType": "serviceability",
+        "moveHomeOptimised": true,
+        "householdFit": ["single", "couple", "family", "individual"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Find out which broadband options are actually available at your new address before you compare plans.",
+        "approvedExplainerText": "Not every plan is available at every address. Checking serviceability first means you only see plans that can actually be connected at your new home.",
+        "faqFragments": [
+          "Q: How do I check availability? A: Enter your new address and we will show you which technology types and plans are available.",
+          "Q: What if my address is not yet connected? A: If your address is new or under construction, we will flag this and show you what connection options are expected to be available."
+        ],
+        "retrievalTags": ["address check", "broadband availability", "moving home internet", "serviceability check", "check coverage"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-01T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "action-bbd-address-check-001@5",
+      "complianceFlags": []
+    },
+    {
+      "assetId": "action-bbd-compare-plans-001",
+      "assetType": "ActionDefinition",
+      "serviceCategory": "broadband",
+      "subtype": "comparison_tool",
+      "provider": null,
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["research", "compare"],
+      "conversionGoal": "start_comparison",
+      "priority": 2,
+      "cta": {
+        "type": "compare",
+        "label": "Compare broadband plans",
+        "deepLink": "/broadband/compare"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Broadband plan comparison tool for customers ready to compare providers, speeds, and prices side by side",
+      "serviceSpecific": {
+        "toolType": "comparison_module",
+        "householdFit": ["single", "couple", "family", "individual"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Compare broadband plans from leading providers side by side to find the best fit for your needs and budget.",
+        "approvedExplainerText": "Our broadband comparison shows you speed tiers, prices, contract terms, and included features from multiple providers so you can decide with confidence.",
+        "faqFragments": [
+          "Q: Are all providers shown? A: We show plans from all providers available at your address.",
+          "Q: Can I filter by speed or price? A: Yes, you can filter and sort by speed tier, monthly price, contract length, and more."
+        ],
+        "retrievalTags": ["compare broadband", "broadband comparison", "internet plans comparison", "best broadband"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-01T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "action-bbd-compare-plans-001@7",
+      "complianceFlags": []
+    },
+    {
+      "assetId": "action-bbd-resume-quote-001",
+      "assetType": "ActionDefinition",
+      "serviceCategory": "broadband",
+      "subtype": "resume_flow",
+      "provider": "Provider B",
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT"],
+      "funnelStages": ["quote"],
+      "conversionGoal": "resume_application",
+      "priority": 1,
+      "cta": {
+        "type": "resume",
+        "label": "Pick up where you left off",
+        "deepLink": "/broadband/quote/resume"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Resume a previously started broadband quote for returning customers who abandoned mid-flow",
+      "serviceSpecific": {
+        "resumeEligibility": "requires_resume_candidate_flag_true",
+        "householdFit": ["single", "couple", "family", "individual"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Your broadband quote is still saved. Pick up right where you left off and complete your application in minutes.",
+        "approvedExplainerText": "You started a broadband quote but did not finish. Your selections are still saved so you can resume and complete your application without starting over.",
+        "faqFragments": [
+          "Q: How long is my quote saved? A: Quotes are saved for 14 days.",
+          "Q: Can I change my plan when I resume? A: Yes, you can update your plan selection before completing the application."
+        ],
+        "retrievalTags": ["resume broadband", "continue quote", "saved broadband quote", "finish application", "broadband resume"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-06-01T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "action-bbd-resume-quote-001@3",
+      "complianceFlags": []
+    },
+    {
+      "assetId": "guide-bbd-moving-home-001",
+      "assetType": "GuidanceAsset",
+      "serviceCategory": "broadband",
+      "subtype": "move_home_guide",
+      "provider": null,
+      "region": ["NSW", "VIC", "QLD", "SA", "WA", "ACT", "TAS", "NT"],
+      "funnelStages": ["discover", "research"],
+      "conversionGoal": "check_serviceability",
+      "priority": 3,
+      "cta": {
+        "type": "read_guide",
+        "label": "Broadband when moving home",
+        "deepLink": "/broadband/guides/moving-home"
+      },
+      "disclosures": [],
+      "retrievalSummary": "Guide for customers moving home explaining how to set up broadband at a new address, timing, and what to check",
+      "serviceSpecific": {
+        "contentType": "educational",
+        "moveHomeOptimised": true,
+        "householdFit": ["single", "couple", "family", "individual"]
+      },
+      "aiSupportFields": {
+        "plainLanguageSummary": "Everything you need to know about setting up broadband when you move to a new home.",
+        "approvedExplainerText": "Moving home and sorting broadband does not have to be stressful. This guide covers when to apply, how long connection takes, and what to check before moving day.",
+        "faqFragments": [
+          "Q: How far in advance should I apply for broadband at my new address? A: Apply at least 2 to 4 weeks before your move date to give time for any required technician visits.",
+          "Q: Can I transfer my current plan to my new address? A: In some cases yes, depending on your provider and the technology available at the new address. Check with your provider first."
+        ],
+        "retrievalTags": ["moving home broadband", "new address internet", "broadband setup", "moving internet guide", "home move"]
+      },
+      "lifecycle": {
+        "status": "active",
+        "metadataUpdatedAt": "2026-05-15T08:00:00Z",
+        "expiresAt": null
+      },
+      "metadataRevision": "guide-bbd-moving-home-001@4",
+      "complianceFlags": []
+    }
+  ]
+}

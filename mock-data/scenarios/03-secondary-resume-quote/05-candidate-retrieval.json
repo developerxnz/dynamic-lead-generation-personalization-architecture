@@ -1,0 +1,52 @@
+{
+  "scenario": "03-secondary-resume-quote",
+  "description": "Candidate retrieval for a returning customer in quote_in_progress stage with resume_candidate true. Retrieval targets the quote funnel stage.",
+  "retrieval_query": {
+    "active_journey": {
+      "service_category": "broadband",
+      "stage": "quote_in_progress",
+      "intent": "ready_to_buy",
+      "resume_candidate": true
+    },
+    "secondary_journey": null,
+    "context": {
+      "region": "QLD",
+      "channel": "web",
+      "lifecycle_status_filter": "active"
+    }
+  },
+  "candidates_returned": [
+    {
+      "asset_id": "action-bbd-resume-quote-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "funnel_stage_match": "quote",
+      "retrieval_source": "primary_journey",
+      "note": "Resume CTA is the primary candidate given resume_candidate flag is true"
+    },
+    {
+      "asset_id": "offer-bbd-fast-family-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "broadband",
+      "funnel_stage_match": "compare",
+      "retrieval_source": "primary_journey",
+      "note": "Included as fallback comparison option if customer wants to reconsider plan"
+    },
+    {
+      "asset_id": "action-bbd-compare-plans-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "funnel_stage_match": "compare",
+      "retrieval_source": "primary_journey",
+      "note": "Included as secondary option in case customer wants to restart comparison"
+    }
+  ],
+  "total_candidates": 3,
+  "retrieval_duration_ms": 12,
+  "excluded_at_retrieval": [
+    {
+      "asset_id": "guide-bbd-moving-home-001",
+      "reason": "funnel_stage_mismatch — guide is for discover/research stages, customer is in quote stage"
+    }
+  ]
+}

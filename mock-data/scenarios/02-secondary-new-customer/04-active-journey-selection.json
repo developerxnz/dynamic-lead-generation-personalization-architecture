@@ -1,0 +1,29 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "description": "Active-journey selection result. Only one journey exists. No ambiguity.",
+  "selected_journey_id": "journey-health-812",
+  "selected_service_category": "health_insurance",
+  "selection_method": "deterministic_single_journey",
+  "reason_summary": "Only one journey exists for this customer. Health insurance journey is the clear active path.",
+  "candidate_journeys": [
+    {
+      "journey_id": "journey-health-812",
+      "service_category": "health_insurance",
+      "journey_score": 0.41,
+      "recency_score": 1.0,
+      "session_signal_alignment": "strong",
+      "campaign_alignment": false,
+      "selection_reasons": [
+        "Only active journey for this customer",
+        "Session URL and query text align with health insurance discovery",
+        "No competing journeys"
+      ]
+    }
+  ],
+  "ai_interpretation": {
+    "suggested_journey_id": "journey-health-812",
+    "confidence": 0.95,
+    "reason_summary": "Single journey and clear health insurance discovery intent. No ambiguity."
+  },
+  "deterministic_override": false
+}

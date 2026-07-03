@@ -1,0 +1,56 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "description": "Candidate retrieval for a new customer in health insurance discovery. Broad set covering discover and research stages.",
+  "retrieval_query": {
+    "active_journey": {
+      "service_category": "health_insurance",
+      "stage": "discover",
+      "intent": "researching_options"
+    },
+    "secondary_journey": null,
+    "context": {
+      "region": "VIC",
+      "channel": "web",
+      "lifecycle_status_filter": "active"
+    }
+  },
+  "candidates_returned": [
+    {
+      "asset_id": "action-health-compare-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "health_insurance",
+      "funnel_stage_match": "discover",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "guide-health-families-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "health_insurance",
+      "funnel_stage_match": "discover",
+      "retrieval_source": "primary_journey",
+      "note": "Included but expected to be suppressed at ranking because household type is single, not family"
+    },
+    {
+      "asset_id": "offer-health-singles-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "health_insurance",
+      "funnel_stage_match": "discover",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "guide-health-switching-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "health_insurance",
+      "funnel_stage_match": "research",
+      "retrieval_source": "primary_journey"
+    }
+  ],
+  "total_candidates": 4,
+  "retrieval_duration_ms": 14,
+  "excluded_at_retrieval": [
+    {
+      "asset_id": "offer-health-family-001",
+      "reason": "household_fit_mismatch — customer profile is single, family cover not retrieved"
+    }
+  ]
+}

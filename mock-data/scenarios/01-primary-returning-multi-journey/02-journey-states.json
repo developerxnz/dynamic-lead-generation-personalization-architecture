@@ -1,0 +1,62 @@
+{
+  "scenario": "01-primary-returning-multi-journey",
+  "customer_id": "cust-20481",
+  "journeys": [
+    {
+      "journey_id": "journey-health-301",
+      "customer_id": "cust-20481",
+      "service_category": "health_insurance",
+      "status": "active",
+      "intent": "comparing_options",
+      "stage": "compare",
+      "urgency": "medium",
+      "switching_intent": "passive",
+      "renewal_window_days": null,
+      "resume_candidate": true,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 3,
+        "pages_viewed_7d": ["health-insurance/compare", "health-insurance/providers/h", "health-insurance/providers/k"]
+      },
+      "decision_support": {
+        "journey_score": 0.68,
+        "ai_journey_summary": "Customer has been comparing health cover options across multiple providers over the past week but has not yet started a quote. Resume comparison is likely the right next step if this journey is selected."
+      },
+      "last_meaningful_event_at": "2026-06-26T09:12:00Z"
+    },
+    {
+      "journey_id": "journey-broadband-118",
+      "customer_id": "cust-20481",
+      "service_category": "broadband",
+      "status": "active",
+      "intent": "moving_home",
+      "stage": "research",
+      "urgency": "high",
+      "switching_intent": "active",
+      "renewal_window_days": null,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": false,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 0,
+        "pages_viewed_7d": ["broadband/moving-home", "broadband/guides/moving-home"]
+      },
+      "decision_support": {
+        "journey_score": 0.74,
+        "ai_journey_summary": "Customer has recently viewed moving-home broadband content and arrived from a move-home broadband campaign. Serviceability has not been checked yet. Address check is the recommended first step."
+      },
+      "last_meaningful_event_at": "2026-06-28T11:45:00Z"
+    }
+  ]
+}

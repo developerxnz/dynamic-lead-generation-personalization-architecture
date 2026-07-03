@@ -1,0 +1,55 @@
+{
+  "scenario": "03-secondary-resume-quote",
+  "description": "Ranking response. Resume CTA ranks first by a large margin due to resume_candidate flag, high journey score, and confirmed serviceability.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-bbd-resume-quote-001",
+      "score": 41,
+      "cta": {
+        "type": "resume",
+        "label": "Pick up where you left off",
+        "deep_link": "/broadband/quote/resume"
+      },
+      "reasons": [
+        "Active journey fit: broadband quote_in_progress journey",
+        "Resume candidate flag is true — quote was started and not completed",
+        "Intent alignment: ready_to_buy",
+        "Serviceability already confirmed — no need to restart from address check",
+        "High journey score (0.82) indicates strong purchase intent",
+        "Urgency is high",
+        "Priority score: 1",
+        "Resume bias policy applied: returning customer with saved quote receives maximum resume weight"
+      ]
+    },
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "score": 18,
+      "cta": {
+        "type": "compare",
+        "label": "See fast family broadband plans",
+        "deep_link": "/broadband/compare?household=family&speed=nbn100"
+      },
+      "reasons": [
+        "Service category match: broadband",
+        "Available as a fallback if customer wants to reconsider plan before resuming",
+        "Household fit: couple profile is compatible with fast family plan"
+      ]
+    },
+    {
+      "content_id": "action-bbd-compare-plans-001",
+      "score": 14,
+      "cta": {
+        "type": "compare",
+        "label": "Compare broadband plans",
+        "deep_link": "/broadband/compare"
+      },
+      "reasons": [
+        "Service category match: broadband",
+        "Secondary fallback if customer wants to start comparison from scratch"
+      ]
+    }
+  ],
+  "suppressed_candidates": [],
+  "ranking_policy_version": "broadband-v1",
+  "ranking_duration_ms": 8
+}

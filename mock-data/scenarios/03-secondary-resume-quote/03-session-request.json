@@ -1,0 +1,14 @@
+{
+  "scenario": "03-secondary-resume-quote",
+  "description": "Incoming orchestrator request. Customer returns directly 6 days after abandoning a broadband quote.",
+  "customer_id": "cust-55312",
+  "session_id": "sess-88103",
+  "channel": "web",
+  "entry_point": "direct",
+  "campaign_theme": null,
+  "current_url": "/broadband",
+  "query_text": null,
+  "region": "QLD",
+  "device_type": "desktop",
+  "timestamp": "2026-07-03T09:15:00Z"
+}

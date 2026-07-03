@@ -1,0 +1,67 @@
+{
+  "scenario": "03-secondary-resume-quote",
+  "description": "Ranking engine request for a returning customer with a saved broadband quote. Resume bias should be applied.",
+  "customer_profile": {
+    "customer_id": "cust-55312",
+    "lead_score": 71,
+    "location": "QLD",
+    "household_type": "couple",
+    "is_returning_customer": true
+  },
+  "active_journey": {
+    "journey_id": "journey-broadband-441",
+    "service_category": "broadband",
+    "intent": "ready_to_buy",
+    "stage": "quote_in_progress",
+    "urgency": "high",
+    "resume_candidate": true,
+    "qualification_state": {
+      "coverage_region_match": true,
+      "serviceability_confirmed": true,
+      "hard_exclusions": [],
+      "suppression_flags": []
+    }
+  },
+  "context": {
+    "channel": "web",
+    "campaign_source": "direct",
+    "campaign_theme": null,
+    "session_id": "sess-88103"
+  },
+  "candidates": [
+    {
+      "content_id": "action-bbd-resume-quote-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "cta_type": "resume",
+      "cta_deep_link": "/broadband/quote/resume",
+      "provider": "Provider B",
+      "priority": 1,
+      "funnel_stage": "quote",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "broadband",
+      "cta_type": "compare",
+      "cta_deep_link": "/broadband/compare?household=family&speed=nbn100",
+      "provider": "Provider B",
+      "priority": 2,
+      "funnel_stage": "compare",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "content_id": "action-bbd-compare-plans-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "cta_type": "compare",
+      "cta_deep_link": "/broadband/compare",
+      "provider": null,
+      "priority": 2,
+      "funnel_stage": "compare",
+      "retrieval_source": "primary_journey"
+    }
+  ],
+  "ranking_policy_version": "broadband-v1"
+}

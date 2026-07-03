@@ -1,0 +1,58 @@
+{
+  "scenario": "02-secondary-new-customer",
+  "description": "Ranking response. Comparison CTA ranks first as the most appropriate action for a new customer in discovery. Singles offer ranks second. Family guide is suppressed as household mismatch.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-health-compare-001",
+      "score": 29,
+      "cta": {
+        "type": "compare",
+        "label": "Compare health cover options",
+        "deep_link": "/health-insurance/compare"
+      },
+      "reasons": [
+        "Active journey fit: health insurance discovery journey",
+        "Funnel stage match: discover — comparison is the right next step",
+        "Intent alignment: researching_options",
+        "Priority score: 1",
+        "No prior comparison behavior — first-time customer benefits from guided comparison"
+      ]
+    },
+    {
+      "content_id": "offer-health-singles-001",
+      "score": 22,
+      "cta": {
+        "type": "get_quote",
+        "label": "Get a singles cover quote",
+        "deep_link": "/health-insurance/quote?type=singles&provider=h"
+      },
+      "reasons": [
+        "Household fit: customer profile is single — singles cover is appropriate",
+        "Service category match: health_insurance",
+        "Intent support: discovery-stage customers benefit from seeing a relevant offer"
+      ]
+    },
+    {
+      "content_id": "guide-health-switching-001",
+      "score": 11,
+      "cta": {
+        "type": "read_guide",
+        "label": "How to switch health insurance",
+        "deep_link": "/health-insurance/guides/switching"
+      },
+      "reasons": [
+        "Service category match",
+        "Useful supporting content for a customer in research mode",
+        "Lower priority as switching guide is less relevant for a first-time buyer"
+      ]
+    }
+  ],
+  "suppressed_candidates": [
+    {
+      "content_id": "guide-health-families-001",
+      "reason": "household_fit_mismatch — family guide is not appropriate for a single-household customer"
+    }
+  ],
+  "ranking_policy_version": "health-v1",
+  "ranking_duration_ms": 9
+}

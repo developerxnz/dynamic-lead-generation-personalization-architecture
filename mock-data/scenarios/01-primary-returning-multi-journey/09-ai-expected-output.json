@@ -1,0 +1,33 @@
+{
+  "scenario": "01-primary-returning-multi-journey",
+  "description": "Expected AI model output for the CTA explanation task. This is the deterministic target output used to validate AI model responses.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Because you're moving soon, the fastest next step is to check which broadband options are actually available at your new address.",
+    "key_points": [
+      "Broadband availability depends on your specific address, not just your suburb",
+      "Checking first means you only compare plans that can actually be connected",
+      "It only takes a minute and saves time when comparing plans"
+    ],
+    "cta_support_text": "Start with your new address so you only see plans that can be connected there.",
+    "grounding_asset_ids": [
+      "action-bbd-address-check-001",
+      "guide-bbd-moving-home-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 22,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 15,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-101",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 820
+}

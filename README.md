@@ -171,6 +171,7 @@ These documents move from business framing into implementation guidance.
 | [13-ownership-and-operating-model.md](./docs/delivery/13-ownership-and-operating-model.md) | Cross-functional ownership matrix for decisioning, content, telemetry, analytics, AI, and operational review |
 | [14-poc-demo-flow.md](./docs/delivery/14-poc-demo-flow.md) | Step-by-step POC walkthrough with example requests, responses, decision trace, and analytics events |
 | [15-poc-story.md](./docs/delivery/15-poc-story.md) | Concise presentation narrative for the POC: chosen slice, presenter framing, reviewer takeaways, and real-versus-mocked guidance |
+| [16-mock-data-scenarios.md](./docs/delivery/16-mock-data-scenarios.md) | Mock data for the three POC scenarios: full end-to-end trace files for validating decisioning and AI model outputs |
 
 ---
 
