@@ -102,7 +102,7 @@ These choices reflect the current reference architecture, not a product requirem
 
 ## Local AI Evaluation In The Devcontainer
 
-The devcontainer includes the GitHub CLI in the app container and an `ollama` sidecar container for running the POC AI scenarios locally.
+The devcontainer includes the GitHub CLI, the GitHub Copilot CLI, and an `ollama` sidecar container for running the POC AI scenarios locally.
 
 When the devcontainer is created, it will:
 
