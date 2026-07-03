@@ -42,7 +42,7 @@ The POC should be understandable to three core audiences.
 
 ## Recommended POC Scenario Set
 
-The POC should use **one primary scenario** that is fully demonstrated end to end, plus **one or two secondary scenarios** that show the architecture generalizes cleanly.
+The POC should use **one primary scenario** that is fully demonstrated end to end, plus **two or three secondary scenarios** that show the architecture generalizes cleanly.
 
 This gives the demo enough breadth to feel credible without turning the POC into a mini-product.
 
@@ -94,6 +94,9 @@ Recommended secondary scenarios:
 2. **returning customer resuming an interrupted quote or application**
    - show that prior state can be resumed with lower friction
    - demonstrate how returning-customer recovery works without requiring a second concurrent journey to lead the session
+3. **compliance suppression of an otherwise relevant candidate**
+   - show that deterministic compliance controls can suppress an attractive offer without collapsing the customer experience
+   - demonstrate that the platform can still return a clear, conversion-supporting CTA after a compliance guardrail is applied
 
 These supporting scenarios help prove the design is reusable rather than overfit to one complex story.
 
@@ -167,7 +170,7 @@ Keep the POC intentionally narrow.
 ### In Scope
 
 - one primary returning-customer, multi-journey scenario
-- one or two supporting scenarios that reuse the same platform model
+- two or three supporting scenarios that reuse the same platform model
 - two concurrent journeys for the same customer in the primary scenario
 - one active-journey decision
 - one candidate retrieval path

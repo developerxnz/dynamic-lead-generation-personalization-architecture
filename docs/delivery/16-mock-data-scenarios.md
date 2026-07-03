@@ -4,7 +4,7 @@
 
 ## Overview
 
-This document describes the three mock data scenarios used to validate the platform's decisioning flow against the AI model.
+This document describes the four mock data scenarios used to validate the platform's decisioning flow against the AI model.
 
 The full data set lives in the [`mock-data/`](../../mock-data/) folder at the repository root. This document explains each scenario, the data shape used, and how the files relate to the broader architecture.
 
@@ -12,7 +12,7 @@ The full data set lives in the [`mock-data/`](../../mock-data/) folder at the re
 
 ## Purpose
 
-The mock data is designed to support **full end-to-end trace validation** across the three POC scenarios defined in [POC Scope](./12-poc-scope.md).
+The mock data is designed to support **full end-to-end trace validation** across the four POC scenarios defined in [POC Scope](./12-poc-scope.md).
 
 Each scenario provides:
 
@@ -96,6 +96,27 @@ This means each scenario can be used to:
 
 ---
 
+### Scenario 04 — Secondary C: Compliance Suppression Of A State-Restricted Offer
+
+**Folder:** [`mock-data/scenarios/04-secondary-compliance-suppression/`](../../mock-data/scenarios/04-secondary-compliance-suppression/)
+
+**Customer:** `cust-66140` — returning customer, couple household, TAS
+
+**Journey states:**
+- `journey-health-944` — health insurance, switching provider, compare stage, score 0.67
+
+**Session:** web, organic search, entry URL `/health-insurance/compare`, query text `compare health insurance tas`
+
+**Active journey selected:** health insurance — only journey, no ambiguity
+
+**Next best action:** `action-health-compare-001` — compare health cover options
+
+**Suppressed at ranking:** `offer-health-hospital-extras-bundle-001` — compliance state restriction (`state_restricted_nsw_vic_qld`)
+
+**Why this scenario matters:** This is the clearest proof that deterministic compliance controls remain authoritative. The bundle looks relevant on intent and household fit, but it still cannot be promoted in Tasmania. The final experience therefore leads with compliant comparison rather than a non-compliant quote path.
+
+---
+
 ## Data Shape Overview
 
 All mock data follows the schemas defined in the architecture documentation.
@@ -148,7 +169,7 @@ The `09-ai-expected-output.json` file in each scenario defines the deterministic
 - `validation` — field-level checks covering required fields, grounding coverage, claim safety, and length bounds
 - `response_status` — `accepted` or `rejected`
 
-All three expected outputs have `response_status: accepted`. This means:
+All four expected outputs have `response_status: accepted`. This means:
 
 - required fields are present
 - grounding asset IDs are cited

@@ -1,0 +1,76 @@
+{
+  "scenario": "04-secondary-compliance-suppression",
+  "description": "Ranking engine request for a returning couple-household customer in Tasmania comparing health insurance options. Compliance flags must be enforced deterministically.",
+  "customer_profile": {
+    "customer_id": "cust-66140",
+    "lead_score": 63,
+    "location": "TAS",
+    "household_type": "couple",
+    "is_returning_customer": true
+  },
+  "active_journey": {
+    "journey_id": "journey-health-944",
+    "service_category": "health_insurance",
+    "intent": "switching_provider",
+    "stage": "compare",
+    "urgency": "medium",
+    "resume_candidate": false,
+    "qualification_state": {
+      "coverage_region_match": true,
+      "serviceability_confirmed": true,
+      "hard_exclusions": [],
+      "suppression_flags": []
+    }
+  },
+  "context": {
+    "channel": "web",
+    "campaign_source": "organic_search",
+    "campaign_theme": null,
+    "session_id": "sess-99214",
+    "regulatory_region": "TAS",
+    "must_enforce_compliance": true
+  },
+  "candidates": [
+    {
+      "content_id": "action-health-compare-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "health_insurance",
+      "cta_type": "compare",
+      "cta_deep_link": "/health-insurance/compare",
+      "provider": null,
+      "priority": 1,
+      "funnel_stage": "compare",
+      "retrieval_source": "primary_journey",
+      "compliance_flags": []
+    },
+    {
+      "content_id": "offer-health-hospital-extras-bundle-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "health_insurance",
+      "cta_type": "get_quote",
+      "cta_deep_link": "/health-insurance/quote?type=bundle&provider=k",
+      "provider": "Provider K",
+      "priority": 3,
+      "funnel_stage": "compare",
+      "retrieval_source": "primary_journey",
+      "compliance_flags": [
+        "standard_health_disclosure",
+        "requires_cooling_off_reminder",
+        "state_restricted_nsw_vic_qld"
+      ]
+    },
+    {
+      "content_id": "guide-health-switching-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "health_insurance",
+      "cta_type": "read_guide",
+      "cta_deep_link": "/health-insurance/guides/switching",
+      "provider": null,
+      "priority": 4,
+      "funnel_stage": "compare",
+      "retrieval_source": "primary_journey",
+      "compliance_flags": []
+    }
+  ],
+  "ranking_policy_version": "health-v1"
+}

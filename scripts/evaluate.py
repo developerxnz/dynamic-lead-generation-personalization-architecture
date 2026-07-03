@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Evaluate all three POC scenarios against a local Ollama model.
+Evaluate all four POC scenarios against a local Ollama model.
 
 For each scenario this script:
   1. Reads 08-ai-prompt-input.json and assembles the OpenAI messages
@@ -35,6 +35,7 @@ SCENARIOS = [
     "01-primary-returning-multi-journey",
     "02-secondary-new-customer",
     "03-secondary-resume-quote",
+    "04-secondary-compliance-suppression",
 ]
 
 

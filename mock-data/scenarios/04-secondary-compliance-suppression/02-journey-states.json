@@ -1,0 +1,39 @@
+{
+  "scenario": "04-secondary-compliance-suppression",
+  "customer_id": "cust-66140",
+  "journeys": [
+    {
+      "journey_id": "journey-health-944",
+      "customer_id": "cust-66140",
+      "service_category": "health_insurance",
+      "status": "active",
+      "intent": "switching_provider",
+      "stage": "compare",
+      "urgency": "medium",
+      "switching_intent": "active",
+      "renewal_window_days": 21,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 4,
+        "pages_viewed_7d": [
+          "/health-insurance/compare",
+          "/health-insurance/providers/h",
+          "/health-insurance/providers/k",
+          "/health-insurance/guides/switching"
+        ]
+      },
+      "decision_support": {
+        "journey_score": 0.67,
+        "ai_journey_summary": "Returning customer in Tasmania is actively comparing health insurance and appears open to switching. A premium bundle may look attractive, but deterministic compliance controls must stop state-restricted products from being promoted."
+      },
+      "last_meaningful_event_at": "2026-07-03T15:45:00Z"
+    }
+  ]
+}
