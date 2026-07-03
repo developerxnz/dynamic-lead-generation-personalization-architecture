@@ -1,0 +1,14 @@
+{
+  "scenario": "04-secondary-compliance-suppression",
+  "description": "Incoming orchestrator request from the web channel. Returning customer is comparing health insurance options in Tasmania.",
+  "customer_id": "cust-66140",
+  "session_id": "sess-99214",
+  "channel": "web",
+  "entry_point": "organic_search",
+  "campaign_theme": null,
+  "current_url": "/health-insurance/compare",
+  "query_text": "compare health insurance tas",
+  "region": "TAS",
+  "device_type": "desktop",
+  "timestamp": "2026-07-03T15:45:00Z"
+}

@@ -1,0 +1,23 @@
+{
+  "scenario": "04-secondary-compliance-suppression",
+  "description": "Returning health insurance customer in Tasmania comparing options. Profile is known and switching intent is active.",
+  "customer_id": "cust-66140",
+  "identity": {
+    "known_customer": true,
+    "account_linked": false,
+    "anonymous_ids": ["web-anon-7731"]
+  },
+  "profile": {
+    "household_type": "couple",
+    "employment_type": "full_time",
+    "location": "TAS",
+    "budget_range": "mid",
+    "life_stage": "partnered"
+  },
+  "customer_summary": {
+    "is_returning_customer": true,
+    "last_meaningful_event_at": "2026-07-03T15:45:00Z",
+    "repeat_sessions_30d": 2,
+    "lead_score": 63
+  }
+}

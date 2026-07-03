@@ -1,6 +1,6 @@
 # Mock Data
 
-This folder contains structured mock data for the three POC scenarios defined in [`docs/delivery/12-poc-scope.md`](../docs/delivery/12-poc-scope.md).
+This folder contains structured mock data for the four POC scenarios defined in [`docs/delivery/12-poc-scope.md`](../docs/delivery/12-poc-scope.md).
 
 The data is designed to be processed step-by-step through the platform's services and AI model to validate deterministic outputs.
 
@@ -18,6 +18,7 @@ mock-data/
     01-primary-returning-multi-journey/   Returning customer, two concurrent journeys
     02-secondary-new-customer/            First-time customer, single journey
     03-secondary-resume-quote/            Returning customer resuming a saved quote
+    04-secondary-compliance-suppression/  State-restricted offer suppressed by compliance
 ```
 
 ---
@@ -29,6 +30,7 @@ mock-data/
 | [`01-primary-returning-multi-journey`](./scenarios/01-primary-returning-multi-journey/README.md) | Returning customer with health + broadband journeys | `cust-20481` | health_insurance, broadband | broadband selected |
 | [`02-secondary-new-customer`](./scenarios/02-secondary-new-customer/README.md) | First-time customer, single health insurance journey | `cust-99001` | health_insurance | health_insurance |
 | [`03-secondary-resume-quote`](./scenarios/03-secondary-resume-quote/README.md) | Returning customer resuming a saved broadband quote | `cust-55312` | broadband | broadband |
+| [`04-secondary-compliance-suppression`](./scenarios/04-secondary-compliance-suppression/README.md) | Returning customer in TAS with a state-restricted health bundle suppressed | `cust-66140` | health_insurance | health_insurance |
 
 ---
 
