@@ -29,7 +29,7 @@ from openai import OpenAI
 
 SCENARIOS_DIR = Path(__file__).parent.parent / "mock-data" / "scenarios"
 OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://ollama:11434")
-MODEL = os.environ.get("MODEL", "llama3.1:8b")
+MODEL = os.environ.get("MODEL") or os.environ.get("OLLAMA_MODEL", "llama3.1:8b")
 
 SCENARIOS = [
     "01-primary-returning-multi-journey",

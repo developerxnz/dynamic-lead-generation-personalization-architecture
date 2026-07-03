@@ -4,13 +4,17 @@
   "service": "app",
   "workspaceFolder": "/workspace",
   "remoteEnv": {
-    "OLLAMA_BASE_URL": "http://ollama:11434"
+    "OLLAMA_BASE_URL": "http://ollama:11434",
+    "OLLAMA_MODEL": "llama3.1:8b"
   },
   "forwardPorts": [11434],
-  "postCreateCommand": "pip install -r requirements.txt",
+  "postCreateCommand": "pip install -r requirements.txt && ./scripts/setup-ollama.sh",
+  "postStartCommand": "./scripts/wait-for-ollama.sh",
   "customizations": {
     "vscode": {
       "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
         "ms-python.python",
         "ms-python.pylance",
         "bierner.markdown-preview-github-styles",
