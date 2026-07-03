@@ -81,6 +81,35 @@ These choices reflect the current reference architecture, not a product requirem
 
 ---
 
+## Local AI Evaluation In The Devcontainer
+
+The devcontainer includes the GitHub CLI in the app container and an `ollama` sidecar container for running the POC AI scenarios locally.
+
+When the devcontainer is created, it will:
+
+1. install the Python dependencies from `requirements.txt`
+2. wait for Ollama to become reachable at `http://ollama:11434`
+3. pull the default model configured by `OLLAMA_MODEL` if it is not already present
+
+The default model is `llama3.1:8b`. You can override it before running the evaluation script:
+
+```bash
+OLLAMA_MODEL=phi4:14b ./scripts/setup-ollama.sh
+MODEL=phi4:14b python scripts/evaluate.py
+```
+
+The first container create can take a while because the configured Ollama model is downloaded into the persistent `ollama_data` volume.
+
+To re-pull or switch models manually at any time:
+
+```bash
+./scripts/pull-model.sh
+./scripts/pull-model.sh phi4:14b
+python scripts/evaluate.py
+```
+
+---
+
 ## Documentation Structure
 
 The documents below now support both a **linear architecture narrative** and **audience-based reading paths**.
