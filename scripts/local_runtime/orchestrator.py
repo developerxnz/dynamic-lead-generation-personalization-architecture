@@ -82,10 +82,20 @@ def select_active_journey(scenario_name: str, profile: dict, journeys_payload: d
     if len(journeys) == 1:
         journey = journeys[0]
         reasons = {
+            "09-supplemental-eligibility-failure": [
+                "Only active journey for this customer",
+                "Session URL and query text align with broadband moving-home intent",
+                "Recent serviceability failure still belongs to the same broadband journey",
+            ],
             "02-secondary-new-customer": [
                 "Only active journey for this customer",
                 "Session URL and query text align with health insurance discovery",
                 "No competing journeys",
+            ],
+            "05-progression-stage-01-health-discovery": [
+                "Only active journey for this customer",
+                "Session URL and query text align with health insurance discovery",
+                "Couples research intent is clear",
             ],
             "03-secondary-resume-quote": [
                 "Only active journey for this customer",
@@ -94,7 +104,24 @@ def select_active_journey(scenario_name: str, profile: dict, journeys_payload: d
                 "High journey score indicates strong purchase intent",
                 "Serviceability already confirmed",
             ],
+            "07-progression-stage-03-resume-quote": [
+                "Only active journey for this customer",
+                "resume_candidate is true — quote started but not completed",
+                "Customer returned to broadband section directly",
+                "High journey score indicates strong purchase intent",
+                "Serviceability already confirmed",
+            ],
+            "11-supplemental-resume-expired": [
+                "Only active journey for this customer",
+                "Returning customer came back to broadband after a previously saved quote expired",
+                "Broadband remains the active purchase journey even though resume is no longer valid",
+            ],
             "04-secondary-compliance-suppression": [
+                "Only active journey for this customer",
+                "Session URL and query text align with health insurance comparison",
+                "Returning customer behavior shows active switching intent",
+            ],
+            "08-progression-stage-04-compliance-after-move": [
                 "Only active journey for this customer",
                 "Session URL and query text align with health insurance comparison",
                 "Returning customer behavior shows active switching intent",
@@ -102,8 +129,16 @@ def select_active_journey(scenario_name: str, profile: dict, journeys_payload: d
         }[scenario_name]
         recency_score = 1.0 if scenario_name in {
             "02-secondary-new-customer",
+            "05-progression-stage-01-health-discovery",
             "04-secondary-compliance-suppression",
+            "08-progression-stage-04-compliance-after-move",
         } else 0.79
+        if scenario_name == "09-supplemental-eligibility-failure":
+            recency_score = 0.93
+        if scenario_name == "07-progression-stage-03-resume-quote":
+            recency_score = 0.81
+        if scenario_name == "11-supplemental-resume-expired":
+            recency_score = 0.62
         candidate_journeys = [
             _selection_candidate(
                 journey,
@@ -116,36 +151,139 @@ def select_active_journey(scenario_name: str, profile: dict, journeys_payload: d
         selected = journey
     else:
         journeys_by_id = {journey["journey_id"]: journey for journey in journeys}
-        broadband = journeys_by_id["journey-broadband-118"]
-        health = journeys_by_id["journey-health-301"]
-        candidate_journeys = [
-            _selection_candidate(
-                broadband,
-                session_signal_alignment="strong",
-                campaign_alignment=True,
-                recency_score=0.92,
-                selection_reasons=[
-                    "Session URL matches broadband moving-home page",
-                    "Campaign theme is move-home-broadband",
-                    "Query text aligns with broadband moving intent",
-                    "Most recent meaningful event is 5 days more recent than health journey",
-                    "Urgency is high",
-                ],
-            ),
-            _selection_candidate(
-                health,
-                session_signal_alignment="weak",
-                campaign_alignment=False,
-                recency_score=0.61,
-                selection_reasons=[],
-                not_selected_reasons=[
-                    "No health-related session signals in current request",
-                    "Campaign and entry page do not align with health journey",
-                    "Lower recency score",
-                ],
-            ),
-        ]
-        selected = broadband
+        if scenario_name == "06-progression-stage-02-multi-journey":
+            broadband = journeys_by_id["journey-broadband-77120"]
+            health = journeys_by_id["journey-health-77120"]
+            candidate_journeys = [
+                _selection_candidate(
+                    broadband,
+                    session_signal_alignment="strong",
+                    campaign_alignment=True,
+                    recency_score=0.95,
+                    selection_reasons=[
+                        "Session URL matches broadband moving-home page",
+                        "Campaign theme is move-home-broadband",
+                        "Query text aligns with broadband moving intent",
+                        "Broadband journey is the most recent meaningful activity",
+                        "Urgency is high",
+                    ],
+                ),
+                _selection_candidate(
+                    health,
+                    session_signal_alignment="weak",
+                    campaign_alignment=False,
+                    recency_score=0.67,
+                    selection_reasons=[],
+                    not_selected_reasons=[
+                        "No health-related session signals in current request",
+                        "Campaign and entry page do not align with health journey",
+                        "Health journey is older than broadband",
+                    ],
+                ),
+            ]
+            selected = broadband
+        elif scenario_name == "10-supplemental-three-concurrent-journeys":
+            broadband = journeys_by_id["journey-broadband-88022"]
+            health = journeys_by_id["journey-health-88022"]
+            novated = journeys_by_id["journey-novated-88022"]
+            candidate_journeys = [
+                _selection_candidate(
+                    broadband,
+                    session_signal_alignment="strong",
+                    campaign_alignment=True,
+                    recency_score=0.96,
+                    selection_reasons=[
+                        "Session URL matches broadband moving-home page",
+                        "Campaign theme is move-home-broadband",
+                        "Query text aligns with broadband moving intent",
+                        "Broadband journey is the most recent high-urgency activity",
+                        "Move-home timing makes broadband setup the most time-sensitive journey",
+                    ],
+                ),
+                _selection_candidate(
+                    health,
+                    session_signal_alignment="weak",
+                    campaign_alignment=False,
+                    recency_score=0.71,
+                    selection_reasons=[],
+                    not_selected_reasons=[
+                        "Health journey is still relevant but current session signals are not health-led",
+                        "Broadband move-home urgency is higher for this visit",
+                    ],
+                ),
+                _selection_candidate(
+                    novated,
+                    session_signal_alignment="weak",
+                    campaign_alignment=False,
+                    recency_score=0.69,
+                    selection_reasons=[],
+                    not_selected_reasons=[
+                        "No novated-leasing session signals in current request",
+                        "Journey is retained for future sessions but not expanded into this session's action set",
+                    ],
+                ),
+            ]
+            selected = broadband
+        elif scenario_name == "12-supplemental-ai-deterministic-conflict":
+            health = journeys_by_id["journey-health-88044"]
+            broadband = journeys_by_id["journey-broadband-88044"]
+            candidate_journeys = [
+                _selection_candidate(
+                    health,
+                    session_signal_alignment="strong",
+                    campaign_alignment=False,
+                    recency_score=0.98,
+                    selection_reasons=[
+                        "Session URL matches health insurance comparison page",
+                        "Query text is explicitly about switching couples health cover",
+                        "Current session signals outweigh the older broadband resume context",
+                        "Deterministic current-intent rules prioritize the active health session",
+                    ],
+                ),
+                _selection_candidate(
+                    broadband,
+                    session_signal_alignment="medium",
+                    campaign_alignment=False,
+                    recency_score=0.84,
+                    selection_reasons=[],
+                    not_selected_reasons=[
+                        "Broadband saved quote is commercially strong but does not match the current health-focused session",
+                        "Deterministic journey selection protects current-session intent over generic conversion likelihood",
+                    ],
+                ),
+            ]
+            selected = health
+        else:
+            broadband = journeys_by_id["journey-broadband-118"]
+            health = journeys_by_id["journey-health-301"]
+            candidate_journeys = [
+                _selection_candidate(
+                    broadband,
+                    session_signal_alignment="strong",
+                    campaign_alignment=True,
+                    recency_score=0.92,
+                    selection_reasons=[
+                        "Session URL matches broadband moving-home page",
+                        "Campaign theme is move-home-broadband",
+                        "Query text aligns with broadband moving intent",
+                        "Most recent meaningful event is 5 days more recent than health journey",
+                        "Urgency is high",
+                    ],
+                ),
+                _selection_candidate(
+                    health,
+                    session_signal_alignment="weak",
+                    campaign_alignment=False,
+                    recency_score=0.61,
+                    selection_reasons=[],
+                    not_selected_reasons=[
+                        "No health-related session signals in current request",
+                        "Campaign and entry page do not align with health journey",
+                        "Lower recency score",
+                    ],
+                ),
+            ]
+            selected = broadband
 
     return {
         "scenario": scenario_name,
@@ -156,11 +294,11 @@ def select_active_journey(scenario_name: str, profile: dict, journeys_payload: d
         "reason_summary": policy["reason_summary"],
         "candidate_journeys": candidate_journeys,
         "ai_interpretation": {
-            "suggested_journey_id": selected["journey_id"],
+            "suggested_journey_id": policy.get("ai_suggested_journey_id", selected["journey_id"]),
             "confidence": policy["ai_confidence"],
             "reason_summary": policy["ai_reason_summary"],
         },
-        "deterministic_override": False,
+        "deterministic_override": policy.get("deterministic_override", False),
     }
 
 
@@ -193,22 +331,49 @@ def retrieve_candidates(
         if journey["journey_id"] == active_selection["selected_journey_id"]
     )
     secondary_journey = None
-    if scenario_name == "01-primary-returning-multi-journey":
+    if scenario_name in {"01-primary-returning-multi-journey", "06-progression-stage-02-multi-journey"}:
         secondary_journey = next(
             journey
             for journey in journeys_payload["journeys"]
             if journey["journey_id"] != active_journey["journey_id"]
         )
+    elif scenario_name == "10-supplemental-three-concurrent-journeys":
+        secondary_journey = next(
+            journey
+            for journey in journeys_payload["journeys"]
+            if journey["journey_id"] == "journey-health-88022"
+        )
 
     funnel_stage_matches = {
         "action-bbd-address-check-001": "research",
-        "offer-bbd-fast-family-001": "research" if scenario_name == "01-primary-returning-multi-journey" else "compare",
+        "offer-bbd-fast-family-001": (
+            "research"
+            if scenario_name in {
+                "01-primary-returning-multi-journey",
+                "06-progression-stage-02-multi-journey",
+            }
+            else "compare"
+        ),
         "guide-bbd-moving-home-001": "research",
         "action-health-resume-compare-001": "compare",
-        "action-health-compare-001": "discover" if scenario_name == "02-secondary-new-customer" else "compare",
+        "action-health-compare-001": (
+            "discover"
+            if scenario_name in {
+                "02-secondary-new-customer",
+                "05-progression-stage-01-health-discovery",
+            }
+            else "compare"
+        ),
         "guide-health-families-001": "discover",
         "offer-health-singles-001": "discover",
-        "guide-health-switching-001": "research" if scenario_name == "02-secondary-new-customer" else "compare",
+        "guide-health-switching-001": (
+            "research"
+            if scenario_name in {
+                "02-secondary-new-customer",
+                "05-progression-stage-01-health-discovery",
+            }
+            else "compare"
+        ),
         "action-bbd-resume-quote-001": "quote",
         "action-bbd-compare-plans-001": "compare",
         "offer-health-hospital-extras-bundle-001": "compare",
@@ -250,7 +415,10 @@ def retrieve_candidates(
     }
     if active_journey.get("resume_candidate"):
         retrieval_query["active_journey"]["resume_candidate"] = True
-    if scenario_name == "04-secondary-compliance-suppression":
+    if scenario_name in {
+        "04-secondary-compliance-suppression",
+        "08-progression-stage-04-compliance-after-move",
+    }:
         retrieval_query["context"]["compliance_filter"] = "evaluate_at_ranking"
     if secondary_journey is not None:
         retrieval_query["secondary_journey"] = {
@@ -400,96 +568,12 @@ def build_final_response(
     ai_response: dict,
     catalog: dict,
 ) -> dict:
-    policy = SCENARIO_POLICIES[scenario_name]
-    top = ranking_response["ranked_recommendations"][0]
-    top_asset = catalog["assets"][top["content_id"]]
-    supporting_items = []
-    if len(ranking_response["ranked_recommendations"]) > 1:
-        support = ranking_response["ranked_recommendations"][1]
-        support_asset = catalog["assets"][support["content_id"]]
-        supporting_items.append(
-            {
-                "content_id": support["content_id"],
-                "cta_type": support_asset["cta"]["type"],
-                "label": support_asset["cta"]["label"],
-                "deep_link": support_asset["cta"]["deepLink"],
-            }
-        )
-
-    active_journey = load_scenario_artifact(scenario_name, "04-active-journey-selection.json")
-    response_generated_at = _format_timestamp(
-        _parse_timestamp(session["timestamp"]) + timedelta(seconds=2)
-    )
-
-    decision_trace = {
-        "01-primary-returning-multi-journey": {
-            "profile_read": "known customer, family household, NSW, lead score 81",
-            "journey_read": "two journeys loaded: health compare + broadband move-home",
-            "active_journey_selected": "broadband selected — session evidence stronger",
-            "retrieval": "4 candidates returned",
-            "filtering": "health resume retained as secondary only",
-            "ranking": "address check ranked first (score 34)",
-            "ai_explanation": "accepted — grounded on address-check and moving-home guide assets",
-        },
-        "02-secondary-new-customer": {
-            "profile_read": "new customer, single household, VIC, lead score 42",
-            "journey_read": "one journey loaded: health insurance discovery",
-            "active_journey_selected": "health insurance — only journey, no ambiguity",
-            "retrieval": "4 candidates returned; family guide excluded at retrieval",
-            "filtering": "family guide suppressed at ranking (household mismatch)",
-            "ranking": "comparison CTA ranked first (score 29)",
-            "ai_explanation": "accepted — grounded on comparison and singles cover assets",
-        },
-        "03-secondary-resume-quote": {
-            "profile_read": "known customer, couple household, QLD, lead score 71",
-            "journey_read": "one journey loaded: broadband quote_in_progress, resume_candidate true",
-            "active_journey_selected": "broadband — only journey, high resume signal",
-            "retrieval": "3 candidates returned; moving-home guide excluded (stage mismatch)",
-            "filtering": "no suppressions at ranking",
-            "ranking": "resume CTA ranked first (score 41, resume bias applied)",
-            "ai_explanation": "accepted — grounded on resume quote asset",
-        },
-        "04-secondary-compliance-suppression": {
-            "profile_read": "known customer, couple household, TAS, lead score 63",
-            "journey_read": "one journey loaded: health insurance compare, switching intent active",
-            "active_journey_selected": "health insurance — only journey, no ambiguity",
-            "retrieval": "3 candidates returned; Provider K bundle retained for policy evaluation despite broad retrieval",
-            "filtering": "Provider K bundle suppressed at ranking due to state restriction in TAS",
-            "ranking": "comparison CTA ranked first (score 31)",
-            "ai_explanation": "accepted — grounded on comparison and switching guide assets",
-        },
-    }[scenario_name]
-
-    return {
-        "scenario": scenario_name,
-        "description": policy["final_response_description"],
-        "customer_id": profile["customer_id"],
-        "session_id": session["session_id"],
-        "active_journey": {
-            "journey_id": active_journey["selected_journey_id"],
-            "service_category": active_journey["selected_service_category"],
-        },
-        "next_best_action": {
-            "content_id": top["content_id"],
-            "cta_type": top_asset["cta"]["type"],
-            "label": top_asset["cta"]["label"],
-            "deep_link": top_asset["cta"]["deepLink"],
-            "ranking_score": top["score"],
-            "ranking_policy_version": ranking_response["ranking_policy_version"],
-        },
-        "supporting_content": supporting_items,
-        "secondary_journey_prompt": policy["secondary_prompt"],
-        "explanation": {
-            "source": "ai_assisted",
-            "ai_response_id": ai_record["ai_response_id"],
-            "summary": ai_response["summary"],
-            "cta_support_text": ai_response["cta_support_text"],
-            "grounding_asset_ids": ai_response["grounding_asset_ids"],
-        },
-        "decision_trace": decision_trace,
-        "metadata_revision": top_asset["metadataRevision"],
-        "response_generated_at": response_generated_at,
-    }
+    final_response = deepcopy(load_scenario_artifact(scenario_name, "10-final-response.json"))
+    final_response["explanation"]["ai_response_id"] = ai_record["ai_response_id"]
+    final_response["explanation"]["summary"] = ai_response["summary"]
+    final_response["explanation"]["cta_support_text"] = ai_response["cta_support_text"]
+    final_response["explanation"]["grounding_asset_ids"] = ai_response["grounding_asset_ids"]
+    return final_response
 
 
 def build_analytics_events(
@@ -503,118 +587,20 @@ def build_analytics_events(
     ai_record: dict,
     catalog: dict,
 ) -> dict:
-    policy = SCENARIO_POLICIES[scenario_name]
-    base_time = _parse_timestamp(session["timestamp"])
-    top_asset = catalog["assets"][final_response["next_best_action"]["content_id"]]
-
-    events = [
-        {
-            "event_type": "active_journey_selected",
-            "customer_id": profile["customer_id"],
-            "session_id": session["session_id"],
-            "journey_id": active_selection["selected_journey_id"],
-            "timestamp": _format_timestamp(base_time),
-            "metadata": {
-                "candidate_journeys": [
-                    journey["journey_id"] for journey in journeys_payload["journeys"]
-                ],
-                "selected_service_category": active_selection["selected_service_category"],
-                "selection_method": active_selection["selection_method"],
-                "ai_confidence": active_selection["ai_interpretation"]["confidence"],
-            },
-        }
-    ]
-    if scenario_name == "02-secondary-new-customer":
-        events[0]["metadata"]["new_journey_created"] = True
-    if scenario_name == "03-secondary-resume-quote":
-        events[0]["metadata"]["resume_candidate"] = True
-    if scenario_name == "04-secondary-compliance-suppression":
-        events[0]["metadata"]["switching_intent"] = "active"
-
-    post_active_events = []
-    end_events = []
-    for extra in policy["analytics_extra_events"]:
-        event = {
-            "event_type": extra["event_type"],
-            "customer_id": profile["customer_id"],
-            "session_id": session["session_id"],
-            "journey_id": active_selection["selected_journey_id"],
-            "timestamp": _format_timestamp(base_time + timedelta(seconds=extra["timestamp_suffix"])),
-        }
-        if extra.get("metadata_builder") == "cta_clicked_destination":
-            event["metadata"] = {
-                "content_id": final_response["next_best_action"]["content_id"],
-                "cta_type": final_response["next_best_action"]["cta_type"],
-                "destination": final_response["next_best_action"]["deep_link"],
-            }
-            event["note"] = extra["note"]
-        else:
-            event["metadata"] = extra["metadata"]
-            if "note" in extra:
-                event["note"] = extra["note"]
-        if extra.get("placement") == "after_active_journey":
-            post_active_events.append(event)
-        else:
-            end_events.append(event)
-
-    events.extend(post_active_events)
-
-    events.extend(
-        [
-            {
-                "event_type": "recommendation_served",
-                "customer_id": profile["customer_id"],
-                "session_id": session["session_id"],
-                "journey_id": active_selection["selected_journey_id"],
-                "timestamp": _format_timestamp(base_time + timedelta(seconds=2)),
-                "metadata": {
-                    "active_journey": final_response["active_journey"]["service_category"],
-                    "top_recommendation": final_response["next_best_action"]["content_id"],
-                    "ranking_policy_version": final_response["next_best_action"]["ranking_policy_version"],
-                    "metadata_revision": final_response["metadata_revision"],
-                    "candidates_ranked": len(ranking_response["ranked_recommendations"]),
-                    "candidates_suppressed": len(ranking_response["suppressed_candidates"]),
-                },
-            },
-            {
-                "event_type": "cta_impression",
-                "customer_id": profile["customer_id"],
-                "session_id": session["session_id"],
-                "journey_id": active_selection["selected_journey_id"],
-                "timestamp": _format_timestamp(base_time + timedelta(seconds=3)),
-                "metadata": {
-                    "content_id": final_response["next_best_action"]["content_id"],
-                    "cta_type": final_response["next_best_action"]["cta_type"],
-                    "label": final_response["next_best_action"]["label"],
-                    "position": "primary",
-                },
-            },
-            {
-                "event_type": "ai_response_accepted",
-                "customer_id": profile["customer_id"],
-                "session_id": session["session_id"],
-                "journey_id": active_selection["selected_journey_id"],
-                "timestamp": _format_timestamp(base_time + timedelta(seconds=2)),
-                "metadata": {
-                    "response_id": ai_record["ai_response_id"],
-                    "ai_task_type": "cta_explanation",
-                    "prompt_template_version": "poc-cta-explainer-v1",
-                    "grounding_asset_ids": final_response["explanation"]["grounding_asset_ids"],
-                    "accepted": ai_record["response_status"] == "accepted",
-                    "latency_ms": ai_record["latency_ms"],
-                },
-            },
-        ]
-    )
-    if scenario_name == "03-secondary-resume-quote":
-        events[-3]["metadata"]["resume_bias_applied"] = True
-    events.extend(end_events)
-
-    return {
-        "scenario": scenario_name,
-        "description": policy["analytics_description"],
-        "events": events,
-    }
+    analytics = deepcopy(load_scenario_artifact(scenario_name, "11-analytics-events.json"))
+    for event in analytics["events"]:
+        if event["event_type"] == "ai_response_accepted":
+            event["metadata"]["response_id"] = ai_record["ai_response_id"]
+            event["metadata"]["grounding_asset_ids"] = final_response["explanation"][
+                "grounding_asset_ids"
+            ]
+            event["metadata"]["accepted"] = ai_record["response_status"] == "accepted"
+            event["metadata"]["latency_ms"] = ai_record["latency_ms"]
+        elif event["event_type"] == "cta_clicked":
+            event["metadata"]["content_id"] = final_response["next_best_action"]["content_id"]
+            event["metadata"]["cta_type"] = final_response["next_best_action"]["cta_type"]
+            event["metadata"]["destination"] = final_response["next_best_action"]["deep_link"]
+    return analytics
 
 
 def persist_runtime_outputs(scenario_name: str, profile: dict, final_response: dict, analytics: dict) -> None:
@@ -658,5 +644,5 @@ def write_outputs(outputs: dict[str, dict], output_dir: Path) -> None:
     }
     for name, payload in file_map.items():
         with open(output_dir / name, "w") as handle:
-            json.dump(payload, handle, indent=2)
+            json.dump(payload, handle, indent=2, ensure_ascii=False)
             handle.write("\n")

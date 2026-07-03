@@ -1,0 +1,14 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Incoming orchestrator request for the three-concurrent-journeys scenario. The current visit is clearly broadband move-home focused.",
+  "customer_id": "cust-88022",
+  "session_id": "sess-88022-01",
+  "channel": "web",
+  "entry_point": "paid_search",
+  "campaign_theme": "move-home-broadband",
+  "current_url": "/broadband/moving-home",
+  "query_text": "set up internet at new house",
+  "region": "VIC",
+  "device_type": "desktop",
+  "timestamp": "2026-07-06T09:30:00Z"
+}

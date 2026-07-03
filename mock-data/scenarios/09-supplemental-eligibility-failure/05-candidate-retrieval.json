@@ -1,0 +1,48 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Candidate retrieval for the eligibility-failure scenario. Broad retrieval still pulls broadband actions, then deterministic eligibility rules suppress the ineligible offer later.",
+  "retrieval_query": {
+    "active_journey": {
+      "service_category": "broadband",
+      "stage": "research",
+      "intent": "moving_home"
+    },
+    "secondary_journey": null,
+    "context": {
+      "region": "NSW",
+      "channel": "web",
+      "lifecycle_status_filter": "active"
+    }
+  },
+  "candidates_returned": [
+    {
+      "asset_id": "action-bbd-address-check-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "funnel_stage_match": "research",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "offer-bbd-fast-family-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "broadband",
+      "funnel_stage_match": "compare",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "asset_id": "guide-bbd-moving-home-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "broadband",
+      "funnel_stage_match": "research",
+      "retrieval_source": "primary_journey"
+    }
+  ],
+  "total_candidates": 3,
+  "retrieval_duration_ms": 15,
+  "excluded_at_retrieval": [
+    {
+      "asset_id": "offer-bbd-fibre-premium-001",
+      "reason": "access_technology_mismatch — premium fibre requires FTTP and is excluded after the address check showed no serviceable fibre path"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "scenario": "07-progression-stage-03-resume-quote",
+  "description": "Incoming orchestrator request for stage 3. Returning customer comes back directly to resume a saved broadband quote.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-03",
+  "channel": "web",
+  "entry_point": "direct",
+  "campaign_theme": null,
+  "current_url": "/broadband",
+  "query_text": null,
+  "region": "VIC",
+  "device_type": "desktop",
+  "timestamp": "2026-06-25T09:45:00Z"
+}

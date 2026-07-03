@@ -1,0 +1,29 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Active-journey selection result for the resume-expired scenario. Broadband remains the active journey even though the saved quote can no longer be resumed.",
+  "selected_journey_id": "journey-broadband-88033",
+  "selected_service_category": "broadband",
+  "selection_method": "deterministic_single_journey",
+  "reason_summary": "Only one journey exists for this customer. Broadband still leads the session, but the earlier resume path is no longer valid because the saved quote expired.",
+  "candidate_journeys": [
+    {
+      "journey_id": "journey-broadband-88033",
+      "service_category": "broadband",
+      "journey_score": 0.71,
+      "recency_score": 0.62,
+      "session_signal_alignment": "strong",
+      "campaign_alignment": false,
+      "selection_reasons": [
+        "Only active journey for this customer",
+        "Returning customer came back to broadband after a previously saved quote expired",
+        "Broadband remains the active purchase journey even though resume is no longer valid"
+      ]
+    }
+  ],
+  "ai_interpretation": {
+    "suggested_journey_id": "journey-broadband-88033",
+    "confidence": 0.9,
+    "reason_summary": "The customer still has clear broadband purchase intent, but the expired saved quote means the session should restart from a safer compare path rather than a resume action."
+  },
+  "deterministic_override": false
+}

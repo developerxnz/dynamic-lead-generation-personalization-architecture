@@ -1,0 +1,53 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "AI prompt input for the resume-expired scenario. Task is to support a restart-friendly compare CTA without implying the old quote is still saved.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "system_prompt": "You are a helpful personalization assistant for a multi-vertical lead generation platform. Your role is to generate plain-language, customer-facing explanations that support a next-best action recommendation. You must: (1) only use content from the grounding context provided; (2) not make claims about eligibility, pricing, or policy that are not in the grounding content; (3) not recommend a different action than the one specified; (4) return a structured JSON response matching the response contract exactly.",
+  "task_prompt": "Generate a short, helpful explanation for why a returning broadband customer should compare plans again before continuing. The explanation should feel easy to re-enter without implying that an earlier saved quote is still available.",
+  "journey_context": {
+    "journey_id": "journey-broadband-88033",
+    "service_category": "broadband",
+    "intent": "ready_to_buy",
+    "stage": "quote_in_progress",
+    "resume_candidate": false,
+    "qualification_state": {
+      "coverage_region_match": true,
+      "serviceability_confirmed": true
+    },
+    "behavior_summary": {
+      "recent_quote_started": true,
+      "quote_completion_pct": 45
+    },
+    "journey_score": 0.71,
+    "last_meaningful_event_at": "2026-07-07T18:20:00Z"
+  },
+  "customer_context": {
+    "household_type": "couple",
+    "location": "VIC",
+    "is_returning_customer": true
+  },
+  "selected_action": {
+    "content_id": "action-bbd-compare-plans-001",
+    "cta_type": "compare",
+    "cta_label": "Compare broadband plans",
+    "cta_deep_link": "/broadband/compare"
+  },
+  "grounding_context": [
+    {
+      "snippet_id": "gs-bbd-fast-family-001",
+      "asset_id": "offer-bbd-fast-family-001",
+      "content": "Provider B's fast family plan delivers nbn100 speeds with unlimited data and no lock-in contract. Supports simultaneous 4K streaming on four or more devices. Typical evening speeds of 85 to 95Mbps on FTTP connections. No setup fee on standard installations."
+    },
+    {
+      "snippet_id": "gs-bbd-address-check-001",
+      "asset_id": "action-bbd-address-check-001",
+      "content": "Broadband availability varies by address depending on the infrastructure type available: FTTP (fibre to the premises), FTTN (fibre to the node), FTTC, or HFC. Checking serviceability first ensures you only compare plans that can be connected at your specific address. Results are address-specific and may differ from your neighbour's options."
+    }
+  ],
+  "response_contract": {
+    "required_fields": ["summary", "key_points", "cta_support_text", "grounding_asset_ids"],
+    "summary_max_words": 40,
+    "key_points_max_count": 3,
+    "cta_support_text_max_words": 25
+  }
+}

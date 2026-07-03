@@ -1,0 +1,94 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Ranking engine request for the three-concurrent-journeys scenario. Broadband must lead, but secondary journey context is still available for continuity.",
+  "customer_profile": {
+    "customer_id": "cust-88022",
+    "lead_score": 81,
+    "location": "VIC",
+    "household_type": "family",
+    "is_returning_customer": true
+  },
+  "active_journey": {
+    "journey_id": "journey-broadband-88022",
+    "service_category": "broadband",
+    "intent": "moving_home",
+    "stage": "research",
+    "urgency": "high",
+    "resume_candidate": false,
+    "qualification_state": {
+      "coverage_region_match": true,
+      "serviceability_confirmed": false,
+      "hard_exclusions": [],
+      "suppression_flags": []
+    }
+  },
+  "supplementary_journeys": [
+    {
+      "journey_id": "journey-health-88022",
+      "service_category": "health_insurance",
+      "intent": "switching_provider",
+      "stage": "compare",
+      "secondary_only": true
+    },
+    {
+      "journey_id": "journey-novated-88022",
+      "service_category": "novated_leasing",
+      "intent": "researching_options",
+      "stage": "discover",
+      "secondary_only": true
+    }
+  ],
+  "context": {
+    "channel": "web",
+    "campaign_source": "paid_search",
+    "campaign_theme": "move-home-broadband",
+    "session_id": "sess-88022-01"
+  },
+  "candidates": [
+    {
+      "content_id": "action-bbd-address-check-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "broadband",
+      "cta_type": "check_eligibility",
+      "cta_deep_link": "/broadband/address-check",
+      "provider": null,
+      "priority": 1,
+      "funnel_stage": "research",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "asset_type": "OfferCandidate",
+      "service_category": "broadband",
+      "cta_type": "compare",
+      "cta_deep_link": "/broadband/compare?household=family&speed=nbn100",
+      "provider": "Provider B",
+      "priority": 2,
+      "funnel_stage": "compare",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "content_id": "guide-bbd-moving-home-001",
+      "asset_type": "GuidanceAsset",
+      "service_category": "broadband",
+      "cta_type": "read_guide",
+      "cta_deep_link": "/broadband/guides/moving-home",
+      "provider": null,
+      "priority": 3,
+      "funnel_stage": "research",
+      "retrieval_source": "primary_journey"
+    },
+    {
+      "content_id": "action-health-resume-compare-001",
+      "asset_type": "ActionDefinition",
+      "service_category": "health_insurance",
+      "cta_type": "resume",
+      "cta_deep_link": "/health-insurance/compare/resume",
+      "provider": "Provider H",
+      "priority": 1,
+      "funnel_stage": "compare",
+      "retrieval_source": "secondary_journey"
+    }
+  ],
+  "ranking_policy_version": "broadband-v1"
+}

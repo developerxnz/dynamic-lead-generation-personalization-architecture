@@ -1,0 +1,44 @@
+{
+  "scenario": "08-progression-stage-04-compliance-after-move",
+  "description": "Ranking response for stage 4. Compare CTA stays first while the Provider K bundle is suppressed for compliance in Tasmania.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-health-compare-001",
+      "score": 32,
+      "cta": {
+        "type": "compare",
+        "label": "Compare health cover options",
+        "deep_link": "/health-insurance/compare"
+      },
+      "reasons": [
+        "Active journey fit: health insurance comparison journey",
+        "Funnel stage match: compare",
+        "Intent alignment: switching_provider",
+        "Comparison keeps the customer on a compliant path while evaluating options",
+        "Priority score: 1"
+      ]
+    },
+    {
+      "content_id": "guide-health-switching-001",
+      "score": 18,
+      "cta": {
+        "type": "read_guide",
+        "label": "How to switch health insurance",
+        "deep_link": "/health-insurance/guides/switching"
+      },
+      "reasons": [
+        "Service category match: health_insurance",
+        "Supports compare-stage customers with portability and waiting-period guidance",
+        "Useful educational content before starting a quote"
+      ]
+    }
+  ],
+  "suppressed_candidates": [
+    {
+      "content_id": "offer-health-hospital-extras-bundle-001",
+      "reason": "compliance_state_restriction — Provider K bundle carries state_restricted_nsw_vic_qld and cannot be promoted in TAS"
+    }
+  ],
+  "ranking_policy_version": "health-v1",
+  "ranking_duration_ms": 10
+}

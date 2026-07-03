@@ -1,0 +1,23 @@
+{
+  "scenario": "06-progression-stage-02-multi-journey",
+  "description": "Stage 2 of the single-customer progression. The same customer is now returning with both an earlier health journey and a new broadband move-home journey.",
+  "customer_id": "cust-77120",
+  "identity": {
+    "known_customer": true,
+    "account_linked": true,
+    "anonymous_ids": ["web-anon-77120"]
+  },
+  "profile": {
+    "household_type": "couple",
+    "employment_type": "full_time",
+    "location": "VIC",
+    "budget_range": "mid",
+    "life_stage": "partnered"
+  },
+  "customer_summary": {
+    "is_returning_customer": true,
+    "last_meaningful_event_at": "2026-06-20T11:20:00Z",
+    "repeat_sessions_30d": 3,
+    "lead_score": 68
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "scenario": "06-progression-stage-02-multi-journey",
+  "description": "Final response for stage 2 of the same-customer progression. Broadband leads the session while the earlier health journey stays secondary.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-02",
+  "active_journey": {
+    "journey_id": "journey-broadband-77120",
+    "service_category": "broadband"
+  },
+  "next_best_action": {
+    "content_id": "action-bbd-address-check-001",
+    "cta_type": "check_eligibility",
+    "label": "Check broadband options at your new address",
+    "deep_link": "/broadband/address-check",
+    "ranking_score": 35,
+    "ranking_policy_version": "broadband-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "cta_type": "compare",
+      "label": "See fast family broadband plans",
+      "deep_link": "/broadband/compare?household=family&speed=nbn100"
+    }
+  ],
+  "secondary_journey_prompt": {
+    "journey_id": "journey-health-77120",
+    "service_category": "health_insurance",
+    "label": "Resume your health cover comparison",
+    "deep_link": "/health-insurance/compare/resume",
+    "content_id": "action-health-resume-compare-001"
+  },
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-502",
+    "summary": "Because you're moving soon, the best next step is to check which broadband options are actually available at your new address.",
+    "cta_support_text": "Start with your new address so you only see plans that fit that location.",
+    "grounding_asset_ids": ["action-bbd-address-check-001", "guide-bbd-moving-home-001"]
+  },
+  "decision_trace": {
+    "profile_read": "known customer, couple household, VIC, lead score 68",
+    "journey_read": "two journeys loaded: health compare + broadband move-home",
+    "active_journey_selected": "broadband selected — session evidence stronger",
+    "retrieval": "4 candidates returned",
+    "filtering": "health resume retained as secondary only",
+    "ranking": "address check ranked first (score 35)",
+    "ai_explanation": "accepted — grounded on address-check and moving-home guide assets"
+  },
+  "metadata_revision": "action-bbd-address-check-001@5",
+  "response_generated_at": "2026-06-20T11:20:02Z"
+}

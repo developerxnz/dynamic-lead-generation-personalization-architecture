@@ -1,0 +1,51 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Final response for the three-concurrent-journeys scenario. Broadband leads while health is preserved only as a supporting secondary prompt.",
+  "customer_id": "cust-88022",
+  "session_id": "sess-88022-01",
+  "active_journey": {
+    "journey_id": "journey-broadband-88022",
+    "service_category": "broadband"
+  },
+  "next_best_action": {
+    "content_id": "action-bbd-address-check-001",
+    "cta_type": "check_eligibility",
+    "label": "Check broadband options at your new address",
+    "deep_link": "/broadband/address-check",
+    "ranking_score": 36,
+    "ranking_policy_version": "broadband-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "cta_type": "compare",
+      "label": "See fast family broadband plans",
+      "deep_link": "/broadband/compare?household=family&speed=nbn100"
+    }
+  ],
+  "secondary_journey_prompt": {
+    "journey_id": "journey-health-88022",
+    "service_category": "health_insurance",
+    "label": "Resume your health cover comparison",
+    "deep_link": "/health-insurance/compare/resume",
+    "content_id": "action-health-resume-compare-001"
+  },
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-602",
+    "summary": "Checking your new address first makes it easier to focus on broadband plans that can actually be connected there.",
+    "cta_support_text": "Check your address first so the right broadband options appear next.",
+    "grounding_asset_ids": ["action-bbd-address-check-001", "guide-bbd-moving-home-001"]
+  },
+  "decision_trace": {
+    "profile_read": "known customer, family household, VIC, lead score 81",
+    "journey_read": "three journeys loaded: broadband moving_home, health compare, novated leasing discovery",
+    "active_journey_selected": "broadband — current move-home session is strongest and most urgent",
+    "retrieval": "4 candidates returned across primary and secondary journeys",
+    "filtering": "health resume action retained only as a secondary prompt; novated journey deferred entirely",
+    "ranking": "address-check CTA ranked first (score 36)",
+    "ai_explanation": "accepted — grounded on address-check and moving-home guide assets"
+  },
+  "metadata_revision": "action-bbd-address-check-001@5",
+  "response_generated_at": "2026-07-06T09:30:02Z"
+}

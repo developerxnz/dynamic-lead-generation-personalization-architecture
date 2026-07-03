@@ -1,0 +1,23 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "description": "Supplementary scenario covering AI-vs-deterministic conflict. AI would prefer a saved broadband quote, but the current session is explicitly about health insurance.",
+  "customer_id": "cust-88044",
+  "identity": {
+    "known_customer": true,
+    "account_linked": true,
+    "anonymous_ids": ["web-anon-88044"]
+  },
+  "profile": {
+    "household_type": "couple",
+    "employment_type": "full_time",
+    "location": "VIC",
+    "budget_range": "mid",
+    "life_stage": "partnered"
+  },
+  "customer_summary": {
+    "is_returning_customer": true,
+    "last_meaningful_event_at": "2026-07-08T12:05:00Z",
+    "repeat_sessions_30d": 6,
+    "lead_score": 79
+  }
+}

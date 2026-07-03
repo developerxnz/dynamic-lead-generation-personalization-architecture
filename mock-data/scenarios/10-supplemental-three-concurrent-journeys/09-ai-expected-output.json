@@ -1,0 +1,33 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Expected AI model output for the three-concurrent-journeys scenario.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Checking your new address first makes it easier to focus on broadband plans that can actually be connected there.",
+    "key_points": [
+      "Broadband availability can change from one address to the next",
+      "The address check shows what connection types are possible at your new home",
+      "Starting early helps if a technician visit is needed before moving day"
+    ],
+    "cta_support_text": "Check your address first so the right broadband options appear next.",
+    "grounding_asset_ids": [
+      "action-bbd-address-check-001",
+      "guide-bbd-moving-home-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 17,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 11,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-602",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 735
+}

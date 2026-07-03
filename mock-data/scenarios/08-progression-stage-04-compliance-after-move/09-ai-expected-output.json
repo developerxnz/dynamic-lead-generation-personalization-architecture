@@ -1,0 +1,33 @@
+{
+  "scenario": "08-progression-stage-04-compliance-after-move",
+  "description": "Expected AI model output for stage 4 of the same-customer progression.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Comparing health cover options first makes it easier to see what fits before you commit to switching.",
+    "key_points": [
+      "See premiums, cover tiers, extras, and waiting periods side by side in one place",
+      "Use the switching guide to understand portability rules before you change",
+      "Results are matched to relevance, not ranked by provider commission"
+    ],
+    "cta_support_text": "Compare options side by side before you start your next quote.",
+    "grounding_asset_ids": [
+      "action-health-compare-001",
+      "guide-health-switching-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 17,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 11,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-504",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 760
+}

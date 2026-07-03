@@ -1,0 +1,63 @@
+{
+  "scenario": "05-progression-stage-01-health-discovery",
+  "description": "Analytics events for stage 1 of the same-customer progression.",
+  "events": [
+    {
+      "event_type": "active_journey_selected",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-01",
+      "journey_id": "journey-health-77120",
+      "timestamp": "2026-05-10T09:00:00Z",
+      "metadata": {
+        "candidate_journeys": ["journey-health-77120"],
+        "selected_service_category": "health_insurance",
+        "selection_method": "deterministic_single_journey",
+        "ai_confidence": 0.94,
+        "new_journey_created": true
+      }
+    },
+    {
+      "event_type": "recommendation_served",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-01",
+      "journey_id": "journey-health-77120",
+      "timestamp": "2026-05-10T09:00:02Z",
+      "metadata": {
+        "active_journey": "health_insurance",
+        "top_recommendation": "action-health-compare-001",
+        "ranking_policy_version": "health-v1",
+        "metadata_revision": "action-health-compare-001@6",
+        "candidates_ranked": 3,
+        "candidates_suppressed": 0
+      }
+    },
+    {
+      "event_type": "cta_impression",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-01",
+      "journey_id": "journey-health-77120",
+      "timestamp": "2026-05-10T09:00:03Z",
+      "metadata": {
+        "content_id": "action-health-compare-001",
+        "cta_type": "compare",
+        "label": "Compare health cover options",
+        "position": "primary"
+      }
+    },
+    {
+      "event_type": "ai_response_accepted",
+      "customer_id": "cust-77120",
+      "session_id": "sess-77120-01",
+      "journey_id": "journey-health-77120",
+      "timestamp": "2026-05-10T09:00:02Z",
+      "metadata": {
+        "response_id": "air-501",
+        "ai_task_type": "cta_explanation",
+        "prompt_template_version": "poc-cta-explainer-v1",
+        "grounding_asset_ids": ["action-health-compare-001", "guide-health-switching-001"],
+        "accepted": true,
+        "latency_ms": 720
+      }
+    }
+  ]
+}

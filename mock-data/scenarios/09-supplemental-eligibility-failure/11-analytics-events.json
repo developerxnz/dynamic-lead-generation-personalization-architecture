@@ -1,0 +1,88 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Analytics events for the eligibility-failure scenario.",
+  "events": [
+    {
+      "event_type": "active_journey_selected",
+      "customer_id": "cust-88011",
+      "session_id": "sess-88011-01",
+      "journey_id": "journey-broadband-88011",
+      "timestamp": "2026-07-05T08:15:00Z",
+      "metadata": {
+        "candidate_journeys": ["journey-broadband-88011"],
+        "selected_service_category": "broadband",
+        "selection_method": "deterministic_single_journey",
+        "ai_confidence": 0.91,
+        "eligibility_block_present": true
+      }
+    },
+    {
+      "event_type": "eligibility_checked",
+      "customer_id": "cust-88011",
+      "session_id": "sess-88011-01",
+      "journey_id": "journey-broadband-88011",
+      "timestamp": "2026-07-05T08:15:00Z",
+      "metadata": {
+        "check_type": "serviceability",
+        "result": "failed",
+        "note": "Stored qualification state shows the address is not currently serviceable for quote-ready broadband promotion."
+      }
+    },
+    {
+      "event_type": "candidate_suppressed",
+      "customer_id": "cust-88011",
+      "session_id": "sess-88011-01",
+      "journey_id": "journey-broadband-88011",
+      "timestamp": "2026-07-05T08:15:01Z",
+      "metadata": {
+        "content_id": "offer-bbd-fast-family-001",
+        "provider": "Provider B",
+        "suppression_class": "eligibility",
+        "suppression_reason": "eligibility_serviceability_failure"
+      }
+    },
+    {
+      "event_type": "recommendation_served",
+      "customer_id": "cust-88011",
+      "session_id": "sess-88011-01",
+      "journey_id": "journey-broadband-88011",
+      "timestamp": "2026-07-05T08:15:02Z",
+      "metadata": {
+        "active_journey": "broadband",
+        "top_recommendation": "guide-bbd-moving-home-001",
+        "ranking_policy_version": "broadband-v1",
+        "metadata_revision": "guide-bbd-moving-home-001@4",
+        "candidates_ranked": 2,
+        "candidates_suppressed": 1
+      }
+    },
+    {
+      "event_type": "cta_impression",
+      "customer_id": "cust-88011",
+      "session_id": "sess-88011-01",
+      "journey_id": "journey-broadband-88011",
+      "timestamp": "2026-07-05T08:15:03Z",
+      "metadata": {
+        "content_id": "guide-bbd-moving-home-001",
+        "cta_type": "read_guide",
+        "label": "Broadband when moving home",
+        "position": "primary"
+      }
+    },
+    {
+      "event_type": "ai_response_accepted",
+      "customer_id": "cust-88011",
+      "session_id": "sess-88011-01",
+      "journey_id": "journey-broadband-88011",
+      "timestamp": "2026-07-05T08:15:02Z",
+      "metadata": {
+        "response_id": "air-601",
+        "ai_task_type": "cta_explanation",
+        "prompt_template_version": "poc-cta-explainer-v1",
+        "grounding_asset_ids": ["guide-bbd-moving-home-001", "action-bbd-address-check-001"],
+        "accepted": true,
+        "latency_ms": 710
+      }
+    }
+  ]
+}

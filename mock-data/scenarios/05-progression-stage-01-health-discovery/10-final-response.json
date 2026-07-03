@@ -1,0 +1,45 @@
+{
+  "scenario": "05-progression-stage-01-health-discovery",
+  "description": "Final response for stage 1 of the same-customer progression. Comparison is the lead action for the customer's first health visit.",
+  "customer_id": "cust-77120",
+  "session_id": "sess-77120-01",
+  "active_journey": {
+    "journey_id": "journey-health-77120",
+    "service_category": "health_insurance"
+  },
+  "next_best_action": {
+    "content_id": "action-health-compare-001",
+    "cta_type": "compare",
+    "label": "Compare health cover options",
+    "deep_link": "/health-insurance/compare",
+    "ranking_score": 30,
+    "ranking_policy_version": "health-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "offer-health-hospital-extras-bundle-001",
+      "cta_type": "get_quote",
+      "label": "Get a hospital and extras bundle quote",
+      "deep_link": "/health-insurance/quote?type=bundle&provider=k"
+    }
+  ],
+  "secondary_journey_prompt": null,
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-501",
+    "summary": "Comparing health cover options first helps you see what suits you as a couple before starting a quote.",
+    "cta_support_text": "Compare options first, then start a quote when one feels right.",
+    "grounding_asset_ids": ["action-health-compare-001", "guide-health-switching-001"]
+  },
+  "decision_trace": {
+    "profile_read": "new customer, couple household, VIC, lead score 36",
+    "journey_read": "one journey loaded: health insurance discovery",
+    "active_journey_selected": "health insurance — only journey, no ambiguity",
+    "retrieval": "3 candidates returned; family, singles, and resume assets excluded",
+    "filtering": "no suppressions at ranking",
+    "ranking": "comparison CTA ranked first (score 30)",
+    "ai_explanation": "accepted — grounded on comparison and switching guide assets"
+  },
+  "metadata_revision": "action-health-compare-001@6",
+  "response_generated_at": "2026-05-10T09:00:02Z"
+}

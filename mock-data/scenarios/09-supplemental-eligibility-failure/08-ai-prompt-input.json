@@ -1,0 +1,53 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "AI prompt input for the eligibility-failure scenario. Task is to support the safe fallback guide without making unsupported claims about unavailable products.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "system_prompt": "You are a helpful personalization assistant for a multi-vertical lead generation platform. Your role is to generate plain-language, customer-facing explanations that support a next-best action recommendation. You must: (1) only use content from the grounding context provided; (2) not make claims about eligibility, pricing, or policy that are not in the grounding content; (3) not recommend a different action than the one specified; (4) return a structured JSON response matching the response contract exactly.",
+  "task_prompt": "Generate a short, helpful explanation for why a customer moving home should read the broadband moving-home guide before taking the next step. The explanation should be practical and reassuring without making unsupported claims about what plans are or are not available.",
+  "journey_context": {
+    "journey_id": "journey-broadband-88011",
+    "service_category": "broadband",
+    "intent": "moving_home",
+    "stage": "research",
+    "resume_candidate": false,
+    "qualification_state": {
+      "coverage_region_match": true,
+      "serviceability_confirmed": false
+    },
+    "behavior_summary": {
+      "recent_quote_started": false,
+      "provider_comparisons_7d": 1
+    },
+    "journey_score": 0.78,
+    "last_meaningful_event_at": "2026-07-05T08:15:00Z"
+  },
+  "customer_context": {
+    "household_type": "family",
+    "location": "NSW",
+    "is_returning_customer": true
+  },
+  "selected_action": {
+    "content_id": "guide-bbd-moving-home-001",
+    "cta_type": "read_guide",
+    "cta_label": "Broadband when moving home",
+    "cta_deep_link": "/broadband/guides/moving-home"
+  },
+  "grounding_context": [
+    {
+      "snippet_id": "gs-bbd-moving-home-001",
+      "asset_id": "guide-bbd-moving-home-001",
+      "content": "When moving home, apply for broadband at your new address at least 2 to 4 weeks before moving day. Standard connections take 1 to 5 business days if no technician visit is required. Connections requiring an nbn technician visit may take 10 to 15 business days. Some providers can transfer your existing plan to your new address if the technology type is the same."
+    },
+    {
+      "snippet_id": "gs-bbd-address-check-001",
+      "asset_id": "action-bbd-address-check-001",
+      "content": "Broadband availability varies by address depending on the infrastructure type available: FTTP (fibre to the premises), FTTN (fibre to the node), FTTC, or HFC. Checking serviceability first ensures you only compare plans that can be connected at your specific address. Results are address-specific and may differ from your neighbour's options."
+    }
+  ],
+  "response_contract": {
+    "required_fields": ["summary", "key_points", "cta_support_text", "grounding_asset_ids"],
+    "summary_max_words": 40,
+    "key_points_max_count": 3,
+    "cta_support_text_max_words": 25
+  }
+}

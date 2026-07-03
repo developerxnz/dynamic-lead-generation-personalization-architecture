@@ -1,0 +1,45 @@
+{
+  "scenario": "06-progression-stage-02-multi-journey",
+  "description": "Active-journey selection result for stage 2. Broadband is selected because current move-home signals are stronger than the older health comparison journey.",
+  "selected_journey_id": "journey-broadband-77120",
+  "selected_service_category": "broadband",
+  "selection_method": "deterministic_with_ai_support",
+  "reason_summary": "Broadband move-home signals are more current than the older health comparison journey. Session entry point, campaign theme, current URL, and query text all point to a broadband moving-home intent.",
+  "candidate_journeys": [
+    {
+      "journey_id": "journey-broadband-77120",
+      "service_category": "broadband",
+      "journey_score": 0.78,
+      "recency_score": 0.95,
+      "session_signal_alignment": "strong",
+      "campaign_alignment": true,
+      "selection_reasons": [
+        "Session URL matches broadband moving-home page",
+        "Campaign theme is move-home-broadband",
+        "Query text aligns with broadband moving intent",
+        "Broadband journey is the most recent meaningful activity",
+        "Urgency is high"
+      ]
+    },
+    {
+      "journey_id": "journey-health-77120",
+      "service_category": "health_insurance",
+      "journey_score": 0.64,
+      "recency_score": 0.67,
+      "session_signal_alignment": "weak",
+      "campaign_alignment": false,
+      "selection_reasons": [],
+      "not_selected_reasons": [
+        "No health-related session signals in current request",
+        "Campaign and entry page do not align with health journey",
+        "Health journey is older than broadband"
+      ]
+    }
+  ],
+  "ai_interpretation": {
+    "suggested_journey_id": "journey-broadband-77120",
+    "confidence": 0.9,
+    "reason_summary": "Session context strongly suggests a move-home broadband intent. Health comparison is still relevant but should remain secondary."
+  },
+  "deterministic_override": false
+}

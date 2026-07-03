@@ -1,0 +1,23 @@
+{
+  "scenario": "07-progression-stage-03-resume-quote",
+  "description": "Stage 3 of the single-customer progression. The same customer returns to resume a broadband quote after starting it during the move-home journey.",
+  "customer_id": "cust-77120",
+  "identity": {
+    "known_customer": true,
+    "account_linked": true,
+    "anonymous_ids": ["web-anon-77120"]
+  },
+  "profile": {
+    "household_type": "couple",
+    "employment_type": "full_time",
+    "location": "VIC",
+    "budget_range": "mid",
+    "life_stage": "partnered"
+  },
+  "customer_summary": {
+    "is_returning_customer": true,
+    "last_meaningful_event_at": "2026-06-25T09:45:00Z",
+    "repeat_sessions_30d": 5,
+    "lead_score": 76
+  }
+}

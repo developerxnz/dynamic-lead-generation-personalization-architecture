@@ -1,0 +1,34 @@
+{
+  "scenario": "08-progression-stage-04-compliance-after-move",
+  "customer_id": "cust-77120",
+  "journeys": [
+    {
+      "journey_id": "journey-health-77120",
+      "customer_id": "cust-77120",
+      "service_category": "health_insurance",
+      "status": "active",
+      "intent": "switching_provider",
+      "stage": "compare",
+      "urgency": "medium",
+      "switching_intent": "active",
+      "renewal_window_days": 14,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 4,
+        "pages_viewed_7d": ["/health-insurance/compare", "/health-insurance/providers/k", "/health-insurance/guides/switching"]
+      },
+      "decision_support": {
+        "journey_score": 0.69,
+        "ai_journey_summary": "After moving to Tasmania, the customer is comparing health insurance again. The Provider K bundle still looks relevant, but deterministic compliance controls must suppress it because it is state-restricted."
+      },
+      "last_meaningful_event_at": "2026-07-02T10:15:00Z"
+    }
+  ]
+}

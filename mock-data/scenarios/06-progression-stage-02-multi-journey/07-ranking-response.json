@@ -1,0 +1,61 @@
+{
+  "scenario": "06-progression-stage-02-multi-journey",
+  "description": "Ranking response for stage 2. Address check ranks first because serviceability is still unknown at the new address.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-bbd-address-check-001",
+      "score": 35,
+      "cta": {
+        "type": "check_eligibility",
+        "label": "Check broadband options at your new address",
+        "deep_link": "/broadband/address-check"
+      },
+      "reasons": [
+        "Active journey fit: broadband moving-home journey",
+        "Intent alignment: moving_home — serviceability check is the required first step",
+        "Serviceability not yet confirmed: address check must precede plan comparison",
+        "CTA alignment: check_eligibility",
+        "High urgency signal from active journey",
+        "Campaign alignment: move-home-broadband",
+        "Priority score: 1"
+      ]
+    },
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "score": 27,
+      "cta": {
+        "type": "compare",
+        "label": "See fast family broadband plans",
+        "deep_link": "/broadband/compare?household=family&speed=nbn100"
+      },
+      "reasons": [
+        "Active journey fit: broadband",
+        "Household fit: couple household is compatible with the fast family plan",
+        "Funnel stage match: research",
+        "Intent support: moving home customers benefit from seeing plan options early"
+      ]
+    },
+    {
+      "content_id": "guide-bbd-moving-home-001",
+      "score": 18,
+      "cta": {
+        "type": "read_guide",
+        "label": "Broadband when moving home",
+        "deep_link": "/broadband/guides/moving-home"
+      },
+      "reasons": [
+        "Active journey fit: broadband moving-home journey",
+        "Funnel stage match: research",
+        "Supports informed decision before address check"
+      ]
+    }
+  ],
+  "suppressed_candidates": [
+    {
+      "content_id": "action-health-resume-compare-001",
+      "reason": "secondary_journey_not_primary — health comparison journey is retained as secondary prompt only, not in main ranked set"
+    }
+  ],
+  "ranking_policy_version": "broadband-v1",
+  "ranking_duration_ms": 10
+}

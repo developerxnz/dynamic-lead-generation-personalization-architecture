@@ -1,0 +1,33 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "description": "Expected AI model output for the AI-vs-deterministic-control scenario.",
+  "prompt_template_version": "poc-cta-explainer-v1",
+  "response_status": "accepted",
+  "response": {
+    "summary": "Comparing health cover options first makes it easier to see what fits before you decide whether to switch.",
+    "key_points": [
+      "You can compare premiums, cover tiers, extras, and waiting periods side by side",
+      "Results are matched to relevance for your household, not ranked by provider commission",
+      "The switching guide explains portability so you know what happens to waiting periods"
+    ],
+    "cta_support_text": "Compare health options first so your next switch decision is clearer.",
+    "grounding_asset_ids": [
+      "action-health-compare-001",
+      "guide-health-switching-001"
+    ]
+  },
+  "validation": {
+    "required_fields_present": true,
+    "grounding_assets_referenced": true,
+    "unsupported_claims_detected": false,
+    "summary_word_count": 17,
+    "key_points_count": 3,
+    "cta_support_text_word_count": 10,
+    "within_length_bounds": true,
+    "disclosure_required": false
+  },
+  "ai_response_id": "air-604",
+  "ai_task_type": "cta_explanation",
+  "model_version": "azure-openai-gpt-4o",
+  "latency_ms": 720
+}

@@ -1,0 +1,43 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "description": "Active-journey selection result for the AI-vs-deterministic-control scenario. Deterministic session-alignment rules keep health insurance active even though the AI hint would have chosen broadband.",
+  "selected_journey_id": "journey-health-88044",
+  "selected_service_category": "health_insurance",
+  "selection_method": "deterministic_with_ai_support",
+  "reason_summary": "Current session signals are explicitly about switching health cover, so health insurance leads the session. A saved broadband quote remains valuable, but it does not override the current health-focused visit.",
+  "candidate_journeys": [
+    {
+      "journey_id": "journey-health-88044",
+      "service_category": "health_insurance",
+      "journey_score": 0.72,
+      "recency_score": 0.98,
+      "session_signal_alignment": "strong",
+      "campaign_alignment": false,
+      "selection_reasons": [
+        "Session URL matches health insurance comparison page",
+        "Query text is explicitly about switching couples health cover",
+        "Current session signals outweigh the older broadband resume context",
+        "Deterministic current-intent rules prioritize the active health session"
+      ]
+    },
+    {
+      "journey_id": "journey-broadband-88044",
+      "service_category": "broadband",
+      "journey_score": 0.86,
+      "recency_score": 0.84,
+      "session_signal_alignment": "medium",
+      "campaign_alignment": false,
+      "selection_reasons": [],
+      "not_selected_reasons": [
+        "Broadband saved quote is commercially strong but does not match the current health-focused session",
+        "Deterministic journey selection protects current-session intent over generic conversion likelihood"
+      ]
+    }
+  ],
+  "ai_interpretation": {
+    "suggested_journey_id": "journey-broadband-88044",
+    "confidence": 0.76,
+    "reason_summary": "A saved broadband quote looks like the highest short-term conversion opportunity, so AI would surface it. Deterministic controls should still keep the health journey active because current-session intent is explicit."
+  },
+  "deterministic_override": true
+}

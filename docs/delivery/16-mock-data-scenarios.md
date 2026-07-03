@@ -4,7 +4,7 @@
 
 ## Overview
 
-This document describes the four mock data scenarios used to validate the platform's decisioning flow against the AI model.
+This document describes the four mock data scenarios used to validate the platform's decisioning flow against the AI model, plus a supplementary same-customer progression set for lifecycle-style testing.
 
 The full data set lives in the [`mock-data/`](../../mock-data/) folder at the repository root. This document explains each scenario, the data shape used, and how the files relate to the broader architecture.
 
@@ -12,7 +12,7 @@ The full data set lives in the [`mock-data/`](../../mock-data/) folder at the re
 
 ## Purpose
 
-The mock data is designed to support **full end-to-end trace validation** across the four POC scenarios defined in [POC Scope](./12-poc-scope.md).
+The mock data is designed to support **full end-to-end trace validation** across the four POC scenarios defined in [POC Scope](./12-poc-scope.md). It also includes a separate progression-focused set that keeps one `customer_id` constant while the customer moves through multiple lifecycle stages.
 
 Each scenario provides:
 
@@ -33,6 +33,8 @@ This means each scenario can be used to:
 ---
 
 ## Scenarios
+
+### Core reference scenarios
 
 ### Scenario 01 — Primary: Returning Customer With Multiple Journeys
 
@@ -114,6 +116,21 @@ This means each scenario can be used to:
 **Suppressed at ranking:** `offer-health-hospital-extras-bundle-001` — compliance state restriction (`state_restricted_nsw_vic_qld`)
 
 **Why this scenario matters:** This is the clearest proof that deterministic compliance controls remain authoritative. The bundle looks relevant on intent and household fit, but it still cannot be promoted in Tasmania. The final experience therefore leads with compliant comparison rather than a non-compliant quote path.
+
+---
+
+## Supplementary Same-Customer Progression
+
+The `mock-data/scenarios/05-` to `08-` folders form a **single-customer progression set** built around `cust-77120`.
+
+Unlike the four core reference scenarios above, these stages are meant to be read **in order**:
+
+1. `05-progression-stage-01-health-discovery` — first health research visit
+2. `06-progression-stage-02-multi-journey` — later return with a new broadband move-home journey while health still exists
+3. `07-progression-stage-03-resume-quote` — the broadband journey advances to a saved quote that should be resumed
+4. `08-progression-stage-04-compliance-after-move` — after the move, the health journey becomes active again in Tasmania and triggers compliance suppression
+
+This progression set is useful when you want to test **state evolution** rather than isolated decision slices. It keeps the original POC scenarios untouched while adding a lifecycle-oriented testing path.
 
 ---
 

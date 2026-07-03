@@ -1,0 +1,77 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "description": "Analytics events for the AI-vs-deterministic-control scenario.",
+  "events": [
+    {
+      "event_type": "active_journey_selected",
+      "customer_id": "cust-88044",
+      "session_id": "sess-88044-01",
+      "journey_id": "journey-health-88044",
+      "timestamp": "2026-07-08T12:05:00Z",
+      "metadata": {
+        "candidate_journeys": ["journey-health-88044", "journey-broadband-88044"],
+        "selected_service_category": "health_insurance",
+        "selection_method": "deterministic_with_ai_support",
+        "ai_confidence": 0.76,
+        "ai_suggested_journey_id": "journey-broadband-88044",
+        "deterministic_override": true
+      }
+    },
+    {
+      "event_type": "deterministic_override_applied",
+      "customer_id": "cust-88044",
+      "session_id": "sess-88044-01",
+      "journey_id": "journey-health-88044",
+      "timestamp": "2026-07-08T12:05:01Z",
+      "metadata": {
+        "override_type": "active_journey_selection",
+        "ai_suggested_journey_id": "journey-broadband-88044",
+        "selected_journey_id": "journey-health-88044",
+        "reason": "current_session_alignment"
+      }
+    },
+    {
+      "event_type": "recommendation_served",
+      "customer_id": "cust-88044",
+      "session_id": "sess-88044-01",
+      "journey_id": "journey-health-88044",
+      "timestamp": "2026-07-08T12:05:02Z",
+      "metadata": {
+        "active_journey": "health_insurance",
+        "top_recommendation": "action-health-compare-001",
+        "ranking_policy_version": "health-v1",
+        "metadata_revision": "action-health-compare-001@6",
+        "candidates_ranked": 3,
+        "candidates_suppressed": 0
+      }
+    },
+    {
+      "event_type": "cta_impression",
+      "customer_id": "cust-88044",
+      "session_id": "sess-88044-01",
+      "journey_id": "journey-health-88044",
+      "timestamp": "2026-07-08T12:05:03Z",
+      "metadata": {
+        "content_id": "action-health-compare-001",
+        "cta_type": "compare",
+        "label": "Compare health cover options",
+        "position": "primary"
+      }
+    },
+    {
+      "event_type": "ai_response_accepted",
+      "customer_id": "cust-88044",
+      "session_id": "sess-88044-01",
+      "journey_id": "journey-health-88044",
+      "timestamp": "2026-07-08T12:05:02Z",
+      "metadata": {
+        "response_id": "air-604",
+        "ai_task_type": "cta_explanation",
+        "prompt_template_version": "poc-cta-explainer-v1",
+        "grounding_asset_ids": ["action-health-compare-001", "guide-health-switching-001"],
+        "accepted": true,
+        "latency_ms": 720
+      }
+    }
+  ]
+}

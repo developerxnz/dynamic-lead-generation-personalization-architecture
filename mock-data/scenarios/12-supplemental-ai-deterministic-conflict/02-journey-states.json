@@ -1,0 +1,65 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "customer_id": "cust-88044",
+  "journeys": [
+    {
+      "journey_id": "journey-health-88044",
+      "customer_id": "cust-88044",
+      "service_category": "health_insurance",
+      "status": "active",
+      "intent": "switching_provider",
+      "stage": "compare",
+      "urgency": "medium",
+      "switching_intent": "active",
+      "renewal_window_days": 24,
+      "resume_candidate": false,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": false,
+        "provider_comparisons_7d": 4,
+        "pages_viewed_7d": ["/health-insurance/compare", "/health-insurance/guides/switching"]
+      },
+      "decision_support": {
+        "journey_score": 0.72,
+        "ai_journey_summary": "Health insurance is the current-session need because the customer has returned directly to comparison with explicit switching intent."
+      },
+      "last_meaningful_event_at": "2026-07-08T12:05:00Z"
+    },
+    {
+      "journey_id": "journey-broadband-88044",
+      "customer_id": "cust-88044",
+      "service_category": "broadband",
+      "status": "active",
+      "intent": "ready_to_buy",
+      "stage": "quote_in_progress",
+      "urgency": "high",
+      "switching_intent": "active",
+      "renewal_window_days": null,
+      "resume_candidate": true,
+      "qualification_state": {
+        "coverage_region_match": true,
+        "serviceability_confirmed": true,
+        "hard_exclusions": [],
+        "suppression_flags": []
+      },
+      "behavior_summary": {
+        "recent_quote_started": true,
+        "quote_started_at": "2026-07-05T09:40:00Z",
+        "quote_abandoned_at": "2026-07-05T09:58:00Z",
+        "quote_completion_pct": 68,
+        "provider_comparisons_7d": 2,
+        "pages_viewed_7d": ["/broadband/compare", "/broadband/quote?provider=b&plan=nbn100"]
+      },
+      "decision_support": {
+        "journey_score": 0.86,
+        "ai_journey_summary": "Broadband has the strongest short-term conversion signal because a saved quote is waiting to be resumed."
+      },
+      "last_meaningful_event_at": "2026-07-05T09:58:00Z"
+    }
+  ]
+}

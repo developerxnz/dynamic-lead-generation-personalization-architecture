@@ -1,0 +1,57 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Active-journey selection result for the three-concurrent-journeys scenario. Broadband leads even though health insurance and novated leasing journeys also exist.",
+  "selected_journey_id": "journey-broadband-88022",
+  "selected_service_category": "broadband",
+  "selection_method": "deterministic_with_ai_support",
+  "reason_summary": "Broadband move-home signals are the clearest and most time-sensitive. Health insurance and novated leasing remain in state, but they do not lead the current session.",
+  "candidate_journeys": [
+    {
+      "journey_id": "journey-broadband-88022",
+      "service_category": "broadband",
+      "journey_score": 0.83,
+      "recency_score": 0.96,
+      "session_signal_alignment": "strong",
+      "campaign_alignment": true,
+      "selection_reasons": [
+        "Session URL matches broadband moving-home page",
+        "Campaign theme is move-home-broadband",
+        "Query text aligns with broadband moving intent",
+        "Broadband journey is the most recent high-urgency activity",
+        "Move-home timing makes broadband setup the most time-sensitive journey"
+      ]
+    },
+    {
+      "journey_id": "journey-health-88022",
+      "service_category": "health_insurance",
+      "journey_score": 0.68,
+      "recency_score": 0.71,
+      "session_signal_alignment": "weak",
+      "campaign_alignment": false,
+      "selection_reasons": [],
+      "not_selected_reasons": [
+        "Health journey is still relevant but current session signals are not health-led",
+        "Broadband move-home urgency is higher for this visit"
+      ]
+    },
+    {
+      "journey_id": "journey-novated-88022",
+      "service_category": "novated_leasing",
+      "journey_score": 0.74,
+      "recency_score": 0.69,
+      "session_signal_alignment": "weak",
+      "campaign_alignment": false,
+      "selection_reasons": [],
+      "not_selected_reasons": [
+        "No novated-leasing session signals in current request",
+        "Journey is retained for future sessions but not expanded into this session's action set"
+      ]
+    }
+  ],
+  "ai_interpretation": {
+    "suggested_journey_id": "journey-broadband-88022",
+    "confidence": 0.89,
+    "reason_summary": "Broadband is the best match for the current session. Health remains a reasonable secondary prompt and novated leasing should stay deferred."
+  },
+  "deterministic_override": false
+}

@@ -1,0 +1,23 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Supplementary scenario covering eligibility failure. The customer still has a valid broadband move-home journey, but a prior serviceability check has blocked quote-ready promotion.",
+  "customer_id": "cust-88011",
+  "identity": {
+    "known_customer": true,
+    "account_linked": false,
+    "anonymous_ids": ["web-anon-88011"]
+  },
+  "profile": {
+    "household_type": "family",
+    "employment_type": "full_time",
+    "location": "NSW",
+    "budget_range": "mid",
+    "life_stage": "growing_family"
+  },
+  "customer_summary": {
+    "is_returning_customer": true,
+    "last_meaningful_event_at": "2026-07-05T08:15:00Z",
+    "repeat_sessions_30d": 2,
+    "lead_score": 63
+  }
+}

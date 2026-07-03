@@ -1,0 +1,45 @@
+{
+  "scenario": "12-supplemental-ai-deterministic-conflict",
+  "description": "Final response for the AI-vs-deterministic-control scenario. Deterministic session intent keeps the experience on health insurance even though AI preferred broadband.",
+  "customer_id": "cust-88044",
+  "session_id": "sess-88044-01",
+  "active_journey": {
+    "journey_id": "journey-health-88044",
+    "service_category": "health_insurance"
+  },
+  "next_best_action": {
+    "content_id": "action-health-compare-001",
+    "cta_type": "compare",
+    "label": "Compare health cover options",
+    "deep_link": "/health-insurance/compare",
+    "ranking_score": 29,
+    "ranking_policy_version": "health-v1"
+  },
+  "supporting_content": [
+    {
+      "content_id": "offer-health-hospital-extras-bundle-001",
+      "cta_type": "get_quote",
+      "label": "Get a hospital and extras bundle quote",
+      "deep_link": "/health-insurance/quote?type=bundle&provider=k"
+    }
+  ],
+  "secondary_journey_prompt": null,
+  "explanation": {
+    "source": "ai_assisted",
+    "ai_response_id": "air-604",
+    "summary": "Comparing health cover options first makes it easier to see what fits before you decide whether to switch.",
+    "cta_support_text": "Compare health options first so your next switch decision is clearer.",
+    "grounding_asset_ids": ["action-health-compare-001", "guide-health-switching-001"]
+  },
+  "decision_trace": {
+    "profile_read": "known customer, couple household, VIC, lead score 79",
+    "journey_read": "two journeys loaded: health compare and broadband quote_in_progress",
+    "active_journey_selected": "health insurance — deterministic session intent overrode AI broadband preference",
+    "retrieval": "3 health candidates returned after deterministic journey lock-in",
+    "filtering": "no suppressions at ranking",
+    "ranking": "health comparison CTA ranked first (score 29)",
+    "ai_explanation": "accepted — grounded on health comparison and switching guide assets"
+  },
+  "metadata_revision": "action-health-compare-001@6",
+  "response_generated_at": "2026-07-08T12:05:02Z"
+}

@@ -1,0 +1,23 @@
+{
+  "scenario": "11-supplemental-resume-expired",
+  "description": "Supplementary scenario covering an expired resume path. The customer still wants broadband, but the saved quote is no longer resumable.",
+  "customer_id": "cust-88033",
+  "identity": {
+    "known_customer": true,
+    "account_linked": true,
+    "anonymous_ids": ["web-anon-88033"]
+  },
+  "profile": {
+    "household_type": "couple",
+    "employment_type": "full_time",
+    "location": "VIC",
+    "budget_range": "mid",
+    "life_stage": "partnered"
+  },
+  "customer_summary": {
+    "is_returning_customer": true,
+    "last_meaningful_event_at": "2026-07-07T18:20:00Z",
+    "repeat_sessions_30d": 4,
+    "lead_score": 74
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "scenario": "10-supplemental-three-concurrent-journeys",
+  "description": "Ranking response for the three-concurrent-journeys scenario. Address check stays first because broadband availability must be confirmed before the customer can act on plan options.",
+  "ranked_recommendations": [
+    {
+      "content_id": "action-bbd-address-check-001",
+      "score": 36,
+      "cta": {
+        "type": "check_eligibility",
+        "label": "Check broadband options at your new address",
+        "deep_link": "/broadband/address-check"
+      },
+      "reasons": [
+        "Active journey fit: broadband moving-home journey",
+        "Intent alignment: moving_home — address serviceability is the first required step",
+        "Move-home urgency is highest among the customer's concurrent journeys",
+        "Priority score: 1"
+      ]
+    },
+    {
+      "content_id": "offer-bbd-fast-family-001",
+      "score": 26,
+      "cta": {
+        "type": "compare",
+        "label": "See fast family broadband plans",
+        "deep_link": "/broadband/compare?household=family&speed=nbn100"
+      },
+      "reasons": [
+        "Active journey fit: broadband",
+        "Household fit: family profile is compatible with the fast family plan",
+        "Strong follow-up option once availability is confirmed"
+      ]
+    },
+    {
+      "content_id": "guide-bbd-moving-home-001",
+      "score": 17,
+      "cta": {
+        "type": "read_guide",
+        "label": "Broadband when moving home",
+        "deep_link": "/broadband/guides/moving-home"
+      },
+      "reasons": [
+        "Active journey fit: broadband moving-home journey",
+        "Useful supporting content before availability is confirmed"
+      ]
+    }
+  ],
+  "suppressed_candidates": [
+    {
+      "content_id": "action-health-resume-compare-001",
+      "reason": "secondary_journey_not_primary — health comparison is retained as a supporting prompt only, not promoted in the main ranked set"
+    }
+  ],
+  "ranking_policy_version": "broadband-v1",
+  "ranking_duration_ms": 11
+}

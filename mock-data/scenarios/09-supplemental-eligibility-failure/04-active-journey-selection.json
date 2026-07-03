@@ -1,0 +1,29 @@
+{
+  "scenario": "09-supplemental-eligibility-failure",
+  "description": "Active-journey selection result for the eligibility-failure scenario. Broadband still leads because the customer is clearly trying to solve a move-home internet need.",
+  "selected_journey_id": "journey-broadband-88011",
+  "selected_service_category": "broadband",
+  "selection_method": "deterministic_single_journey",
+  "reason_summary": "Only one journey exists for this customer. Broadband moving-home intent still leads the session even though eligibility checks have already identified an address-level serviceability problem.",
+  "candidate_journeys": [
+    {
+      "journey_id": "journey-broadband-88011",
+      "service_category": "broadband",
+      "journey_score": 0.78,
+      "recency_score": 0.93,
+      "session_signal_alignment": "strong",
+      "campaign_alignment": false,
+      "selection_reasons": [
+        "Only active journey for this customer",
+        "Session URL and query text align with broadband moving-home intent",
+        "Recent serviceability failure still belongs to the same broadband journey"
+      ]
+    }
+  ],
+  "ai_interpretation": {
+    "suggested_journey_id": "journey-broadband-88011",
+    "confidence": 0.91,
+    "reason_summary": "The customer still needs help with broadband at the new address. The journey remains valid even though some downstream actions are now blocked by serviceability."
+  },
+  "deterministic_override": false
+}

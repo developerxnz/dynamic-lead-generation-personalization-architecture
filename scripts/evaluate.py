@@ -31,12 +31,9 @@ SCENARIOS_DIR = Path(__file__).parent.parent / "mock-data" / "scenarios"
 OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://ollama:11434")
 MODEL = os.environ.get("MODEL") or os.environ.get("OLLAMA_MODEL", "llama3.1:8b")
 
-SCENARIOS = [
-    "01-primary-returning-multi-journey",
-    "02-secondary-new-customer",
-    "03-secondary-resume-quote",
-    "04-secondary-compliance-suppression",
-]
+
+def list_scenarios() -> list[str]:
+    return sorted(path.name for path in SCENARIOS_DIR.iterdir() if path.is_dir())
 
 
 def load_json(path: Path) -> dict:
@@ -236,7 +233,7 @@ def main() -> None:
         sys.exit(1)
 
     results = []
-    for scenario in SCENARIOS:
+    for scenario in list_scenarios():
         print(f"Running: {scenario}")
         result = run_scenario(scenario, client)
         results.append(result)
