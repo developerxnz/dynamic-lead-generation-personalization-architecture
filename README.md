@@ -153,6 +153,15 @@ python scripts/validate_scenarios.py --ai-mode expected
 python scripts/test_dashboard.py --ai-mode expected
 ```
 
+To start exercising the local RAG slice for AI grounding context:
+
+```bash
+python scripts/run_scenario.py 02-secondary-new-customer --prompt-source rag --ai-mode expected
+python scripts/run_scenario.py 10-supplemental-three-concurrent-journeys --prompt-source rag --ai-mode expected
+```
+
+`--prompt-source rag` keeps the deterministic ranking flow intact but replaces the checked-in `08-ai-prompt-input.json` grounding context with dynamically assembled local retrieval results from the activity catalog and approved grounding snippets.
+
 Example command line flows for testing specific scenario groups:
 
 ```bash

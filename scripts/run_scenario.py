@@ -38,6 +38,12 @@ def parse_args() -> argparse.Namespace:
         help="Use checked-in expected AI output or call the local Ollama endpoint.",
     )
     parser.add_argument(
+        "--prompt-source",
+        choices=["fixture", "rag"],
+        default="fixture",
+        help="Use checked-in AI prompt fixtures or build grounding context from the local RAG slice.",
+    )
+    parser.add_argument(
         "--output-dir",
         default=None,
         help="Directory to write generated artifacts. Defaults to /tmp/leadgen-scenario-runs/<scenario>.",
@@ -57,7 +63,15 @@ def main() -> None:
     )
     ranking_response = rank_candidates(args.scenario, catalog)
     prompt_input = build_ai_prompt_input(
-        args.scenario, profile, journeys, ranking_request, ranking_response, catalog
+        args.scenario,
+        profile,
+        journeys,
+        session,
+        selection,
+        ranking_request,
+        ranking_response,
+        catalog,
+        prompt_source=args.prompt_source,
     )
     ai_response, ai_record = run_ai_explanation(
         args.scenario,
@@ -103,6 +117,7 @@ def main() -> None:
     print(f"Ran scenario: {args.scenario}")
     print(f"  source: {args.source}")
     print(f"  ai_mode: {args.ai_mode}")
+    print(f"  prompt_source: {args.prompt_source}")
     print(f"  output_dir: {output_dir}")
 
 

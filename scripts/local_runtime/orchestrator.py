@@ -11,6 +11,7 @@ from local_runtime.activity_catalog import load_catalog
 from local_runtime.config import CosmosConfig
 from local_runtime.cosmos_store import create_client, ensure_database, ensure_runtime_containers
 from local_runtime.fixtures import load_scenario_artifact, load_scenario_inputs
+from local_runtime.rag import build_rag_prompt_input
 from local_runtime.scenario_policies import RESPONSE_CONTRACT, SCENARIO_POLICIES, SYSTEM_PROMPT
 from evaluate import assemble_user_message, normalize_grounding_asset_ids, validate_response
 
@@ -490,11 +491,26 @@ def build_ai_prompt_input(
     scenario_name: str,
     profile: dict,
     journeys_payload: dict,
+    session: dict,
+    active_selection: dict,
     ranking_request: dict,
     ranking_response: dict,
     catalog: dict,
+    prompt_source: str = "fixture",
 ) -> dict:
-    return deepcopy(load_scenario_artifact(scenario_name, "08-ai-prompt-input.json"))
+    if prompt_source == "fixture":
+        return deepcopy(load_scenario_artifact(scenario_name, "08-ai-prompt-input.json"))
+    if prompt_source == "rag":
+        return build_rag_prompt_input(
+            scenario_name=scenario_name,
+            profile=profile,
+            journeys_payload=journeys_payload,
+            session=session,
+            active_selection=active_selection,
+            ranking_response=ranking_response,
+            catalog=catalog,
+        )
+    raise ValueError(f"Unsupported prompt_source: {prompt_source}")
 
 
 def run_ai_explanation(
