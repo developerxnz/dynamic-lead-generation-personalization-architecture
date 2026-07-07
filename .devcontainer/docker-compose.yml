@@ -43,6 +43,7 @@ services:
     environment:
       - PROTOCOL=http
       - ENABLE_EXPLORER=true
+      - GATEWAY_PUBLIC_ENDPOINT=cosmosdb
     volumes:
       - cosmosdb_data:/data
     healthcheck:

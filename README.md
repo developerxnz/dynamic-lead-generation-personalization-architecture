@@ -120,6 +120,8 @@ MODEL=phi4:14b python scripts/evaluate.py
 
 The first container create can take a while because the configured Ollama model is downloaded into the persistent `ollama_data` volume.
 
+The devcontainer compose stack configures the Cosmos DB Emulator to advertise `cosmosdb` as its gateway hostname so the Python SDK can reach the sidecar over the Docker network instead of resolving back to `localhost`.
+
 To re-pull or switch models manually at any time:
 
 ```bash
@@ -148,6 +150,7 @@ To run the local deterministic harness from the checked-in fixtures:
 ```bash
 python scripts/run_scenario.py 02-secondary-new-customer --ai-mode expected
 python scripts/validate_scenarios.py --ai-mode expected
+python scripts/test_dashboard.py --ai-mode expected
 ```
 
 Example command line flows for testing specific scenario groups:
@@ -165,6 +168,13 @@ python scripts/validate_scenarios.py \
   07-progression-stage-03-resume-quote \
   08-progression-stage-04-compliance-after-move \
   --ai-mode expected
+
+# Cosmos-backed validation with explicit cleanup policy
+python scripts/validate_scenarios.py \
+  02-secondary-new-customer \
+  --source cosmos \
+  --ai-mode expected \
+  --cosmos-clear both
 
 # supplemental control scenarios
 python scripts/validate_scenarios.py \
@@ -190,6 +200,21 @@ Once the Cosmos DB Emulator is running and seeded, you can load profile and jour
 ```bash
 python scripts/run_scenario.py 02-secondary-new-customer --source cosmos --ai-mode ollama
 ```
+
+To generate a local Markdown test report:
+
+```bash
+# fixture-backed report
+python scripts/test_dashboard.py --source fixtures --ai-mode expected
+
+# Cosmos-backed report; resets and seeds each scenario automatically
+python scripts/test_dashboard.py --source cosmos --ai-mode expected
+
+# Cosmos-backed report that keeps the seeded and generated data in the emulator
+python scripts/test_dashboard.py --source cosmos --ai-mode expected --cosmos-clear none
+```
+
+The report is written to `/tmp/leadgen-test-dashboard/<timestamp>/results.md` with a matching `report.json` and per-scenario artifacts under `scenarios/`.
 
 Default local endpoints:
 
