@@ -4,7 +4,10 @@
     "ghcr.io/devcontainers/features/github-cli:1": {
       "version": "latest"
     },
-    "ghcr.io/devcontainers/features/copilot-cli:1": {}
+    "ghcr.io/devcontainers/features/copilot-cli:1": {},
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "8.0"
+    }
   },
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
@@ -29,6 +32,7 @@
       "extensions": [
         "GitHub.copilot",
         "GitHub.copilot-chat",
+        "ms-dotnettools.csharp",
         "ms-python.python",
         "ms-python.pylance",
         "bierner.markdown-preview-github-styles",
