@@ -12,23 +12,19 @@ This script intentionally validates only the infrastructure slice:
 from __future__ import annotations
 
 import os
+from typing import Any
 
-from azure.cosmos import CosmosClient, PartitionKey, exceptions
+from azure.cosmos import PartitionKey, exceptions
 
-DEFAULT_EMULATOR_KEY = (
-    "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPM"
-    "bIZnqyMsEcaGQy67XIw/Jw=="
-)
+from local_runtime.config import CosmosConfig
+from local_runtime.cosmos_store import create_client
 
-COSMOS_ENDPOINT = os.environ.get("COSMOS_ENDPOINT", "http://cosmosdb:8081")
-COSMOS_KEY = os.environ.get("COSMOS_KEY", DEFAULT_EMULATOR_KEY)
-COSMOS_DATABASE = os.environ.get("COSMOS_DATABASE", "leadgen-local")
 HEALTHCHECK_CONTAINER = os.environ.get(
     "COSMOS_HEALTHCHECK_CONTAINER", "devcontainer-healthcheck"
 )
 
 
-def ensure_database(client: CosmosClient, database_id: str):
+def ensure_database(client: Any, database_id: str):
     try:
         client.create_database(id=database_id)
     except exceptions.CosmosResourceExistsError:
@@ -54,12 +50,13 @@ def ensure_container(database, container_id: str):
 
 
 def main() -> None:
-    client = CosmosClient(COSMOS_ENDPOINT, credential=COSMOS_KEY)
-    database = ensure_database(client, COSMOS_DATABASE)
+    config = CosmosConfig.from_env()
+    client = create_client(config)
+    database = ensure_database(client, config.database)
     container = ensure_container(database, HEALTHCHECK_CONTAINER)
 
     print("Cosmos DB Emulator smoke test passed.")
-    print(f"  endpoint:  {COSMOS_ENDPOINT}")
+    print(f"  endpoint:  {config.endpoint}")
     print(f"  database:  {database.id}")
     print(f"  container: {container.id}")
 

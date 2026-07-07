@@ -15,7 +15,12 @@ CONTAINER_PARTITION_KEYS = {
 
 
 def create_client(config: CosmosConfig) -> CosmosClient:
-    return CosmosClient(config.endpoint, credential=config.key)
+    return CosmosClient(
+        config.endpoint,
+        credential=config.key,
+        connection_mode="Gateway",
+        enable_endpoint_discovery=False,
+    )
 
 
 def ensure_database(client: CosmosClient, database_name: str):

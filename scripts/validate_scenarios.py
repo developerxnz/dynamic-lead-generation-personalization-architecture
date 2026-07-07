@@ -2,13 +2,17 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import os
 import subprocess
 import tempfile
+from contextlib import redirect_stdout
 from pathlib import Path
 
 from local_runtime.fixtures import list_scenarios, load_scenario_artifact
+from reset_scenario_state import reset_scenario
+from seed_scenario import seed_scenario
 
 
 def parse_args() -> argparse.Namespace:
@@ -16,6 +20,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("scenarios", nargs="*", choices=list_scenarios())
     parser.add_argument("--source", choices=["fixtures", "cosmos"], default="fixtures")
     parser.add_argument("--ai-mode", choices=["expected", "ollama"], default="expected")
+    parser.add_argument(
+        "--cosmos-clear",
+        choices=["none", "before", "after", "both"],
+        default="none",
+        help="When --source cosmos is used, clear scenario state before and/or after each run.",
+    )
     return parser.parse_args()
 
 
@@ -45,24 +55,52 @@ def _normalize_final_response(payload: dict, ai_mode: str) -> dict:
     return normalized
 
 
-def validate_scenario(scenario: str, source: str, ai_mode: str) -> tuple[bool, list[str]]:
+def _silently(callable_obj, *args) -> None:
+    buffer = io.StringIO()
+    with redirect_stdout(buffer):
+        callable_obj(*args)
+
+
+def _should_clear_before(cosmos_clear: str) -> bool:
+    return cosmos_clear in {"before", "both"}
+
+
+def _should_clear_after(cosmos_clear: str) -> bool:
+    return cosmos_clear in {"after", "both"}
+
+
+def validate_scenario(
+    scenario: str,
+    source: str,
+    ai_mode: str,
+    cosmos_clear: str,
+) -> tuple[bool, list[str]]:
     with tempfile.TemporaryDirectory() as temp_dir:
-        subprocess.run(
-            [
-                "python",
-                "scripts/run_scenario.py",
-                scenario,
-                "--source",
-                source,
-                "--ai-mode",
-                ai_mode,
-                "--output-dir",
-                temp_dir,
-            ],
-            cwd="/workspace",
-            check=True,
-            env=os.environ.copy(),
-        )
+        try:
+            if source == "cosmos":
+                if _should_clear_before(cosmos_clear):
+                    _silently(reset_scenario, scenario)
+                _silently(seed_scenario, scenario)
+
+            subprocess.run(
+                [
+                    "python",
+                    "scripts/run_scenario.py",
+                    scenario,
+                    "--source",
+                    source,
+                    "--ai-mode",
+                    ai_mode,
+                    "--output-dir",
+                    temp_dir,
+                ],
+                cwd="/workspace",
+                check=True,
+                env=os.environ.copy(),
+            )
+        finally:
+            if source == "cosmos" and _should_clear_after(cosmos_clear):
+                _silently(reset_scenario, scenario)
 
         actual = {
             "04": _load(Path(temp_dir) / "04-active-journey-selection.json"),
@@ -103,7 +141,12 @@ def main() -> None:
     total = len(scenarios)
 
     for scenario in scenarios:
-        ok, mismatches = validate_scenario(scenario, args.source, args.ai_mode)
+        ok, mismatches = validate_scenario(
+            scenario,
+            args.source,
+            args.ai_mode,
+            args.cosmos_clear,
+        )
         if ok:
             print(f"PASS {scenario}")
             passed += 1
