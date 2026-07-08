@@ -162,6 +162,15 @@ python scripts/run_scenario.py 10-supplemental-three-concurrent-journeys --promp
 
 `--prompt-source rag` keeps the deterministic ranking flow intact but replaces the checked-in `08-ai-prompt-input.json` grounding context with dynamically assembled local retrieval results from the activity catalog and approved grounding snippets.
 
+An initial C# port of the fixture-backed scenario runner now lives under `src/Leadgen.Runtime/`:
+
+```bash
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --prompt-source rag --ai-mode expected
+```
+
+The current C# slice supports fixture-backed scenario runs, expected AI output playback, Ollama-compatible chat completions, and the local RAG prompt builder. Cosmos-backed state loading and persistence still use the Python scripts for now.
+
 Example command line flows for testing specific scenario groups:
 
 ```bash
