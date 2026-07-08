@@ -169,7 +169,16 @@ dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-
 dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --prompt-source rag --ai-mode expected
 ```
 
-The current C# slice supports fixture-backed scenario runs, expected AI output playback, Ollama-compatible chat completions, and the local RAG prompt builder. Cosmos-backed state loading and persistence still use the Python scripts for now.
+The current C# slice supports fixture-backed scenario runs, Cosmos-backed state loading and persistence, expected AI output playback, Ollama-compatible chat completions, and the local RAG prompt builder. The broader validation/dashboard/state-management tooling still lives in Python for now.
+
+The C# runner now also supports Cosmos-backed execution using the same emulator environment variables as the Python runtime:
+
+```bash
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --source cosmos --seed-cosmos --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --source cosmos --ai-mode ollama
+```
+
+`--seed-cosmos` upserts the scenario's fixture profile and journeys into the emulator before loading them back through the Cosmos path. Cosmos-backed runs persist decision traces and analytics events to the emulator.
 
 Example command line flows for testing specific scenario groups:
 

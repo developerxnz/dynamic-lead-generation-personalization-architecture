@@ -24,12 +24,7 @@ internal sealed class ScenarioRunner
             throw new ArgumentException($"Unknown scenario: {options.Scenario}");
         }
 
-        if (options.Source != "fixtures")
-        {
-            throw new NotSupportedException("The initial C# runtime supports fixture-backed scenarios only. Use the Python scripts for Cosmos-backed runs.");
-        }
-
-        var inputs = _fixtures.LoadScenarioInputs(options.Scenario);
+        var inputs = await LoadInputsAsync(options);
         var catalog = ActivityCatalog.Load(_paths);
         var selection = BuildSelection(options.Scenario, inputs.Journeys);
         var retrieval = BuildRetrieval(options.Scenario, inputs.Journeys, inputs.Session, selection, catalog);
@@ -92,11 +87,35 @@ internal sealed class ScenarioRunner
             ["11-analytics-events.json"] = analytics,
         });
 
+        if (options.Source == "cosmos")
+        {
+            var config = CosmosConfig.FromEnvironment();
+            await using var store = new CosmosRuntimeStore(config);
+            await store.PersistRuntimeOutputsAsync(options.Scenario, inputs.Profile, finalResponse, analytics);
+        }
+
         Console.WriteLine($"Ran scenario: {options.Scenario}");
         Console.WriteLine($"  source: {options.Source}");
         Console.WriteLine($"  ai_mode: {options.AiMode}");
         Console.WriteLine($"  prompt_source: {options.PromptSource}");
         Console.WriteLine($"  output_dir: {outputDirectory}");
+    }
+
+    private async Task<ScenarioInputs> LoadInputsAsync(CliOptions options)
+    {
+        if (options.Source == "fixtures")
+        {
+            return _fixtures.LoadScenarioInputs(options.Scenario);
+        }
+
+        var config = CosmosConfig.FromEnvironment();
+        await using var store = new CosmosRuntimeStore(config);
+        if (options.SeedCosmos)
+        {
+            await store.SeedScenarioAsync(_fixtures.LoadScenarioInputs(options.Scenario));
+        }
+
+        return await store.LoadScenarioInputsAsync(options.Scenario, _fixtures);
     }
 
     private JsonObject BuildSelection(string scenario, JsonObject journeysPayload)
