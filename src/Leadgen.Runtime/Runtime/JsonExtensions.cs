@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -8,6 +9,7 @@ internal static class JsonExtensions
     private static readonly JsonSerializerOptions IndentedJsonOptions = new()
     {
         WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     };
 
     public static JsonObject RequireObject(this JsonNode? node, string name)
