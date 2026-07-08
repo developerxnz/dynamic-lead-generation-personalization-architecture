@@ -8,7 +8,7 @@
 
 set -euo pipefail
 
-MODEL="${1:-${OLLAMA_MODEL:-llama3.1:8b}}"
+MODEL="${1:-${OLLAMA_MODEL:-qwen2.5:1.5b}}"
 OLLAMA_BASE_URL="${OLLAMA_BASE_URL:-http://ollama:11434}"
 
 echo "Pulling model: $MODEL"
@@ -18,30 +18,8 @@ echo ""
 curl -fsS -X POST "$OLLAMA_BASE_URL/api/pull" \
   -H "Content-Type: application/json" \
   -d "{\"name\": \"$MODEL\"}" \
-  --no-buffer | python3 -c "
-import json
-import sys
-
-for raw_line in sys.stdin:
-    raw_line = raw_line.strip()
-    if not raw_line:
-        continue
-    event = json.loads(raw_line)
-    status = event.get('status')
-    if status and status != 'success':
-        completed = event.get('completed')
-        total = event.get('total')
-        if completed is not None and total:
-            print(f\"{status}: {completed}/{total}\")
-        else:
-            print(status)
-"
+  --no-buffer | sed -u -n 's/.*"status":"\([^"]*\)".*/\1/p'
 
 echo ""
 echo "Done. Available models:"
-curl -fsS "$OLLAMA_BASE_URL/api/tags" | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-for m in data.get('models', []):
-    print(f\"  {m['name']}\")
-"
+curl -fsS "$OLLAMA_BASE_URL/api/tags" | tr ',' '\n' | sed -n 's/.*"name":"\([^"]*\)".*/  \1/p'

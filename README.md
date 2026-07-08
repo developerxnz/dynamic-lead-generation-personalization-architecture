@@ -102,76 +102,62 @@ These choices reflect the current reference architecture, not a product requirem
 
 ## Local AI Evaluation In The Devcontainer
 
-The devcontainer includes the GitHub CLI, the GitHub Copilot CLI, an `ollama` sidecar container for running the POC AI scenarios locally, and a **Cosmos DB Emulator** sidecar for local state and event persistence.
+The devcontainer includes the GitHub CLI, the GitHub Copilot CLI, the .NET 8 SDK, an `ollama` sidecar container for running the POC AI scenarios locally, and a **Cosmos DB Emulator** sidecar for local state and event persistence.
 
 When the devcontainer is created, it will:
 
-1. install the Python dependencies from `requirements.txt`
-2. wait for the Cosmos DB Emulator readiness probe at `http://cosmosdb:8080/ready`
-3. wait for Ollama to become reachable at `http://ollama:11434`
-4. pull the default model configured by `OLLAMA_MODEL` if it is not already present
+1. wait for the Cosmos DB Emulator readiness probe at `http://cosmosdb:8080/ready`
+2. wait for Ollama to become reachable at `http://ollama:11434`
+3. pull the default model configured by `OLLAMA_MODEL` if it is not already present
 
-The default model is `llama3.1:8b`. You can override it before running the evaluation script:
+The default model is `qwen2.5:1.5b`. You can override it before running the runtime:
 
 ```bash
-OLLAMA_MODEL=phi4:14b ./scripts/setup-ollama.sh
-MODEL=phi4:14b python scripts/evaluate.py
+OLLAMA_MODEL=qwen2.5:0.5b ./scripts/setup-ollama.sh
+MODEL=qwen2.5:0.5b dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- evaluate 02-secondary-new-customer
 ```
 
 The first container create can take a while because the configured Ollama model is downloaded into the persistent `ollama_data` volume.
 
-The devcontainer compose stack configures the Cosmos DB Emulator to advertise `cosmosdb` as its gateway hostname so the Python SDK can reach the sidecar over the Docker network instead of resolving back to `localhost`.
+The devcontainer compose stack configures the Cosmos DB Emulator to advertise `cosmosdb` as its gateway hostname so the C# Cosmos SDK can reach the sidecar over the Docker network instead of resolving back to `localhost`.
 
 To re-pull or switch models manually at any time:
 
 ```bash
 ./scripts/pull-model.sh
-./scripts/pull-model.sh phi4:14b
-python scripts/evaluate.py
+./scripts/pull-model.sh qwen2.5:0.5b
+MODEL=qwen2.5:0.5b dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- evaluate 02-secondary-new-customer
 ```
 
-To smoke-test the Cosmos DB Emulator from inside the devcontainer:
+To seed and inspect one scenario in the Cosmos DB Emulator:
 
 ```bash
 ./scripts/wait-for-cosmos.sh
-python scripts/check-cosmos.py
-```
-
-To seed and reset a scenario's durable state in the emulator:
-
-```bash
-python scripts/seed_scenario.py 02-secondary-new-customer
-python scripts/inspect_scenario_state.py 02-secondary-new-customer
-python scripts/reset_scenario_state.py 02-secondary-new-customer
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- seed 02-secondary-new-customer
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- inspect 02-secondary-new-customer
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- reset 02-secondary-new-customer
 ```
 
 To run the local deterministic harness from the checked-in fixtures:
 
 ```bash
-python scripts/run_scenario.py 02-secondary-new-customer --ai-mode expected
-python scripts/validate_scenarios.py --ai-mode expected
-python scripts/test_dashboard.py --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- dashboard
 ```
 
 To start exercising the local RAG slice for AI grounding context:
 
 ```bash
-python scripts/run_scenario.py 02-secondary-new-customer --prompt-source rag --ai-mode expected
-python scripts/run_scenario.py 10-supplemental-three-concurrent-journeys --prompt-source rag --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --prompt-source rag --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 10-supplemental-three-concurrent-journeys --prompt-source rag --ai-mode expected
 ```
 
 `--prompt-source rag` keeps the deterministic ranking flow intact but replaces the checked-in `08-ai-prompt-input.json` grounding context with dynamically assembled local retrieval results from the activity catalog and approved grounding snippets.
 
-An initial C# port of the fixture-backed scenario runner now lives under `src/Leadgen.Runtime/`:
+The C# runtime at `src/Leadgen.Runtime/` is now the local execution path for fixture-backed and Cosmos-backed scenario runs, expected AI output playback, Ollama-compatible chat completions, validation, console dashboards, and state-management tooling.
 
-```bash
-dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --ai-mode expected
-dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --prompt-source rag --ai-mode expected
-```
-
-The current C# slice supports fixture-backed scenario runs, Cosmos-backed state loading and persistence, expected AI output playback, Ollama-compatible chat completions, and the local RAG prompt builder. The broader validation/dashboard/state-management tooling still lives in Python for now.
-
-The C# runner now also supports Cosmos-backed execution using the same emulator environment variables as the Python runtime:
+The C# runner supports Cosmos-backed execution using the same emulator environment variables as the devcontainer:
 
 ```bash
 dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --source cosmos --seed-cosmos --ai-mode expected
@@ -201,7 +187,7 @@ dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- reset 02-seco
 dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- evaluate 02-secondary-new-customer
 ```
 
-If the default `llama3.1:8b` model is too heavy for the current devcontainer memory limits, a smaller Ollama model can be used through the existing `MODEL` override. `qwen2.5:1.5b` has been validated with the C# Cosmos-backed dashboard flow:
+`qwen2.5:1.5b` has been validated with the C# Cosmos-backed dashboard flow:
 
 ```bash
 MODEL=qwen2.5:1.5b dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- dashboard --source cosmos --cosmos-clear both --ai-mode ollama
@@ -211,12 +197,12 @@ Example command line flows for testing specific scenario groups:
 
 ```bash
 # core reference scenarios
-python scripts/run_scenario.py 01-primary-returning-multi-journey --ai-mode expected
-python scripts/run_scenario.py 04-secondary-compliance-suppression --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 01-primary-returning-multi-journey --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 04-secondary-compliance-suppression --ai-mode expected
 
 # same-customer progression stages
-python scripts/run_scenario.py 05-progression-stage-01-health-discovery --ai-mode expected
-python scripts/validate_scenarios.py \
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 05-progression-stage-01-health-discovery --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate \
   05-progression-stage-01-health-discovery \
   06-progression-stage-02-multi-journey \
   07-progression-stage-03-resume-quote \
@@ -224,14 +210,14 @@ python scripts/validate_scenarios.py \
   --ai-mode expected
 
 # Cosmos-backed validation with explicit cleanup policy
-python scripts/validate_scenarios.py \
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate \
   02-secondary-new-customer \
   --source cosmos \
   --ai-mode expected \
   --cosmos-clear both
 
 # supplemental control scenarios
-python scripts/validate_scenarios.py \
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate \
   09-supplemental-eligibility-failure \
   10-supplemental-three-concurrent-journeys \
   11-supplemental-resume-expired \
@@ -239,36 +225,23 @@ python scripts/validate_scenarios.py \
   --ai-mode expected
 
 # full deterministic regression suite
-python scripts/validate_scenarios.py --ai-mode expected
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate --ai-mode expected
 ```
 
 To run the same harness with the local Ollama model:
 
 ```bash
-python scripts/run_scenario.py 04-secondary-compliance-suppression --ai-mode ollama
-python scripts/validate_scenarios.py 04-secondary-compliance-suppression --ai-mode ollama
+MODEL=qwen2.5:1.5b dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 04-secondary-compliance-suppression --ai-mode ollama
+MODEL=qwen2.5:1.5b dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate 04-secondary-compliance-suppression --ai-mode ollama
 ```
 
 Once the Cosmos DB Emulator is running and seeded, you can load profile and journey state from Cosmos instead of the fixture files:
 
 ```bash
-python scripts/run_scenario.py 02-secondary-new-customer --source cosmos --ai-mode ollama
+MODEL=qwen2.5:1.5b dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-new-customer --source cosmos --ai-mode ollama
 ```
 
-To generate a local Markdown test report:
-
-```bash
-# fixture-backed report
-python scripts/test_dashboard.py --source fixtures --ai-mode expected
-
-# Cosmos-backed report; resets and seeds each scenario automatically
-python scripts/test_dashboard.py --source cosmos --ai-mode expected
-
-# Cosmos-backed report that keeps the seeded and generated data in the emulator
-python scripts/test_dashboard.py --source cosmos --ai-mode expected --cosmos-clear none
-```
-
-The report is written to `/tmp/leadgen-test-dashboard/<timestamp>/results.md` with a matching `report.json` and per-scenario artifacts under `scenarios/`.
+The console dashboard writes its scenario artifacts under `/tmp/leadgen-scenario-runs/<scenario>/`.
 
 Default local endpoints:
 

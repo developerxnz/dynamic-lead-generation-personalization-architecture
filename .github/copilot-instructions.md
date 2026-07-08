@@ -2,9 +2,13 @@
 
 ## Build, test, and lint
 
-This repository is documentation-only. There are no project manifests, build scripts, lint scripts, or test runners checked into the repo right now.
+This repository now includes a .NET 8 local runtime under `src/Leadgen.Runtime/`.
 
-Because no automated test harness exists here, there is also no repo-defined command for running a single test.
+Use these commands when changing the runtime:
+
+- build: `dotnet build src/Leadgen.Runtime/Leadgen.Runtime.csproj`
+- full validation: `dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate`
+- Cosmos-backed validation: `dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate --source cosmos --cosmos-clear both`
 
 ## High-level architecture
 
