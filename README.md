@@ -180,6 +180,33 @@ dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 02-secondary-
 
 `--seed-cosmos` upserts the scenario's fixture profile and journeys into the emulator before loading them back through the Cosmos path. Cosmos-backed runs persist decision traces and analytics events to the emulator.
 
+The C# CLI also includes console-first tooling commands for validation and local runtime operations:
+
+```bash
+# validate all scenarios against the checked-in expected artifacts
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate
+
+# console summary view for a smaller scenario set
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- dashboard 02-secondary-new-customer
+
+# validate through the Cosmos-backed path
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- validate 02-secondary-new-customer --source cosmos --cosmos-clear both
+
+# seed, inspect, and reset one scenario in the Cosmos emulator
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- seed 02-secondary-new-customer
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- inspect 02-secondary-new-customer
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- reset 02-secondary-new-customer
+
+# evaluate Ollama-backed AI responses with console output
+dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- evaluate 02-secondary-new-customer
+```
+
+If the default `llama3.1:8b` model is too heavy for the current devcontainer memory limits, a smaller Ollama model can be used through the existing `MODEL` override. `qwen2.5:1.5b` has been validated with the C# Cosmos-backed dashboard flow:
+
+```bash
+MODEL=qwen2.5:1.5b dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- dashboard --source cosmos --cosmos-clear both --ai-mode ollama
+```
+
 Example command line flows for testing specific scenario groups:
 
 ```bash

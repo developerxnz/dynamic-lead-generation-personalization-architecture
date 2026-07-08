@@ -71,6 +71,14 @@ internal static class JsonExtensions
     public static void WriteIndentedJson(string path, JsonNode payload)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-        File.WriteAllText(path, payload.ToJsonString(IndentedJsonOptions) + Environment.NewLine);
+        using var stream = File.Create(path);
+        using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions
+        {
+            Indented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        });
+        payload.WriteTo(writer);
+        writer.Flush();
+        stream.WriteByte((byte)'\n');
     }
 }

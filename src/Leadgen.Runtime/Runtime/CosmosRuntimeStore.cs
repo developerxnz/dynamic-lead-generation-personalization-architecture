@@ -116,6 +116,51 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         }
     }
 
+    public async Task ResetScenarioAsync(string customerId)
+    {
+        var containers = await EnsureRuntimeContainersAsync();
+        await DeleteItemsByCustomerAsync(containers.Profiles, customerId);
+        await DeleteItemsByCustomerAsync(containers.Journeys, customerId);
+        await DeleteItemsByCustomerAsync(containers.Events, customerId);
+        await DeleteItemsByCustomerAsync(containers.DecisionTraces, customerId);
+    }
+
+    public async Task<JsonObject> InspectScenarioStateAsync(string customerId)
+    {
+        var containers = await EnsureRuntimeContainersAsync();
+
+        JsonObject? profile = null;
+        try
+        {
+            profile = FromCosmosDocument((await containers.Profiles.ReadItemAsync<JObject>(
+                customerId,
+                new PartitionKey(customerId))).Resource);
+        }
+        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+        }
+
+        var journeyQuery = new QueryDefinition(
+            "SELECT * FROM c WHERE c.customer_id = @customer_id ORDER BY c.journey_id")
+            .WithParameter("@customer_id", customerId);
+        var iterator = containers.Journeys.GetItemQueryIterator<JObject>(
+            journeyQuery,
+            requestOptions: new QueryRequestOptions { PartitionKey = new PartitionKey(customerId) });
+
+        var journeys = new List<JsonNode>();
+        while (iterator.HasMoreResults)
+        {
+            var page = await iterator.ReadNextAsync();
+            journeys.AddRange(page.Resource.Where(static item => item is not null).Select(static item => (JsonNode)FromCosmosDocument(item!)));
+        }
+
+        return new JsonObject
+        {
+            ["profile"] = profile,
+            ["journeys"] = new JsonArray(journeys.ToArray()),
+        };
+    }
+
     public ValueTask DisposeAsync()
     {
         _client.Dispose();
@@ -128,6 +173,28 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
             containerName,
             "/customer_id");
         return response.Container;
+    }
+
+    private static async Task DeleteItemsByCustomerAsync(Container container, string customerId)
+    {
+        var query = new QueryDefinition("SELECT c.id FROM c WHERE c.customer_id = @customer_id")
+            .WithParameter("@customer_id", customerId);
+        var iterator = container.GetItemQueryIterator<JObject>(
+            query,
+            requestOptions: new QueryRequestOptions { PartitionKey = new PartitionKey(customerId) });
+
+        while (iterator.HasMoreResults)
+        {
+            var page = await iterator.ReadNextAsync();
+            foreach (var item in page.Resource)
+            {
+                var itemId = item["id"]?.Value<string>();
+                if (!string.IsNullOrWhiteSpace(itemId))
+                {
+                    await container.DeleteItemAsync<JObject>(itemId, new PartitionKey(customerId));
+                }
+            }
+        }
     }
 
     private static JObject ToCosmosDocument(JsonObject document)

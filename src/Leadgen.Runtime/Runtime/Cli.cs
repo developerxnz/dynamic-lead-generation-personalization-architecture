@@ -1,5 +1,3 @@
-using System.Text.Json.Nodes;
-
 namespace Leadgen.Runtime;
 
 internal static class Cli
@@ -8,8 +6,13 @@ internal static class Cli
     {
         try
         {
-            var options = CliOptions.Parse(args);
             var paths = RepositoryPaths.Find();
+            if (args.Length > 0 && IsToolingCommand(args[0]))
+            {
+                return await ToolingCommands.RunAsync(args[0], args.Skip(1).ToArray(), paths);
+            }
+
+            var options = CliOptions.Parse(args);
             var runner = new ScenarioRunner(paths);
             await runner.RunAsync(options);
             return 0;
@@ -19,6 +22,11 @@ internal static class Cli
             Console.Error.WriteLine($"ERROR: {ex.Message}");
             return 1;
         }
+    }
+
+    private static bool IsToolingCommand(string arg)
+    {
+        return arg is "validate" or "dashboard" or "evaluate" or "seed" or "reset" or "inspect";
     }
 }
 
