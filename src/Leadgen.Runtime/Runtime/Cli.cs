@@ -27,6 +27,7 @@ internal sealed record CliOptions(
     string Source,
     string AiMode,
     string PromptSource,
+    bool SeedCosmos,
     string? OutputDir)
 {
     public static CliOptions Parse(string[] args)
@@ -34,13 +35,14 @@ internal sealed record CliOptions(
         if (args.Length == 0)
         {
             throw new ArgumentException(
-                "Usage: dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- <scenario> [--source fixtures|cosmos] [--ai-mode expected|ollama] [--prompt-source fixture|rag] [--output-dir <path>]");
+                "Usage: dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- <scenario> [--source fixtures|cosmos] [--ai-mode expected|ollama] [--prompt-source fixture|rag] [--seed-cosmos] [--output-dir <path>]");
         }
 
         var scenario = args[0];
         var source = "fixtures";
         var aiMode = "expected";
         var promptSource = "fixture";
+        var seedCosmos = false;
         string? outputDir = null;
 
         for (var index = 1; index < args.Length; index++)
@@ -56,6 +58,9 @@ internal sealed record CliOptions(
                     break;
                 case "--prompt-source":
                     promptSource = ReadValue(args, ref index, arg);
+                    break;
+                case "--seed-cosmos":
+                    seedCosmos = true;
                     break;
                 case "--output-dir":
                     outputDir = ReadValue(args, ref index, arg);
@@ -80,7 +85,12 @@ internal sealed record CliOptions(
             throw new ArgumentException($"Unsupported --prompt-source value: {promptSource}");
         }
 
-        return new CliOptions(scenario, source, aiMode, promptSource, outputDir);
+        if (seedCosmos && source != "cosmos")
+        {
+            throw new ArgumentException("--seed-cosmos requires --source cosmos.");
+        }
+
+        return new CliOptions(scenario, source, aiMode, promptSource, seedCosmos, outputDir);
     }
 
     private static string ReadValue(string[] args, ref int index, string flag)
