@@ -19,6 +19,14 @@ internal sealed class ScenarioRunner
 
     public async Task RunAsync(CliOptions options)
     {
+        await RunScenarioAsync(options);
+    }
+
+    public async Task<ScenarioRunResult> RunScenarioAsync(
+        CliOptions options,
+        bool printSummary = true,
+        bool writeOutputs = true)
+    {
         if (!_fixtures.ListScenarios().Contains(options.Scenario, StringComparer.Ordinal))
         {
             throw new ArgumentException($"Unknown scenario: {options.Scenario}");
@@ -75,7 +83,7 @@ internal sealed class ScenarioRunner
         var outputDirectory = options.OutputDir
             ?? Path.Combine(Path.GetTempPath(), "leadgen-scenario-runs", options.Scenario);
 
-        WriteOutputs(outputDirectory, new Dictionary<string, JsonObject>
+        var outputs = new Dictionary<string, JsonObject>
         {
             ["04-active-journey-selection.json"] = selection,
             ["05-candidate-retrieval.json"] = retrieval,
@@ -85,7 +93,12 @@ internal sealed class ScenarioRunner
             ["09-ai-output.json"] = aiRecord,
             ["10-final-response.json"] = finalResponse,
             ["11-analytics-events.json"] = analytics,
-        });
+        };
+
+        if (writeOutputs)
+        {
+            WriteOutputs(outputDirectory, outputs);
+        }
 
         if (options.Source == "cosmos")
         {
@@ -94,11 +107,16 @@ internal sealed class ScenarioRunner
             await store.PersistRuntimeOutputsAsync(options.Scenario, inputs.Profile, finalResponse, analytics);
         }
 
-        Console.WriteLine($"Ran scenario: {options.Scenario}");
-        Console.WriteLine($"  source: {options.Source}");
-        Console.WriteLine($"  ai_mode: {options.AiMode}");
-        Console.WriteLine($"  prompt_source: {options.PromptSource}");
-        Console.WriteLine($"  output_dir: {outputDirectory}");
+        if (printSummary)
+        {
+            Console.WriteLine($"Ran scenario: {options.Scenario}");
+            Console.WriteLine($"  source: {options.Source}");
+            Console.WriteLine($"  ai_mode: {options.AiMode}");
+            Console.WriteLine($"  prompt_source: {options.PromptSource}");
+            Console.WriteLine($"  output_dir: {outputDirectory}");
+        }
+
+        return new ScenarioRunResult(options.Scenario, outputDirectory, outputs);
     }
 
     private async Task<ScenarioInputs> LoadInputsAsync(CliOptions options)
@@ -261,16 +279,25 @@ internal sealed class ScenarioRunner
             aiContext["deterministic_override_required"] = selection.OptionalBoolProperty("deterministic_override");
         }
 
-        request["context"] = new JsonObject
-        {
-            ["channel"] = session.RequireProperty("channel").DeepClone(),
-            ["campaign_source"] = session.RequireProperty("entry_point").DeepClone(),
-            ["campaign_theme"] = session["campaign_theme"]?.DeepClone(),
-            ["session_id"] = session.RequireProperty("session_id").DeepClone(),
-        };
-        request["candidates"] = new JsonArray(retrieval.RequireArrayProperty("candidates_returned")
+        var context = request.RequireObjectProperty("context").DeepCloneObject();
+        context["channel"] = session.RequireProperty("channel").DeepClone();
+        context["campaign_source"] = session.RequireProperty("entry_point").DeepClone();
+        context["campaign_theme"] = session["campaign_theme"]?.DeepClone();
+        context["session_id"] = session.RequireProperty("session_id").DeepClone();
+        request["context"] = context;
+        var retrievalCandidatesById = retrieval.RequireArrayProperty("candidates_returned")
             .OfType<JsonObject>()
-            .Select(candidate => BuildRankingCandidate(candidate, catalog))
+            .ToDictionary(
+                static candidate => candidate.RequireStringProperty("asset_id"),
+                static candidate => candidate,
+                StringComparer.Ordinal);
+        request["candidates"] = new JsonArray(request.RequireArrayProperty("candidates")
+            .OfType<JsonObject>()
+            .Select(candidate =>
+            {
+                var contentId = candidate.RequireStringProperty("content_id");
+                return BuildRankingCandidate(candidate, retrievalCandidatesById[contentId], catalog);
+            })
             .Cast<JsonNode>()
             .ToArray());
 
@@ -555,22 +582,24 @@ internal sealed class ScenarioRunner
         };
     }
 
-    private static JsonObject BuildRankingCandidate(JsonObject retrievalCandidate, ActivityCatalog catalog)
+    private static JsonObject BuildRankingCandidate(
+        JsonObject templateCandidate,
+        JsonObject retrievalCandidate,
+        ActivityCatalog catalog)
     {
         var assetId = retrievalCandidate.RequireStringProperty("asset_id");
         var asset = catalog.Assets[assetId];
-        return new JsonObject
-        {
-            ["content_id"] = asset.RequireProperty("assetId").DeepClone(),
-            ["asset_type"] = asset.RequireProperty("assetType").DeepClone(),
-            ["service_category"] = asset.RequireProperty("serviceCategory").DeepClone(),
-            ["cta_type"] = asset.RequireObjectProperty("cta").RequireProperty("type").DeepClone(),
-            ["cta_deep_link"] = asset.RequireObjectProperty("cta").RequireProperty("deepLink").DeepClone(),
-            ["provider"] = asset["provider"]?.DeepClone(),
-            ["priority"] = asset.RequireProperty("priority").DeepClone(),
-            ["funnel_stage"] = retrievalCandidate.RequireProperty("funnel_stage_match").DeepClone(),
-            ["retrieval_source"] = retrievalCandidate.RequireProperty("retrieval_source").DeepClone(),
-        };
+        var candidate = templateCandidate.DeepCloneObject();
+        candidate["content_id"] = asset.RequireProperty("assetId").DeepClone();
+        candidate["asset_type"] = asset.RequireProperty("assetType").DeepClone();
+        candidate["service_category"] = asset.RequireProperty("serviceCategory").DeepClone();
+        candidate["cta_type"] = asset.RequireObjectProperty("cta").RequireProperty("type").DeepClone();
+        candidate["cta_deep_link"] = asset.RequireObjectProperty("cta").RequireProperty("deepLink").DeepClone();
+        candidate["provider"] = asset["provider"]?.DeepClone();
+        candidate["priority"] = asset.RequireProperty("priority").DeepClone();
+        candidate["funnel_stage"] = retrievalCandidate.RequireProperty("funnel_stage_match").DeepClone();
+        candidate["retrieval_source"] = retrievalCandidate.RequireProperty("retrieval_source").DeepClone();
+        return candidate;
     }
 
     private static string AddSeconds(string timestamp, int seconds)
@@ -578,3 +607,8 @@ internal sealed class ScenarioRunner
         return DateTimeOffset.Parse(timestamp).AddSeconds(seconds).ToString("yyyy-MM-ddTHH:mm:ssZ");
     }
 }
+
+internal sealed record ScenarioRunResult(
+    string Scenario,
+    string OutputDirectory,
+    IReadOnlyDictionary<string, JsonObject> Outputs);
