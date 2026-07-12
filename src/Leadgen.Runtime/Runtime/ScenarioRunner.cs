@@ -4,6 +4,9 @@ using System.Text.Json.Nodes;
 
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Orchestrates a scenario run end-to-end, from input loading through artifact generation and optional persistence.
+/// </summary>
 internal sealed class ScenarioRunner
 {
     private readonly RepositoryPaths _paths;
@@ -38,7 +41,7 @@ internal sealed class ScenarioRunner
         var retrieval = BuildRetrieval(options.Scenario, inputs.Journeys, inputs.Session, selection, catalog);
         var rankingRequest = BuildRankingRequest(
             options.Scenario,
-            inputs.Profile,
+            inputs,
             inputs.Journeys,
             inputs.Session,
             selection,
@@ -49,7 +52,7 @@ internal sealed class ScenarioRunner
         var promptInput = options.PromptSource == "rag"
             ? _ragPromptBuilder.Build(
                 options.Scenario,
-                inputs.Profile,
+                inputs,
                 inputs.Journeys,
                 inputs.Session,
                 selection,
@@ -61,7 +64,7 @@ internal sealed class ScenarioRunner
         var (aiResponse, aiRecord) = await RunAiExplanationAsync(options, promptInput);
         var finalResponse = BuildFinalResponse(
             options.Scenario,
-            inputs.Profile,
+            inputs,
             inputs.Journeys,
             inputs.Session,
             selection,
@@ -72,7 +75,7 @@ internal sealed class ScenarioRunner
             catalog);
         var analytics = BuildAnalytics(
             options.Scenario,
-            inputs.Profile,
+            inputs,
             inputs.Journeys,
             inputs.Session,
             selection,
@@ -104,7 +107,7 @@ internal sealed class ScenarioRunner
         {
             var config = CosmosConfig.FromEnvironment();
             await using var store = new CosmosRuntimeStore(config);
-            await store.PersistRuntimeOutputsAsync(options.Scenario, inputs.Profile, finalResponse, analytics);
+            await store.PersistRuntimeOutputsAsync(options.Scenario, inputs.CustomerId, finalResponse, analytics);
         }
 
         if (printSummary)
@@ -235,7 +238,7 @@ internal sealed class ScenarioRunner
 
     private JsonObject BuildRankingRequest(
         string scenario,
-        JsonObject profile,
+        ScenarioInputs inputs,
         JsonObject journeysPayload,
         JsonObject session,
         JsonObject selection,
@@ -250,11 +253,10 @@ internal sealed class ScenarioRunner
         request["scenario"] = scenario;
         request["customer_profile"] = new JsonObject
         {
-            ["customer_id"] = profile.RequireProperty("customer_id").DeepClone(),
-            ["lead_score"] = profile.RequireObjectProperty("customer_summary").RequireProperty("lead_score").DeepClone(),
-            ["location"] = profile.RequireObjectProperty("profile").RequireProperty("location").DeepClone(),
-            ["household_type"] = profile.RequireObjectProperty("profile").RequireProperty("household_type").DeepClone(),
-            ["is_returning_customer"] = profile.RequireObjectProperty("customer_summary").RequireProperty("is_returning_customer").DeepClone(),
+            ["customer_id"] = session.RequireProperty("customer_id").DeepClone(),
+            ["lead_score"] = inputs.RequireCustomerSummary().RequireProperty("lead_score").DeepClone(),
+            ["location"] = inputs.RequireAttributes().RequireProperty("location").DeepClone(),
+            ["household_type"] = inputs.RequireAttributes().RequireProperty("household_type").DeepClone(),
         };
         request["active_journey"] = new JsonObject
         {
@@ -425,7 +427,7 @@ internal sealed class ScenarioRunner
 
     private JsonObject BuildFinalResponse(
         string scenario,
-        JsonObject profile,
+        ScenarioInputs inputs,
         JsonObject journeysPayload,
         JsonObject session,
         JsonObject selection,
@@ -496,7 +498,7 @@ internal sealed class ScenarioRunner
 
     private JsonObject BuildAnalytics(
         string scenario,
-        JsonObject profile,
+        ScenarioInputs inputs,
         JsonObject journeysPayload,
         JsonObject session,
         JsonObject selection,
@@ -608,6 +610,9 @@ internal sealed class ScenarioRunner
     }
 }
 
+/// <summary>
+/// Returns the generated artifacts and output location for one completed scenario run.
+/// </summary>
 internal sealed record ScenarioRunResult(
     string Scenario,
     string OutputDirectory,

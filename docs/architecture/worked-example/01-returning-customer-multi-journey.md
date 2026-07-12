@@ -55,18 +55,13 @@ The platform should:
 ```json
 {
   "customer_id": "cust-20481",
-  "identity": {
-    "known_customer": true,
-    "anonymous_ids": ["web-9f23aa"]
-  },
-  "profile": {
+  "attributes": {
     "household_type": "family",
     "employment_type": "full_time",
     "location": "NSW",
     "move_window_days": 18
   },
   "customer_summary": {
-    "is_returning_customer": true,
     "repeat_sessions_30d": 4,
     "lead_score": 81,
     "last_meaningful_event_at": "2026-05-16T19:10:00Z"

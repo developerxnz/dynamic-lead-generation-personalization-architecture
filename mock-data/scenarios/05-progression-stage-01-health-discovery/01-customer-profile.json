@@ -2,12 +2,7 @@
   "scenario": "05-progression-stage-01-health-discovery",
   "description": "Stage 1 of the single-customer progression. New couple household in VIC begins health insurance research.",
   "customer_id": "cust-77120",
-  "identity": {
-    "known_customer": false,
-    "account_linked": false,
-    "anonymous_ids": ["web-anon-77120"]
-  },
-  "profile": {
+  "attributes": {
     "household_type": "couple",
     "employment_type": "full_time",
     "location": "VIC",
@@ -15,7 +10,6 @@
     "life_stage": "partnered"
   },
   "customer_summary": {
-    "is_returning_customer": false,
     "last_meaningful_event_at": "2026-05-10T09:00:00Z",
     "repeat_sessions_30d": 1,
     "lead_score": 36

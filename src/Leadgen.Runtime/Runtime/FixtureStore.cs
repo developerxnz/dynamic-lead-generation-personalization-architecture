@@ -2,6 +2,9 @@ using System.Text.Json.Nodes;
 
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Reads checked-in scenario fixtures and expected artifacts from the mock-data directory.
+/// </summary>
 internal sealed class FixtureStore
 {
     private readonly RepositoryPaths _paths;
@@ -25,8 +28,9 @@ internal sealed class FixtureStore
     public ScenarioInputs LoadScenarioInputs(string scenario)
     {
         var directory = GetScenarioDirectory(scenario);
+        var profilePath = Path.Combine(directory, "01-customer-profile.json");
         return new ScenarioInputs(
-            JsonExtensions.LoadJsonObject(Path.Combine(directory, "01-customer-profile.json")),
+            File.Exists(profilePath) ? JsonExtensions.LoadJsonObject(profilePath) : null,
             JsonExtensions.LoadJsonObject(Path.Combine(directory, "02-journey-states.json")),
             JsonExtensions.LoadJsonObject(Path.Combine(directory, "03-session-request.json")));
     }
@@ -48,4 +52,12 @@ internal sealed class FixtureStore
     }
 }
 
-internal sealed record ScenarioInputs(JsonObject Profile, JsonObject Journeys, JsonObject Session);
+/// <summary>
+/// Bundles the core fixture inputs needed to run a scenario.
+/// </summary>
+internal sealed record ScenarioInputs(JsonObject? Profile, JsonObject Journeys, JsonObject Session)
+{
+    public string CustomerId =>
+        Profile?.OptionalStringProperty("customer_id")
+        ?? Session.RequireStringProperty("customer_id");
+}

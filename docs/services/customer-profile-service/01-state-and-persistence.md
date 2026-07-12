@@ -21,7 +21,7 @@ It is most useful for engineering and product readers who need to understand:
 
 Maintain a durable profile including:
 
-- identity and account linkage
+- durable customer attributes
 - household and employment attributes
 - cross-journey behavioral summaries
 - overall lead score
@@ -104,13 +104,12 @@ flowchart TD
 ```json
 {
   "customerId": "12345",
-  "profile": {
+  "attributes": {
     "householdType": "family",
     "employmentType": "full_time",
     "location": "QLD"
   },
   "customerSummary": {
-    "isReturningCustomer": true,
     "leadScore": 78
   },
   "journeys": [

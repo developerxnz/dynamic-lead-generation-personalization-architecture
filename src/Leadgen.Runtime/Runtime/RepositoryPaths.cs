@@ -1,5 +1,8 @@
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Resolves the repository root and the runtime fixture directories from the current execution context.
+/// </summary>
 internal sealed record RepositoryPaths(
     string RootDirectory,
     string MockDataDirectory,

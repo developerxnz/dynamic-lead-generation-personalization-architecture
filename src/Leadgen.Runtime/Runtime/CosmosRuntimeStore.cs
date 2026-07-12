@@ -4,6 +4,9 @@ using System.Text.Json.Nodes;
 
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Handles Cosmos-backed scenario state loading, seeding, inspection, reset, and runtime output persistence.
+/// </summary>
 internal sealed class CosmosRuntimeStore : IAsyncDisposable
 {
     private readonly CosmosClient _client;
@@ -35,13 +38,16 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
     public async Task SeedScenarioAsync(ScenarioInputs inputs)
     {
         var containers = await EnsureRuntimeContainersAsync();
-        var profileDocument = inputs.Profile.DeepCloneObject();
-        profileDocument["id"] = inputs.Profile.RequireStringProperty("customer_id");
-        profileDocument["source_session_id"] = inputs.Session.RequireProperty("session_id").DeepClone();
+        if (inputs.Profile is not null)
+        {
+            var profileDocument = inputs.Profile.DeepCloneObject();
+            profileDocument["id"] = inputs.CustomerId;
+            profileDocument["source_session_id"] = inputs.Session.RequireProperty("session_id").DeepClone();
 
-        await containers.Profiles.UpsertItemAsync(
-            ToCosmosDocument(profileDocument),
-            new PartitionKey(inputs.Profile.RequireStringProperty("customer_id")));
+            await containers.Profiles.UpsertItemAsync(
+                ToCosmosDocument(profileDocument),
+                new PartitionKey(inputs.CustomerId));
+        }
 
         foreach (var journey in inputs.Journeys.RequireArrayProperty("journeys").OfType<JsonObject>())
         {
@@ -53,19 +59,26 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
 
             await containers.Journeys.UpsertItemAsync(
                 ToCosmosDocument(document),
-                new PartitionKey(inputs.Profile.RequireStringProperty("customer_id")));
+                new PartitionKey(inputs.CustomerId));
         }
     }
 
     public async Task<ScenarioInputs> LoadScenarioInputsAsync(string scenario, FixtureStore fixtures)
     {
         var fixtureInputs = fixtures.LoadScenarioInputs(scenario);
-        var customerId = fixtureInputs.Profile.RequireStringProperty("customer_id");
+        var customerId = fixtureInputs.CustomerId;
         var containers = await EnsureRuntimeContainersAsync();
 
-        var profile = FromCosmosDocument((await containers.Profiles.ReadItemAsync<JObject>(
-            customerId,
-            new PartitionKey(customerId))).Resource);
+        JsonObject? profile = null;
+        try
+        {
+            profile = FromCosmosDocument((await containers.Profiles.ReadItemAsync<JObject>(
+                customerId,
+                new PartitionKey(customerId))).Resource);
+        }
+        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+        }
 
         var journeyQuery = new QueryDefinition(
             "SELECT * FROM c WHERE c.customer_id = @customer_id ORDER BY c.journey_id")
@@ -92,10 +105,9 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
             fixtureInputs.Session.DeepCloneObject());
     }
 
-    public async Task PersistRuntimeOutputsAsync(string scenario, JsonObject profile, JsonObject finalResponse, JsonObject analytics)
+    public async Task PersistRuntimeOutputsAsync(string scenario, string customerId, JsonObject finalResponse, JsonObject analytics)
     {
         var containers = await EnsureRuntimeContainersAsync();
-        var customerId = profile.RequireStringProperty("customer_id");
 
         var traceDocument = new JsonObject
         {
@@ -208,6 +220,9 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
     }
 }
 
+/// <summary>
+/// Groups the Cosmos containers used by the runtime for profiles, journeys, events, and decision traces.
+/// </summary>
 internal sealed record CosmosRuntimeContainers(
     Container Profiles,
     Container Journeys,

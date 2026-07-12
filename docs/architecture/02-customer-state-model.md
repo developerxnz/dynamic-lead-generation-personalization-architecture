@@ -48,12 +48,7 @@ The customer profile should contain durable facts and cross-journey signals.
 ```json
 {
   "customer_id": "cust-12345",
-  "identity": {
-    "known_customer": true,
-    "account_linked": false,
-    "anonymous_ids": ["web-abc-123"]
-  },
-  "profile": {
+  "attributes": {
     "household_type": "family",
     "employment_type": "full_time",
     "location": "NSW",
@@ -61,7 +56,6 @@ The customer profile should contain durable facts and cross-journey signals.
     "life_stage": "young_family"
   },
   "customer_summary": {
-    "is_returning_customer": true,
     "last_meaningful_event_at": "2026-05-14T08:20:00Z",
     "repeat_sessions_30d": 3,
     "lead_score": 78
@@ -197,7 +191,7 @@ The platform can therefore maintain multiple journeys while still keeping sessio
 
 | Model | What it should contain | What it should avoid |
 |---|---|---|
-| Customer profile | identity, household, employment, location, cross-journey summaries, global lead score | volatile per-service stage and intent detail |
+| Customer profile | durable attributes, household, employment, location, cross-journey summaries, global lead score | volatile per-service stage and intent detail |
 | Journey state | service category, intent, stage, urgency, resume status, qualification state, journey-level score | unrelated customer-wide facts |
 
 This separation keeps the data model cleaner and more scalable.

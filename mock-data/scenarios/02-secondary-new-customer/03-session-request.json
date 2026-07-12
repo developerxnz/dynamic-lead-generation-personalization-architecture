@@ -9,6 +9,16 @@
   "current_url": "/health-insurance/plans",
   "query_text": "health insurance options for singles",
   "region": "VIC",
+  "attributes": {
+    "household_type": "single",
+    "location": "VIC",
+    "employment_type": "full_time",
+    "budget_range": "mid",
+    "life_stage": "young_professional"
+  },
+  "customer_summary": {
+    "lead_score": 42
+  },
   "device_type": "desktop",
   "timestamp": "2026-07-03T14:05:00Z"
 }

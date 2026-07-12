@@ -24,8 +24,7 @@
   },
   "customer_context": {
     "household_type": "couple",
-    "location": "QLD",
-    "is_returning_customer": true
+    "location": "QLD"
   },
   "selected_action": {
     "content_id": "action-bbd-resume-quote-001",

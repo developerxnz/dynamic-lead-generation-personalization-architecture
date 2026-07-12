@@ -5,8 +5,7 @@
     "customer_id": "cust-88022",
     "lead_score": 81,
     "location": "VIC",
-    "household_type": "family",
-    "is_returning_customer": true
+    "household_type": "family"
   },
   "active_journey": {
     "journey_id": "journey-broadband-88022",

@@ -2,12 +2,7 @@
   "scenario": "03-secondary-resume-quote",
   "description": "Returning customer with a single broadband journey. Quote was started 6 days ago but abandoned mid-flow. Customer returns directly.",
   "customer_id": "cust-55312",
-  "identity": {
-    "known_customer": true,
-    "account_linked": true,
-    "anonymous_ids": []
-  },
-  "profile": {
+  "attributes": {
     "household_type": "couple",
     "employment_type": "full_time",
     "location": "QLD",
@@ -15,7 +10,6 @@
     "life_stage": "couple_no_children"
   },
   "customer_summary": {
-    "is_returning_customer": true,
     "last_meaningful_event_at": "2026-06-27T16:20:00Z",
     "repeat_sessions_30d": 2,
     "lead_score": 71

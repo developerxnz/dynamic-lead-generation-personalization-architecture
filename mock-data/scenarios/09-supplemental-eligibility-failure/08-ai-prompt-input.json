@@ -23,8 +23,7 @@
   },
   "customer_context": {
     "household_type": "family",
-    "location": "NSW",
-    "is_returning_customer": true
+    "location": "NSW"
   },
   "selected_action": {
     "content_id": "guide-bbd-moving-home-001",

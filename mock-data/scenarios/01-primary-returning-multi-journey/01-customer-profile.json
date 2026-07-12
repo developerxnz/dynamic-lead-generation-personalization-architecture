@@ -2,12 +2,7 @@
   "scenario": "01-primary-returning-multi-journey",
   "description": "Returning customer with two concurrent active journeys: health insurance (comparing) and broadband (moving home). Session enters from a paid-search broadband campaign.",
   "customer_id": "cust-20481",
-  "identity": {
-    "known_customer": true,
-    "account_linked": true,
-    "anonymous_ids": ["web-anon-9912"]
-  },
-  "profile": {
+  "attributes": {
     "household_type": "family",
     "employment_type": "full_time",
     "location": "NSW",
@@ -15,7 +10,6 @@
     "life_stage": "young_family"
   },
   "customer_summary": {
-    "is_returning_customer": true,
     "last_meaningful_event_at": "2026-06-28T11:45:00Z",
     "repeat_sessions_30d": 4,
     "lead_score": 81

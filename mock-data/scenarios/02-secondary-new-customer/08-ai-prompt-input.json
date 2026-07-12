@@ -23,8 +23,7 @@
   },
   "customer_context": {
     "household_type": "single",
-    "location": "VIC",
-    "is_returning_customer": false
+    "location": "VIC"
   },
   "selected_action": {
     "content_id": "action-health-compare-001",

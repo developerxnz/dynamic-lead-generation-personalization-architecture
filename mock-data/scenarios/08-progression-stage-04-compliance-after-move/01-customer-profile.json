@@ -2,12 +2,7 @@
   "scenario": "08-progression-stage-04-compliance-after-move",
   "description": "Stage 4 of the single-customer progression. After moving, the same customer is now comparing health insurance again in Tasmania.",
   "customer_id": "cust-77120",
-  "identity": {
-    "known_customer": true,
-    "account_linked": true,
-    "anonymous_ids": ["web-anon-77120"]
-  },
-  "profile": {
+  "attributes": {
     "household_type": "couple",
     "employment_type": "full_time",
     "location": "TAS",
@@ -15,7 +10,6 @@
     "life_stage": "partnered"
   },
   "customer_summary": {
-    "is_returning_customer": true,
     "last_meaningful_event_at": "2026-07-02T10:15:00Z",
     "repeat_sessions_30d": 6,
     "lead_score": 72

@@ -2,6 +2,9 @@ using System.Text.Json.Nodes;
 
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Loads the shared activity metadata and grounding snippets used during retrieval and ranking assembly.
+/// </summary>
 internal sealed class ActivityCatalog
 {
     public required IReadOnlyDictionary<string, JsonObject> Assets { get; init; }

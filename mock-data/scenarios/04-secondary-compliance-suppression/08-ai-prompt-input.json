@@ -27,8 +27,7 @@
   },
   "customer_context": {
     "household_type": "couple",
-    "location": "TAS",
-    "is_returning_customer": true
+    "location": "TAS"
   },
   "selected_action": {
     "content_id": "action-health-compare-001",

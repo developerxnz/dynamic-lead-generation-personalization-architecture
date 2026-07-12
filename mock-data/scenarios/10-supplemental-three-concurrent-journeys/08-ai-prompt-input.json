@@ -23,8 +23,7 @@
   },
   "customer_context": {
     "household_type": "family",
-    "location": "VIC",
-    "is_returning_customer": true
+    "location": "VIC"
   },
   "selected_action": {
     "content_id": "action-bbd-address-check-001",

@@ -23,8 +23,7 @@
   },
   "customer_context": {
     "household_type": "couple",
-    "location": "VIC",
-    "is_returning_customer": true
+    "location": "VIC"
   },
   "selected_action": {
     "content_id": "action-bbd-compare-plans-001",

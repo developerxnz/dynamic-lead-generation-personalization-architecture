@@ -1,5 +1,8 @@
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Holds the Cosmos emulator connection and container settings used by the local runtime.
+/// </summary>
 internal sealed record CosmosConfig(
     string Endpoint,
     string Key,

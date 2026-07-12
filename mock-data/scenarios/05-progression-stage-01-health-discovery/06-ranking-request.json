@@ -5,8 +5,7 @@
     "customer_id": "cust-77120",
     "lead_score": 36,
     "location": "VIC",
-    "household_type": "couple",
-    "is_returning_customer": false
+    "household_type": "couple"
   },
   "active_journey": {
     "journey_id": "journey-health-77120",

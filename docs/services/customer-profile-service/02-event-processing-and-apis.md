@@ -122,13 +122,12 @@ This allows live decisioning to pick the best journey for the current session wi
 ```json
 {
   "customerId": "12345",
-  "profile": {
+  "attributes": {
     "householdType": "family",
     "employmentType": "full_time",
     "location": "QLD"
   },
   "customerSummary": {
-    "isReturningCustomer": true,
     "leadScore": 78
   }
 }

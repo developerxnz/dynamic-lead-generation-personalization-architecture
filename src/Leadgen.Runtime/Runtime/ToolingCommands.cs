@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Implements the console tooling verbs for validation, dashboards, evaluation, and Cosmos state utilities.
+/// </summary>
 internal static class ToolingCommands
 {
     public static async Task<int> RunAsync(string command, string[] args, RepositoryPaths paths)
@@ -265,7 +268,7 @@ internal static class ToolingCommands
     {
         var scenario = ParseSingleScenario(args, fixtures.ListScenarios(), "inspect");
         var inputs = fixtures.LoadScenarioInputs(scenario);
-        var customerId = inputs.Profile.RequireStringProperty("customer_id");
+        var customerId = inputs.CustomerId;
 
         var config = CosmosConfig.FromEnvironment();
         await using var store = new CosmosRuntimeStore(config);
@@ -381,7 +384,7 @@ internal static class ToolingCommands
         var config = CosmosConfig.FromEnvironment();
         var inputs = fixtures.LoadScenarioInputs(scenario);
         await using var store = new CosmosRuntimeStore(config);
-        await store.ResetScenarioAsync(inputs.Profile.RequireStringProperty("customer_id"));
+        await store.ResetScenarioAsync(inputs.CustomerId);
     }
 
     private static string ParseSingleScenario(string[] args, IReadOnlyList<string> scenarios, string command)
@@ -395,6 +398,9 @@ internal static class ToolingCommands
     }
 }
 
+/// <summary>
+/// Captures the options shared by validate and dashboard runs.
+/// </summary>
 internal sealed record ValidationOptions(
     IReadOnlyList<string> Scenarios,
     string Source,
@@ -456,6 +462,9 @@ internal sealed record ValidationOptions(
     }
 }
 
+/// <summary>
+/// Captures the options for Ollama evaluation runs.
+/// </summary>
 internal sealed record EvaluationOptions(
     IReadOnlyList<string> Scenarios,
     string PromptSource)
@@ -490,6 +499,9 @@ internal sealed record EvaluationOptions(
     }
 }
 
+/// <summary>
+/// Records the outcome of validating one scenario against the expected artifacts.
+/// </summary>
 internal sealed record ValidationScenarioResult(
     string Scenario,
     string Status,
@@ -499,6 +511,9 @@ internal sealed record ValidationScenarioResult(
     IReadOnlyList<string> Mismatches,
     string? Error);
 
+/// <summary>
+/// Records the outcome of evaluating one scenario's AI response quality checks.
+/// </summary>
 internal sealed record EvaluationScenarioResult(
     string Scenario,
     string Status,

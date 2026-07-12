@@ -1,5 +1,8 @@
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Parses top-level arguments and routes execution to either a scenario run or a tooling command.
+/// </summary>
 internal static class Cli
 {
     public static async Task<int> RunAsync(string[] args)
@@ -30,6 +33,9 @@ internal static class Cli
     }
 }
 
+/// <summary>
+/// Captures the runtime options for a single scenario execution.
+/// </summary>
 internal sealed record CliOptions(
     string Scenario,
     string Source,

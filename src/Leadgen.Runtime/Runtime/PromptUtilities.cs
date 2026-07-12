@@ -4,6 +4,9 @@ using System.Text.Json.Nodes;
 
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Builds prompt text and validates AI responses against the checked-in response contract.
+/// </summary>
 internal static class PromptUtilities
 {
     public static string AssembleUserMessage(JsonObject promptInput)
@@ -136,6 +139,9 @@ internal static class PromptUtilities
     }
 }
 
+/// <summary>
+/// Captures per-check validation results for one AI response.
+/// </summary>
 internal sealed class ValidationResult
 {
     public ValidationResult(IReadOnlyDictionary<string, bool> checks)

@@ -5,8 +5,7 @@
     "customer_id": "cust-99001",
     "lead_score": 42,
     "location": "VIC",
-    "household_type": "single",
-    "is_returning_customer": false
+    "household_type": "single"
   },
   "active_journey": {
     "journey_id": "journey-health-812",

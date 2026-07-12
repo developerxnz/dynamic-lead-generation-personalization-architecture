@@ -3,6 +3,9 @@ using System.Text.Json.Nodes;
 
 namespace Leadgen.Runtime;
 
+/// <summary>
+/// Builds the RAG-backed prompt payload by selecting grounded snippets for the chosen action and journey.
+/// </summary>
 internal sealed class RagPromptBuilder
 {
     private static readonly Regex TokenRegex = new("[a-z0-9]+", RegexOptions.Compiled);
@@ -25,7 +28,7 @@ internal sealed class RagPromptBuilder
 
     public JsonObject Build(
         string scenarioName,
-        JsonObject profile,
+        ScenarioInputs inputs,
         JsonObject journeysPayload,
         JsonObject session,
         JsonObject activeSelection,
@@ -34,10 +37,11 @@ internal sealed class RagPromptBuilder
         JsonObject promptFixture)
     {
         var promptInput = promptFixture.DeepCloneObject();
+        var customerAttributes = inputs.RequireAttributes();
         var activeJourney = ActiveJourney(journeysPayload, activeSelection);
         var selectedAction = SelectedAction(rankingResponse);
         var (groundingContext, retrievalDebug) = BuildGroundingContext(
-            profile,
+            inputs,
             session,
             activeJourney,
             selectedAction,
@@ -71,9 +75,8 @@ internal sealed class RagPromptBuilder
         };
         promptInput["customer_context"] = new JsonObject
         {
-            ["household_type"] = profile.RequireObjectProperty("profile").RequireProperty("household_type").DeepClone(),
-            ["location"] = profile.RequireObjectProperty("profile").RequireProperty("location").DeepClone(),
-            ["is_returning_customer"] = profile.RequireObjectProperty("customer_summary").RequireProperty("is_returning_customer").DeepClone(),
+            ["household_type"] = customerAttributes.RequireProperty("household_type").DeepClone(),
+            ["location"] = customerAttributes.RequireProperty("location").DeepClone(),
         };
         promptInput["selected_action"] = selectedAction;
         promptInput["grounding_context"] = groundingContext;
@@ -108,7 +111,7 @@ internal sealed class RagPromptBuilder
     }
 
     private static (JsonArray GroundingContext, JsonObject RetrievalDebug) BuildGroundingContext(
-        JsonObject profile,
+        ScenarioInputs inputs,
         JsonObject session,
         JsonObject activeJourney,
         JsonObject selectedAction,
@@ -154,7 +157,7 @@ internal sealed class RagPromptBuilder
                 selectedActionId,
                 rankedAssetIds,
                 activeJourney,
-                profile,
+                inputs,
                 region);
 
             scored.Add(new ScoredSnippet(
@@ -228,7 +231,7 @@ internal sealed class RagPromptBuilder
         string selectedActionId,
         IReadOnlyList<string> rankedAssetIds,
         JsonObject activeJourney,
-        JsonObject profile,
+        ScenarioInputs inputs,
         string? region)
     {
         var score = 0;
@@ -265,7 +268,7 @@ internal sealed class RagPromptBuilder
             reasons.Add("Available in session region");
         }
 
-        var householdType = profile.RequireObjectProperty("profile").OptionalStringProperty("household_type");
+        var householdType = inputs.RequireAttributes().OptionalStringProperty("household_type");
         if (linkedAssets.Any(asset => HouseholdMatches(asset, householdType)))
         {
             score += 8;

@@ -54,13 +54,12 @@ Before the live request, the customer profile service already contains:
 ```json
 {
   "customerId": "cust-20481",
-  "profile": {
+  "attributes": {
     "householdType": "family",
     "employmentType": "full_time",
     "location": "NSW"
   },
   "customerSummary": {
-    "isReturningCustomer": true,
     "leadScore": 81,
     "repeatSessions30d": 4
   }

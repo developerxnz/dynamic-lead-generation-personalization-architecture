@@ -5,8 +5,7 @@
     "customer_id": "cust-66140",
     "lead_score": 63,
     "location": "TAS",
-    "household_type": "couple",
-    "is_returning_customer": true
+    "household_type": "couple"
   },
   "active_journey": {
     "journey_id": "journey-health-944",
