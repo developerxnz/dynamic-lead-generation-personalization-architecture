@@ -49,7 +49,7 @@ internal sealed record CliOptions(
         if (args.Length == 0)
         {
             throw new ArgumentException(
-                "Usage: dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- <scenario> [--source fixtures|cosmos] [--ai-mode expected|ollama] [--prompt-source fixture|rag] [--seed-cosmos] [--output-dir <path>]");
+                "Usage: dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- <scenario> [--source fixtures|cosmos] [--ai-mode expected|ollama|unavailable|invalid] [--prompt-source fixture|rag] [--seed-cosmos] [--output-dir <path>]");
         }
 
         var scenario = args[0];
@@ -89,7 +89,7 @@ internal sealed record CliOptions(
             throw new ArgumentException($"Unsupported --source value: {source}");
         }
 
-        if (aiMode is not ("expected" or "ollama"))
+        if (aiMode is not ("expected" or "ollama" or "unavailable" or "invalid"))
         {
             throw new ArgumentException($"Unsupported --ai-mode value: {aiMode}");
         }

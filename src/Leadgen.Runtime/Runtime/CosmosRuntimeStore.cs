@@ -105,7 +105,12 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
             fixtureInputs.Session.DeepCloneObject());
     }
 
-    public async Task PersistRuntimeOutputsAsync(string scenario, string customerId, JsonObject finalResponse, JsonObject analytics)
+    public async Task PersistRuntimeOutputsAsync(
+        string scenario,
+        string customerId,
+        JsonObject finalResponse,
+        JsonObject analytics,
+        JsonObject journeyInterpretation)
     {
         var containers = await EnsureRuntimeContainersAsync();
 
@@ -115,6 +120,7 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
             ["customer_id"] = customerId,
             ["scenario"] = scenario,
             ["final_response"] = finalResponse.DeepCloneObject(),
+            ["journey_interpretation"] = journeyInterpretation.DeepCloneObject(),
         };
         await containers.DecisionTraces.UpsertItemAsync(ToCosmosDocument(traceDocument), new PartitionKey(customerId));
 

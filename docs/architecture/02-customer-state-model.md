@@ -242,6 +242,25 @@ AI should not replace:
 
 AI contributes **interpretation**. The profile and journey entities remain the system of record.
 
+### Runtime Boundary
+
+The local runtime builds a bounded summary for each active or recent journey before
+calling AI. The interpretation response may contain only:
+
+- `suggested_journey_id` from the supplied candidate set
+- confidence from `0.0` to `1.0`
+- a short reason summary
+
+The deterministic selector evaluates current URL, query text, campaign context,
+journey score, recency, and resume state before it chooses the active journey.
+It can accept an AI suggestion, but it records an explicit override whenever
+stronger session evidence selects a different journey. Invalid, timed-out, or
+unavailable AI interpretation leaves the deterministic path in control.
+
+AI-generated summaries and interpretations are decision-support records. They
+must be stored with their model and prompt metadata separately from durable
+profile facts and journey projections.
+
 ---
 
 ## Scoring Approach
