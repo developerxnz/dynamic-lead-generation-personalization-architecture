@@ -155,7 +155,7 @@ dotnet run --project src/Leadgen.Runtime/Leadgen.Runtime.csproj -- 10-supplement
 
 `--prompt-source rag` keeps the deterministic ranking flow intact but replaces the checked-in `08-ai-prompt-input.json` grounding context with dynamically assembled local retrieval results from the activity catalog and approved grounding snippets.
 
-The C# runtime at `src/Leadgen.Runtime/` is now the local execution path for fixture-backed and Cosmos-backed scenario runs, expected AI output playback, Ollama-compatible chat completions, validation, console dashboards, and state-management tooling.
+The C# runtime at `src/Leadgen.Runtime/` is now the local execution path for fixture-backed and Cosmos-backed scenario runs, expected AI output playback, Ollama-compatible chat completions, validation, console dashboards, and state-management tooling. The dashboard includes AI journey interpretation acceptance, agreement, deterministic overrides, and fallback counts.
 
 The C# runner supports Cosmos-backed execution using the same emulator environment variables as the devcontainer:
 

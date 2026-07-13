@@ -69,6 +69,7 @@ internal static class ToolingCommands
                     options.AiMode,
                     stopwatch.Elapsed,
                     mismatches,
+                    BuildJourneyAiMetrics(runResult.Outputs),
                     null);
             }
             catch (Exception ex)
@@ -80,6 +81,7 @@ internal static class ToolingCommands
                     options.AiMode,
                     stopwatch.Elapsed,
                     Array.Empty<string>(),
+                    null,
                     ex.Message);
             }
             finally
@@ -166,11 +168,58 @@ internal static class ToolingCommands
                     $"{durationRows[index].PadRight(durationWidth)}  " +
                     $"{detailRows[index]}");
             }
+
+            PrintJourneyAiReadout(results);
         }
 
         var passed = results.Count(static result => result.Status == "PASS");
         Console.WriteLine($"{passed}/{results.Count} scenarios passed");
         return results.All(static result => result.Status == "PASS") ? 0 : 1;
+    }
+
+    private static JourneyAiMetrics BuildJourneyAiMetrics(IReadOnlyDictionary<string, JsonObject> outputs)
+    {
+        var interpretation = outputs["03-ai-journey-interpretation.json"];
+        var selection = outputs["04-active-journey-selection.json"];
+        var status = interpretation.RequireStringProperty("status");
+        var suggestedJourneyId = interpretation.OptionalStringProperty("suggested_journey_id");
+        var selectedJourneyId = selection.RequireStringProperty("selected_journey_id");
+        var explanationSource = outputs["10-final-response.json"]
+            .RequireObjectProperty("explanation")
+            .RequireStringProperty("source");
+
+        return new JourneyAiMetrics(
+            status,
+            status == "accepted" && suggestedJourneyId == selectedJourneyId,
+            selection.OptionalBoolProperty("deterministic_override"),
+            explanationSource == "deterministic_fallback");
+    }
+
+    private static void PrintJourneyAiReadout(IReadOnlyList<ValidationScenarioResult> results)
+    {
+        var metrics = results
+            .Select(static result => result.JourneyAi)
+            .Where(static metric => metric is not null)
+            .Cast<JourneyAiMetrics>()
+            .ToArray();
+        if (metrics.Length == 0)
+        {
+            return;
+        }
+
+        var accepted = metrics.Where(static metric => metric.InterpretationStatus == "accepted").ToArray();
+        var unavailable = metrics.Count(static metric => metric.InterpretationStatus == "unavailable");
+        var agreement = accepted.Count(static metric => metric.AgreedWithSelection);
+        var overrides = metrics.Count(static metric => metric.DeterministicOverride);
+        var fallbacks = metrics.Count(static metric => metric.DeterministicFallback);
+
+        Console.WriteLine();
+        Console.WriteLine("AI JOURNEY READOUT");
+        Console.WriteLine($"  interpretation accepted: {accepted.Length}/{metrics.Length}");
+        Console.WriteLine($"  suggestion agreement: {agreement}/{accepted.Length}");
+        Console.WriteLine($"  deterministic overrides: {overrides}");
+        Console.WriteLine($"  interpretation unavailable: {unavailable}");
+        Console.WriteLine($"  deterministic explanation fallbacks: {fallbacks}");
     }
 
     private static async Task<int> RunEvaluateAsync(string[] args, FixtureStore fixtures, ScenarioRunner runner)
@@ -311,11 +360,16 @@ internal static class ToolingCommands
             }
             if (artifact == "04")
             {
-                if (!SelectionMatches(expected, actual))
+                if (!SelectionMatches(expected, actual, aiMode))
                 {
                     mismatches.Add(artifact);
                 }
                 continue;
+            }
+            if (artifact == "06")
+            {
+                expected = NormalizeRankingRequest(expected, aiMode);
+                actual = NormalizeRankingRequest(actual, aiMode);
             }
             else if (artifact == "10")
             {
@@ -352,14 +406,21 @@ internal static class ToolingCommands
         };
     }
 
-    private static bool SelectionMatches(JsonObject expected, JsonObject actual)
+    private static bool SelectionMatches(JsonObject expected, JsonObject actual, string aiMode)
     {
-        return expected.RequireStringProperty("selected_journey_id")
-                == actual.RequireStringProperty("selected_journey_id")
-            && expected.OptionalBoolProperty("deterministic_override")
+        if (expected.RequireStringProperty("selected_journey_id")
+                != actual.RequireStringProperty("selected_journey_id")
+            || expected.RequireStringProperty("selected_service_category")
+                != actual.RequireStringProperty("selected_service_category"))
+        {
+            return false;
+        }
+
+        return aiMode != "expected"
+            || (expected.OptionalBoolProperty("deterministic_override")
                 == actual.OptionalBoolProperty("deterministic_override")
-            && expected.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id")
-                == actual.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id");
+                && expected.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id")
+                == actual.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id"));
     }
 
     private static IReadOnlyList<string> ValidateJourneyContracts(
@@ -459,6 +520,19 @@ internal static class ToolingCommands
         return normalized;
     }
 
+    private static JsonObject NormalizeRankingRequest(JsonObject payload, string aiMode)
+    {
+        var normalized = payload.DeepCloneObject();
+        if (aiMode == "ollama" && normalized["ai_context"] is JsonObject aiContext)
+        {
+            aiContext["suggested_journey_id"] = "__dynamic__";
+            aiContext["suggested_service_category"] = "__dynamic__";
+            aiContext["deterministic_override_required"] = "__dynamic__";
+        }
+
+        return normalized;
+    }
+
     private static JsonObject NormalizeEvents(JsonObject payload, string aiMode)
     {
         var normalized = payload.DeepCloneObject();
@@ -466,15 +540,30 @@ internal static class ToolingCommands
         {
             foreach (var eventNode in normalized.RequireArrayProperty("events").OfType<JsonObject>())
             {
-                if (eventNode.RequireStringProperty("event_type") != "ai_response_accepted")
+                var metadata = eventNode.RequireObjectProperty("metadata");
+                if (eventNode.RequireStringProperty("event_type") == "active_journey_selected")
                 {
+                    if (metadata.ContainsKey("ai_confidence"))
+                    {
+                        metadata["ai_confidence"] = "__dynamic__";
+                    }
+                    if (metadata.ContainsKey("ai_suggested_journey_id"))
+                    {
+                        metadata["ai_suggested_journey_id"] = "__dynamic__";
+                    }
+                    if (metadata.ContainsKey("deterministic_override"))
+                    {
+                        metadata["deterministic_override"] = "__dynamic__";
+                    }
                     continue;
                 }
 
-                var metadata = eventNode.RequireObjectProperty("metadata");
-                metadata["response_id"] = "__dynamic__";
-                metadata["latency_ms"] = "__dynamic__";
-                metadata["grounding_asset_ids"] = "__dynamic__";
+                if (eventNode.RequireStringProperty("event_type") == "ai_response_accepted")
+                {
+                    metadata["response_id"] = "__dynamic__";
+                    metadata["latency_ms"] = "__dynamic__";
+                    metadata["grounding_asset_ids"] = "__dynamic__";
+                }
             }
         }
 
@@ -645,7 +734,17 @@ internal sealed record ValidationScenarioResult(
     string AiMode,
     TimeSpan Duration,
     IReadOnlyList<string> Mismatches,
+    JourneyAiMetrics? JourneyAi,
     string? Error);
+
+/// <summary>
+/// Captures the AI interpretation and deterministic fallback outcomes for one scenario.
+/// </summary>
+internal sealed record JourneyAiMetrics(
+    string InterpretationStatus,
+    bool AgreedWithSelection,
+    bool DeterministicOverride,
+    bool DeterministicFallback);
 
 /// <summary>
 /// Records the outcome of evaluating one scenario's AI response quality checks.
