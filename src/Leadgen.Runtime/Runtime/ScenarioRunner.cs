@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace Leadgen.Runtime;
@@ -12,12 +13,14 @@ internal sealed class ScenarioRunner
     private readonly RepositoryPaths _paths;
     private readonly FixtureStore _fixtures;
     private readonly RagPromptBuilder _ragPromptBuilder = new();
+    private readonly AiJourneyInterpreter _journeyInterpreter;
     private readonly HttpClient _httpClient = new();
 
     public ScenarioRunner(RepositoryPaths paths)
     {
         _paths = paths;
         _fixtures = new FixtureStore(paths);
+        _journeyInterpreter = new AiJourneyInterpreter(_fixtures);
     }
 
     public async Task RunAsync(CliOptions options)
@@ -37,7 +40,9 @@ internal sealed class ScenarioRunner
 
         var inputs = await LoadInputsAsync(options);
         var catalog = ActivityCatalog.Load(_paths);
-        var selection = BuildSelection(options.Scenario, inputs.Journeys);
+        var journeySummaries = JourneySummaryBuilder.Build(inputs.Journeys);
+        var interpretation = await _journeyInterpreter.InterpretAsync(options, inputs, journeySummaries);
+        var selection = DeterministicJourneySelector.Select(journeySummaries, inputs.Session, interpretation);
         var retrieval = BuildRetrieval(options.Scenario, inputs.Journeys, inputs.Session, selection, catalog);
         var rankingRequest = BuildRankingRequest(
             options.Scenario,
@@ -88,6 +93,11 @@ internal sealed class ScenarioRunner
 
         var outputs = new Dictionary<string, JsonObject>
         {
+            ["02-journey-summaries.json"] = new JsonObject
+            {
+                ["journeys"] = journeySummaries.DeepCloneArray(),
+            },
+            ["03-ai-journey-interpretation.json"] = interpretation,
             ["04-active-journey-selection.json"] = selection,
             ["05-candidate-retrieval.json"] = retrieval,
             ["06-ranking-request.json"] = rankingRequest,
@@ -107,7 +117,12 @@ internal sealed class ScenarioRunner
         {
             var config = CosmosConfig.FromEnvironment();
             await using var store = new CosmosRuntimeStore(config);
-            await store.PersistRuntimeOutputsAsync(options.Scenario, inputs.CustomerId, finalResponse, analytics);
+            await store.PersistRuntimeOutputsAsync(
+                options.Scenario,
+                inputs.CustomerId,
+                finalResponse,
+                analytics,
+                interpretation);
         }
 
         if (printSummary)
@@ -137,40 +152,6 @@ internal sealed class ScenarioRunner
         }
 
         return await store.LoadScenarioInputsAsync(options.Scenario, _fixtures);
-    }
-
-    private JsonObject BuildSelection(string scenario, JsonObject journeysPayload)
-    {
-        var selection = _fixtures.LoadScenarioArtifact(scenario, "04-active-journey-selection.json").DeepCloneObject();
-        var journeysById = journeysPayload.RequireArrayProperty("journeys")
-            .OfType<JsonObject>()
-            .ToDictionary(
-                static journey => journey.RequireStringProperty("journey_id"),
-                static journey => journey,
-                StringComparer.Ordinal);
-
-        var selectedJourneyId = selection.RequireStringProperty("selected_journey_id");
-        if (journeysById.TryGetValue(selectedJourneyId, out var selectedJourney))
-        {
-            selection["selected_service_category"] = selectedJourney.RequireProperty("service_category").DeepClone();
-        }
-
-        foreach (var candidate in selection.RequireArrayProperty("candidate_journeys").OfType<JsonObject>())
-        {
-            var journeyId = candidate.RequireStringProperty("journey_id");
-            if (!journeysById.TryGetValue(journeyId, out var journey))
-            {
-                continue;
-            }
-
-            candidate["service_category"] = journey.RequireProperty("service_category").DeepClone();
-            candidate["journey_score"] = journey
-                .RequireObjectProperty("decision_support")
-                .RequireProperty("journey_score")
-                .DeepClone();
-        }
-
-        return selection;
     }
 
     private JsonObject BuildRetrieval(
@@ -271,13 +252,20 @@ internal sealed class ScenarioRunner
 
         if (request["ai_context"] is JsonObject aiContext)
         {
-            var suggestedJourneyId = selection.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id");
+            var interpretation = selection.RequireObjectProperty("ai_interpretation");
+            var suggestedJourneyId = interpretation.OptionalStringProperty("suggested_journey_id");
             aiContext["suggested_journey_id"] = suggestedJourneyId;
-
-            var suggestedJourney = journeysPayload.RequireArrayProperty("journeys")
-                .OfType<JsonObject>()
-                .FirstOrDefault(journey => journey.RequireStringProperty("journey_id") == suggestedJourneyId);
-            aiContext["suggested_service_category"] = suggestedJourney?.RequireProperty("service_category").DeepClone();
+            if (suggestedJourneyId is not null)
+            {
+                var suggestedJourney = journeysPayload.RequireArrayProperty("journeys")
+                    .OfType<JsonObject>()
+                    .FirstOrDefault(journey => journey.RequireStringProperty("journey_id") == suggestedJourneyId);
+                aiContext["suggested_service_category"] = suggestedJourney?.RequireProperty("service_category").DeepClone();
+            }
+            else
+            {
+                aiContext["suggested_service_category"] = null;
+            }
             aiContext["deterministic_override_required"] = selection.OptionalBoolProperty("deterministic_override");
         }
 
@@ -335,6 +323,14 @@ internal sealed class ScenarioRunner
         {
             return (expectedOutput.RequireObjectProperty("response").DeepCloneObject(), expectedOutput.DeepCloneObject());
         }
+        if (options.AiMode is "unavailable" or "invalid")
+        {
+            return RejectedAiExplanation(
+                expectedOutput,
+                options.AiMode,
+                options.AiMode == "unavailable" ? "forced_unavailable" : "invalid_response",
+                $"AI explanation is disabled by --ai-mode {options.AiMode}.");
+        }
 
         var model = Environment.GetEnvironmentVariable("MODEL")
             ?? Environment.GetEnvironmentVariable("OLLAMA_MODEL")
@@ -358,71 +354,106 @@ internal sealed class ScenarioRunner
             ["temperature"] = 0.1,
         };
 
-        using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl.TrimEnd('/')}/v1/chat/completions")
-        {
-            Content = JsonContent.Create(requestBody),
-        };
-        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "ollama");
-
-        var stopwatch = Stopwatch.StartNew();
-        using var response = await _httpClient.SendAsync(request);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        response.EnsureSuccessStatusCode();
-        stopwatch.Stop();
-
-        var completion = JsonNode.Parse(responseContent).RequireObject("completion");
-        var raw = completion.RequireArrayProperty("choices")[0]
-            ?.RequireObject("choice")
-            .RequireObjectProperty("message")
-            .RequireStringProperty("content")
-            ?? throw new InvalidDataException("Missing choices[0].message.content in Ollama response.");
-
-        JsonObject responseObject;
         try
         {
-            responseObject = JsonNode.Parse(raw).RequireObject("ai_response");
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidDataException($"Ollama returned invalid JSON content: {ex.Message}");
-        }
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl.TrimEnd('/')}/v1/chat/completions")
+            {
+                Content = JsonContent.Create(requestBody),
+            };
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "ollama");
 
-        responseObject = PromptUtilities.NormalizeGroundingAssetIds(responseObject, promptInput);
-        var validation = PromptUtilities.ValidateResponse(responseObject, promptInput);
-        var aiRecord = new JsonObject
+            var stopwatch = Stopwatch.StartNew();
+            using var response = await _httpClient.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+            stopwatch.Stop();
+
+            var completion = JsonNode.Parse(responseContent).RequireObject("completion");
+            var raw = completion.RequireArrayProperty("choices")[0]
+                ?.RequireObject("choice")
+                .RequireObjectProperty("message")
+                .RequireStringProperty("content")
+                ?? throw new InvalidDataException("Missing choices[0].message.content in Ollama response.");
+            var responseObject = JsonNode.Parse(raw).RequireObject("ai_response");
+            responseObject = PromptUtilities.NormalizeGroundingAssetIds(responseObject, promptInput);
+            var validation = PromptUtilities.ValidateResponse(responseObject, promptInput);
+            var aiRecord = new JsonObject
+            {
+                ["scenario"] = options.Scenario,
+                ["description"] = expectedOutput.RequireStringProperty("description"),
+                ["prompt_template_version"] = "poc-cta-explainer-v1",
+                ["response_status"] = validation.AllPassed ? "accepted" : "rejected",
+                ["response"] = responseObject,
+                ["validation"] = new JsonObject
+                {
+                    ["required_fields_present"] = promptInput.RequireObjectProperty("response_contract")
+                        .RequireArrayProperty("required_fields")
+                        .Select(static field => field?.GetValue<string>() ?? string.Empty)
+                        .Where(static field => field.Length > 0)
+                        .All(field => validation.Checks.GetValueOrDefault($"{field}_present")),
+                    ["grounding_assets_referenced"] =
+                        validation.Checks.GetValueOrDefault("grounding_assets_cited")
+                        && validation.Checks.GetValueOrDefault("grounding_assets_valid"),
+                    ["unsupported_claims_detected"] = false,
+                    ["summary_word_count"] = PromptUtilities.CountWords(responseObject.OptionalStringProperty("summary") ?? string.Empty),
+                    ["key_points_count"] = responseObject["key_points"] is JsonArray keyPoints ? keyPoints.Count : 0,
+                    ["cta_support_text_word_count"] = PromptUtilities.CountWords(responseObject.OptionalStringProperty("cta_support_text") ?? string.Empty),
+                    ["within_length_bounds"] =
+                        validation.Checks.GetValueOrDefault("summary_within_length")
+                        && validation.Checks.GetValueOrDefault("key_points_within_count")
+                        && validation.Checks.GetValueOrDefault("cta_text_within_length"),
+                    ["disclosure_required"] = false,
+                },
+                ["ai_response_id"] = completion.OptionalStringProperty("id") ?? expectedOutput.RequireStringProperty("ai_response_id"),
+                ["ai_task_type"] = "cta_explanation",
+                ["model_version"] = model,
+                ["latency_ms"] = stopwatch.ElapsedMilliseconds,
+            };
+
+            return (responseObject, aiRecord);
+        }
+        catch (HttpRequestException ex)
         {
-            ["scenario"] = options.Scenario,
-            ["description"] = expectedOutput.RequireStringProperty("description"),
+            return RejectedAiExplanation(expectedOutput, model, "request_failed", ex.Message);
+        }
+        catch (TaskCanceledException ex)
+        {
+            return RejectedAiExplanation(expectedOutput, model, "request_timed_out", ex.Message);
+        }
+        catch (JsonException ex)
+        {
+            return RejectedAiExplanation(expectedOutput, model, "invalid_json", ex.Message);
+        }
+        catch (InvalidDataException ex)
+        {
+            return RejectedAiExplanation(expectedOutput, model, "invalid_response", ex.Message);
+        }
+    }
+
+    private static (JsonObject Response, JsonObject Record) RejectedAiExplanation(
+        JsonObject expectedOutput,
+        string model,
+        string reason,
+        string detail)
+    {
+        var response = new JsonObject();
+        return (response, new JsonObject
+        {
+            ["scenario"] = expectedOutput.RequireProperty("scenario").DeepClone(),
+            ["description"] = expectedOutput.RequireProperty("description").DeepClone(),
             ["prompt_template_version"] = "poc-cta-explainer-v1",
-            ["response_status"] = validation.AllPassed ? "accepted" : "rejected",
-            ["response"] = responseObject,
+            ["response_status"] = "rejected",
+            ["response"] = response.DeepCloneObject(),
             ["validation"] = new JsonObject
             {
-                ["required_fields_present"] = promptInput.RequireObjectProperty("response_contract")
-                    .RequireArrayProperty("required_fields")
-                    .Select(static field => field?.GetValue<string>() ?? string.Empty)
-                    .Where(static field => field.Length > 0)
-                    .All(field => validation.Checks.GetValueOrDefault($"{field}_present")),
-                ["grounding_assets_referenced"] =
-                    validation.Checks.GetValueOrDefault("grounding_assets_cited")
-                    && validation.Checks.GetValueOrDefault("grounding_assets_valid"),
-                ["unsupported_claims_detected"] = false,
-                ["summary_word_count"] = PromptUtilities.CountWords(responseObject.OptionalStringProperty("summary") ?? string.Empty),
-                ["key_points_count"] = responseObject["key_points"] is JsonArray keyPoints ? keyPoints.Count : 0,
-                ["cta_support_text_word_count"] = PromptUtilities.CountWords(responseObject.OptionalStringProperty("cta_support_text") ?? string.Empty),
-                ["within_length_bounds"] =
-                    validation.Checks.GetValueOrDefault("summary_within_length")
-                    && validation.Checks.GetValueOrDefault("key_points_within_count")
-                    && validation.Checks.GetValueOrDefault("cta_text_within_length"),
-                ["disclosure_required"] = false,
+                ["fallback_reason"] = reason,
+                ["detail"] = detail,
             },
-            ["ai_response_id"] = completion.OptionalStringProperty("id") ?? expectedOutput.RequireStringProperty("ai_response_id"),
+            ["ai_response_id"] = "unavailable",
             ["ai_task_type"] = "cta_explanation",
             ["model_version"] = model,
-            ["latency_ms"] = stopwatch.ElapsedMilliseconds,
-        };
-
-        return (responseObject, aiRecord);
+            ["latency_ms"] = 0,
+        });
     }
 
     private JsonObject BuildFinalResponse(
@@ -480,14 +511,7 @@ internal sealed class ScenarioRunner
             },
             ["supporting_content"] = new JsonArray(supportingContent),
             ["secondary_journey_prompt"] = BuildSecondaryJourneyPrompt(journeysPayload, selection, retrieval, catalog),
-            ["explanation"] = new JsonObject
-            {
-                ["source"] = "ai_assisted",
-                ["ai_response_id"] = aiRecord.RequireProperty("ai_response_id").DeepClone(),
-                ["summary"] = aiResponse.RequireProperty("summary").DeepClone(),
-                ["cta_support_text"] = aiResponse.RequireProperty("cta_support_text").DeepClone(),
-                ["grounding_asset_ids"] = aiResponse.RequireArrayProperty("grounding_asset_ids").DeepCloneArray(),
-            },
+            ["explanation"] = BuildExplanation(topRecommendation, aiRecord, aiResponse),
             ["decision_trace"] = template.RequireObjectProperty("decision_trace").DeepCloneObject(),
             ["metadata_revision"] = catalog.Assets[topRecommendation.RequireStringProperty("content_id")]
                 .RequireProperty("metadataRevision")
@@ -513,6 +537,21 @@ internal sealed class ScenarioRunner
             var metadata = eventNode.RequireObjectProperty("metadata");
             switch (eventNode.RequireStringProperty("event_type"))
             {
+                case "active_journey_selected":
+                    var aiInterpretation = selection.RequireObjectProperty("ai_interpretation");
+                    if (metadata.ContainsKey("ai_suggested_journey_id"))
+                    {
+                        metadata["ai_suggested_journey_id"] = aiInterpretation["suggested_journey_id"]?.DeepClone();
+                    }
+                    if (metadata.ContainsKey("ai_confidence"))
+                    {
+                        metadata["ai_confidence"] = aiInterpretation["confidence"]?.DeepClone();
+                    }
+                    if (metadata.ContainsKey("deterministic_override"))
+                    {
+                        metadata["deterministic_override"] = selection.RequireProperty("deterministic_override").DeepClone();
+                    }
+                    break;
                 case "ai_response_accepted":
                     metadata["response_id"] = aiRecord.RequireProperty("ai_response_id").DeepClone();
                     metadata["grounding_asset_ids"] = finalResponse
@@ -531,6 +570,34 @@ internal sealed class ScenarioRunner
             }
         }
         return analytics;
+    }
+
+    private static JsonObject BuildExplanation(
+        JsonObject topRecommendation,
+        JsonObject aiRecord,
+        JsonObject aiResponse)
+    {
+        if (aiRecord.RequireStringProperty("response_status") == "accepted")
+        {
+            return new JsonObject
+            {
+                ["source"] = "ai_assisted",
+                ["ai_response_id"] = aiRecord.RequireProperty("ai_response_id").DeepClone(),
+                ["summary"] = aiResponse.RequireProperty("summary").DeepClone(),
+                ["cta_support_text"] = aiResponse.RequireProperty("cta_support_text").DeepClone(),
+                ["grounding_asset_ids"] = aiResponse.RequireArrayProperty("grounding_asset_ids").DeepCloneArray(),
+            };
+        }
+
+        var label = topRecommendation.RequireObjectProperty("cta").RequireStringProperty("label");
+        return new JsonObject
+        {
+            ["source"] = "deterministic_fallback",
+            ["ai_response_id"] = null,
+            ["summary"] = $"Continue with {label} to take the next step in this journey.",
+            ["cta_support_text"] = label,
+            ["grounding_asset_ids"] = new JsonArray(),
+        };
     }
 
     private static void WriteOutputs(string outputDirectory, IReadOnlyDictionary<string, JsonObject> outputs)

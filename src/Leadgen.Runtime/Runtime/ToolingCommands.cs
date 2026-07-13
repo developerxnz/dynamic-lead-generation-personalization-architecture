@@ -284,17 +284,40 @@ internal static class ToolingCommands
         string aiMode,
         string promptSource)
     {
-        var artifactNames = promptSource == "fixture"
-            ? new[] { "04", "05", "06", "07", "08", "10", "11" }
-            : new[] { "04", "05", "06", "07", "10", "11" };
+        var expectedSelection = fixtures.LoadScenarioArtifact(scenario, "04-active-journey-selection.json");
+        var contractMismatches = ValidateJourneyContracts(actualOutputs, expectedSelection);
+        if (aiMode is "unavailable" or "invalid")
+        {
+            return contractMismatches
+                .Concat(ValidateUnavailableAiFallback(actualOutputs, expectedSelection))
+                .ToArray();
+        }
 
-        var mismatches = new List<string>();
+        var artifactNames = promptSource == "fixture"
+            ? new[] { "03", "04", "05", "06", "07", "08", "10", "11" }
+            : new[] { "03", "04", "05", "06", "07", "10", "11" };
+
+        var mismatches = new List<string>(contractMismatches);
         foreach (var artifact in artifactNames)
         {
-            var expected = fixtures.LoadScenarioArtifact(scenario, ArtifactFileName(artifact));
+            var expected = artifact == "03"
+                ? ExpectedJourneyInterpretation(expectedSelection)
+                : fixtures.LoadScenarioArtifact(scenario, ArtifactFileName(artifact));
             var actual = actualOutputs[ArtifactFileName(artifact)].DeepCloneObject();
 
-            if (artifact == "10")
+            if (artifact == "03" && aiMode != "expected")
+            {
+                continue;
+            }
+            if (artifact == "04")
+            {
+                if (!SelectionMatches(expected, actual))
+                {
+                    mismatches.Add(artifact);
+                }
+                continue;
+            }
+            else if (artifact == "10")
             {
                 expected = NormalizeFinalResponse(expected, aiMode);
                 actual = NormalizeFinalResponse(actual, aiMode);
@@ -309,6 +332,113 @@ internal static class ToolingCommands
             {
                 mismatches.Add(artifact);
             }
+        }
+
+        return mismatches;
+    }
+
+    private static JsonObject ExpectedJourneyInterpretation(JsonObject expectedSelection)
+    {
+        var expected = expectedSelection.RequireObjectProperty("ai_interpretation");
+        return new JsonObject
+        {
+            ["status"] = "accepted",
+            ["source"] = "fixture",
+            ["model_version"] = "expected",
+            ["latency_ms"] = 0,
+            ["suggested_journey_id"] = expected.RequireProperty("suggested_journey_id").DeepClone(),
+            ["confidence"] = expected.RequireProperty("confidence").DeepClone(),
+            ["reason_summary"] = expected.RequireProperty("reason_summary").DeepClone(),
+        };
+    }
+
+    private static bool SelectionMatches(JsonObject expected, JsonObject actual)
+    {
+        return expected.RequireStringProperty("selected_journey_id")
+                == actual.RequireStringProperty("selected_journey_id")
+            && expected.OptionalBoolProperty("deterministic_override")
+                == actual.OptionalBoolProperty("deterministic_override")
+            && expected.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id")
+                == actual.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id");
+    }
+
+    private static IReadOnlyList<string> ValidateJourneyContracts(
+        IReadOnlyDictionary<string, JsonObject> outputs,
+        JsonObject expectedSelection)
+    {
+        var mismatches = new List<string>();
+        var summaries = outputs["02-journey-summaries.json"].RequireArrayProperty("journeys");
+        var summaryIds = summaries.OfType<JsonObject>()
+            .Select(static summary => summary.RequireStringProperty("journey_id"))
+            .ToHashSet(StringComparer.Ordinal);
+        var expectedIds = expectedSelection.RequireArrayProperty("candidate_journeys")
+            .OfType<JsonObject>()
+            .Select(static candidate => candidate.RequireStringProperty("journey_id"))
+            .ToHashSet(StringComparer.Ordinal);
+        var allowedSummaryFields = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "journey_id", "service_category", "intent", "stage", "resume_candidate",
+            "qualification_state", "behavior_summary", "journey_score",
+            "last_meaningful_event_at", "ai_journey_summary",
+        };
+
+        if (!summaryIds.SetEquals(expectedIds)
+            || summaries.OfType<JsonObject>().Any(summary =>
+                !summary.Select(static property => property.Key)
+                    .ToHashSet(StringComparer.Ordinal)
+                    .SetEquals(allowedSummaryFields)))
+        {
+            mismatches.Add("journey-summary-contract");
+        }
+
+        var interpretation = outputs["03-ai-journey-interpretation.json"];
+        var status = interpretation.RequireStringProperty("status");
+        if (status == "accepted")
+        {
+            var suggestion = interpretation.RequireStringProperty("suggested_journey_id");
+            var confidence = interpretation.RequireProperty("confidence").GetValue<double>();
+            if (!summaryIds.Contains(suggestion)
+                || confidence is < 0 or > 1
+                || string.IsNullOrWhiteSpace(interpretation.RequireStringProperty("reason_summary")))
+            {
+                mismatches.Add("journey-interpretation-contract");
+            }
+        }
+        else if (status != "unavailable" || string.IsNullOrWhiteSpace(interpretation.RequireStringProperty("fallback_reason")))
+        {
+            mismatches.Add("journey-interpretation-contract");
+        }
+
+        var selection = outputs["04-active-journey-selection.json"];
+        var selectedId = selection.RequireStringProperty("selected_journey_id");
+        if (!summaryIds.Contains(selectedId))
+        {
+            mismatches.Add("selection-contract");
+        }
+        else if (selection.OptionalBoolProperty("deterministic_override")
+            && (status != "accepted"
+                || selection.RequireObjectProperty("ai_interpretation").RequireStringProperty("suggested_journey_id") == selectedId))
+        {
+            mismatches.Add("selection-contract");
+        }
+
+        return mismatches;
+    }
+
+    private static IReadOnlyList<string> ValidateUnavailableAiFallback(
+        IReadOnlyDictionary<string, JsonObject> outputs,
+        JsonObject expectedSelection)
+    {
+        var mismatches = new List<string>();
+        var interpretation = outputs["03-ai-journey-interpretation.json"];
+        var selection = outputs["04-active-journey-selection.json"];
+        var explanation = outputs["10-final-response.json"].RequireObjectProperty("explanation");
+        if (interpretation.RequireStringProperty("status") != "unavailable"
+            || interpretation.RequireStringProperty("fallback_reason") is not ("forced_unavailable" or "invalid_response")
+            || selection.RequireStringProperty("selected_journey_id") != expectedSelection.RequireStringProperty("selected_journey_id")
+            || explanation.RequireStringProperty("source") != "deterministic_fallback")
+        {
+            mismatches.Add("unavailable-ai-fallback");
         }
 
         return mismatches;
@@ -353,6 +483,7 @@ internal static class ToolingCommands
 
     private static string ArtifactFileName(string artifact) => artifact switch
     {
+        "03" => "03-ai-journey-interpretation.json",
         "04" => "04-active-journey-selection.json",
         "05" => "05-candidate-retrieval.json",
         "06" => "06-ranking-request.json",
@@ -441,6 +572,11 @@ internal sealed record ValidationOptions(
                     scenarios.Add(arg);
                     break;
             }
+        }
+
+        if (aiMode is not ("expected" or "ollama" or "unavailable" or "invalid"))
+        {
+            throw new ArgumentException($"Unsupported --ai-mode value: {aiMode}");
         }
 
         return new ValidationOptions(

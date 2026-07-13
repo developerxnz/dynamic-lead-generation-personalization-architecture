@@ -75,6 +75,27 @@ The deterministic journey-selection step can then:
 
 This preserves explainability while still allowing AI to help with messy or incomplete intent.
 
+### Local Runtime Behavior
+
+`src/Leadgen.Runtime/` implements this boundary as three separate steps:
+
+1. `JourneySummaryBuilder` derives compact candidate summaries from journey state.
+2. `AiJourneyInterpreter` receives the session context and those summaries, then
+   returns only a suggested supplied journey ID, confidence, and reason summary.
+3. `DeterministicJourneySelector` chooses the active journey from session
+   alignment, campaign alignment, deterministic score, recency, and resume state.
+
+The interpreter rejects suggestions outside the candidate set and malformed
+responses. Network, timeout, and validation failures are emitted as an
+`unavailable` interpretation record; they never block deterministic selection.
+The Cosmos decision trace stores that record alongside the final response for
+auditability.
+
+The scenario harness validates the generated journey-summary and
+interpretation contracts on every deterministic scenario run. It also supports
+`--ai-mode unavailable` and `--ai-mode invalid` to exercise deterministic
+selection and CTA fallback behavior without a model endpoint.
+
 ---
 
 ## Context Assembly Strategy
