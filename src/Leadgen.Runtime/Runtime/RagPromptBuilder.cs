@@ -29,16 +29,16 @@ internal sealed class RagPromptBuilder
     public JsonObject Build(
         string scenarioName,
         ScenarioInputs inputs,
-        JsonObject journeysPayload,
-        JsonObject session,
-        JsonObject activeSelection,
+        IReadOnlyList<JourneyState> journeys,
+        SessionContext session,
+        ActiveJourneySelection selection,
         JsonObject rankingResponse,
         ActivityCatalog catalog,
         JsonObject promptFixture)
     {
         var promptInput = promptFixture.DeepCloneObject();
         var customerAttributes = inputs.RequireAttributes();
-        var activeJourney = ActiveJourney(journeysPayload, activeSelection);
+        var activeJourney = ActiveJourney(journeys, selection);
         var selectedAction = SelectedAction(rankingResponse);
         var (groundingContext, retrievalDebug) = BuildGroundingContext(
             inputs,
@@ -50,28 +50,19 @@ internal sealed class RagPromptBuilder
 
         promptInput["journey_context"] = new JsonObject
         {
-            ["journey_id"] = activeJourney.RequireStringProperty("journey_id"),
-            ["service_category"] = activeJourney.RequireStringProperty("service_category"),
-            ["intent"] = activeJourney.RequireStringProperty("intent"),
-            ["stage"] = activeJourney.RequireStringProperty("stage"),
-            ["resume_candidate"] = activeJourney.OptionalBoolProperty("resume_candidate"),
+            ["journey_id"] = activeJourney.JourneyId,
+            ["service_category"] = activeJourney.ServiceCategory,
+            ["intent"] = activeJourney.Intent,
+            ["stage"] = activeJourney.Stage,
+            ["resume_candidate"] = activeJourney.ResumeCandidate,
             ["qualification_state"] = new JsonObject
             {
-                ["coverage_region_match"] = activeJourney
-                    .RequireObjectProperty("qualification_state")
-                    .RequireProperty("coverage_region_match")
-                    .DeepClone(),
-                ["serviceability_confirmed"] = activeJourney
-                    .RequireObjectProperty("qualification_state")
-                    .RequireProperty("serviceability_confirmed")
-                    .DeepClone(),
+                ["coverage_region_match"] = activeJourney.QualificationState.CoverageRegionMatch,
+                ["serviceability_confirmed"] = activeJourney.QualificationState.ServiceabilityConfirmed,
             },
-            ["behavior_summary"] = activeJourney.RequireObjectProperty("behavior_summary").DeepCloneObject(),
-            ["journey_score"] = activeJourney
-                .RequireObjectProperty("decision_support")
-                .RequireProperty("journey_score")
-                .DeepClone(),
-            ["last_meaningful_event_at"] = activeJourney.RequireProperty("last_meaningful_event_at").DeepClone(),
+            ["behavior_summary"] = activeJourney.BehaviorSummary.DeepCloneObject(),
+            ["journey_score"] = activeJourney.JourneyScore,
+            ["last_meaningful_event_at"] = activeJourney.LastMeaningfulEventAt.ToString("O"),
         };
         promptInput["customer_context"] = new JsonObject
         {
@@ -85,14 +76,13 @@ internal sealed class RagPromptBuilder
         return promptInput;
     }
 
-    private static JsonObject ActiveJourney(JsonObject journeysPayload, JsonObject activeSelection)
+    private static JourneyState ActiveJourney(
+        IReadOnlyList<JourneyState> journeys,
+        ActiveJourneySelection selection)
     {
-        var selectedJourneyId = activeSelection.RequireStringProperty("selected_journey_id");
-        var activeJourney = journeysPayload.RequireArrayProperty("journeys")
-            .OfType<JsonObject>()
-            .FirstOrDefault(journey => journey.RequireStringProperty("journey_id") == selectedJourneyId);
+        var activeJourney = journeys.FirstOrDefault(journey => journey.JourneyId == selection.SelectedJourney.JourneyId);
 
-        return activeJourney ?? throw new KeyNotFoundException($"Selected journey not found: {selectedJourneyId}");
+        return activeJourney ?? throw new KeyNotFoundException($"Selected journey not found: {selection.SelectedJourney.JourneyId}");
     }
 
     private static JsonObject SelectedAction(JsonObject rankingResponse)
@@ -112,8 +102,8 @@ internal sealed class RagPromptBuilder
 
     private static (JsonArray GroundingContext, JsonObject RetrievalDebug) BuildGroundingContext(
         ScenarioInputs inputs,
-        JsonObject session,
-        JsonObject activeJourney,
+        SessionContext session,
+        JourneyState activeJourney,
         JsonObject selectedAction,
         JsonObject rankingResponse,
         ActivityCatalog catalog,
@@ -126,23 +116,22 @@ internal sealed class RagPromptBuilder
         var selectedActionId = selectedAction.RequireStringProperty("content_id");
         var queryText = QueryText(session, activeJourney, selectedAction);
         var queryTokens = Tokenize(queryText);
-        var region = session.OptionalStringProperty("region");
-        var serviceCategory = activeJourney.RequireStringProperty("service_category");
+        var region = session.Region;
+        var serviceCategory = activeJourney.ServiceCategory;
 
         var scored = new List<ScoredSnippet>();
         foreach (var snippet in catalog.Snippets.Values)
         {
-            if (snippet.RequireStringProperty("serviceCategory") != serviceCategory)
+            if (snippet.ServiceCategory != serviceCategory)
             {
                 continue;
             }
 
-            var linkedAssets = snippet.RequireArrayProperty("linkedAssets")
-                .Select(static node => node?.GetValue<string>())
+            var linkedAssets = snippet.LinkedAssetIds
                 .Where(static assetId => !string.IsNullOrWhiteSpace(assetId))
                 .Select(assetId => catalog.Assets.GetValueOrDefault(assetId!))
                 .Where(static asset => asset is not null)
-                .Cast<JsonObject>()
+                .Select(static asset => asset!.Raw)
                 .ToList();
 
             if (linkedAssets.Count == 0 || !linkedAssets.Any(asset => RegionMatches(asset, region)))
@@ -151,7 +140,7 @@ internal sealed class RagPromptBuilder
             }
 
             var (score, reasons) = ScoreSnippet(
-                snippet,
+                snippet.Raw,
                 linkedAssets,
                 queryTokens,
                 selectedActionId,
@@ -161,7 +150,7 @@ internal sealed class RagPromptBuilder
                 region);
 
             scored.Add(new ScoredSnippet(
-                snippet,
+                snippet.Raw,
                 linkedAssets,
                 score,
                 reasons,
@@ -216,7 +205,7 @@ internal sealed class RagPromptBuilder
                 ["snippet_id"] = entry.Snippet.RequireStringProperty("snippetId"),
                 ["asset_id"] = entry.AssetId,
                 ["score"] = entry.Score,
-                ["metadata_revision"] = catalog.Assets[entry.AssetId].RequireStringProperty("metadataRevision"),
+                ["metadata_revision"] = catalog.Assets[entry.AssetId].MetadataRevision,
                 ["reasons"] = new JsonArray(entry.Reasons.Select(static reason => (JsonNode)reason).ToArray()),
             }).ToArray()),
         };
@@ -230,7 +219,7 @@ internal sealed class RagPromptBuilder
         HashSet<string> queryTokens,
         string selectedActionId,
         IReadOnlyList<string> rankedAssetIds,
-        JsonObject activeJourney,
+        JourneyState activeJourney,
         ScenarioInputs inputs,
         string? region)
     {
@@ -256,7 +245,7 @@ internal sealed class RagPromptBuilder
             reasons.Add($"Linked to ranked candidate #{index + 1}");
         }
 
-        if (linkedAssets.Any(asset => StageMatches(asset, activeJourney.RequireStringProperty("stage"))))
+        if (linkedAssets.Any(asset => StageMatches(asset, activeJourney.Stage)))
         {
             score += 12;
             reasons.Add("Matches active journey stage");
@@ -320,15 +309,15 @@ internal sealed class RagPromptBuilder
         return (exactPrimaryLink, exclusiveLink, -entry.Score, entry.Snippet.RequireStringProperty("snippetId"));
     }
 
-    private static string QueryText(JsonObject session, JsonObject activeJourney, JsonObject selectedAction)
+    private static string QueryText(SessionContext session, JourneyState activeJourney, JsonObject selectedAction)
     {
         var parts = new[]
         {
-            session.OptionalStringProperty("query_text"),
-            session.OptionalStringProperty("current_url"),
-            session.OptionalStringProperty("campaign_theme"),
-            activeJourney.OptionalStringProperty("intent"),
-            activeJourney.OptionalStringProperty("stage"),
+            session.QueryText,
+            session.CurrentUrl,
+            session.CampaignTheme,
+            activeJourney.Intent,
+            activeJourney.Stage,
             selectedAction.OptionalStringProperty("cta_label"),
             selectedAction.OptionalStringProperty("content_id"),
         };
