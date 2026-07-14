@@ -161,7 +161,8 @@ internal sealed record AnalyticsEvent(
     string SessionId,
     string JourneyId,
     DateTimeOffset Timestamp,
-    JsonObject Metadata)
+    JsonObject Metadata,
+    string? Note)
 {
     public static AnalyticsEvent FromJson(JsonObject payload) => new(
         payload.RequireStringProperty("event_type"),
@@ -169,24 +170,33 @@ internal sealed record AnalyticsEvent(
         payload.RequireStringProperty("session_id"),
         payload.RequireStringProperty("journey_id"),
         DateTimeOffset.Parse(payload.RequireStringProperty("timestamp")),
-        payload.RequireObjectProperty("metadata").DeepCloneObject());
+        payload.RequireObjectProperty("metadata").DeepCloneObject(),
+        payload.OptionalStringProperty("note"));
 
-    public JsonObject ToJson() => new()
+    public JsonObject ToJson()
     {
-        ["event_type"] = EventType,
-        ["customer_id"] = CustomerId,
-        ["session_id"] = SessionId,
-        ["journey_id"] = JourneyId,
-        ["timestamp"] = Timestamp.ToString("O"),
-        ["metadata"] = Metadata.DeepCloneObject(),
-    };
+        var json = new JsonObject
+        {
+            ["event_type"] = EventType,
+            ["customer_id"] = CustomerId,
+            ["session_id"] = SessionId,
+            ["journey_id"] = JourneyId,
+            ["timestamp"] = Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            ["metadata"] = Metadata.DeepCloneObject(),
+        };
+        if (Note is not null)
+        {
+            json["note"] = Note;
+        }
+        return json;
+    }
 }
 
 internal sealed record DecisionTraceDocument(
     string Id,
     string CustomerId,
     string Scenario,
-    JsonObject FinalResponse,
+    FinalResponseEnvelope FinalResponse,
     JourneyInterpretation JourneyInterpretation)
 {
     public JsonObject ToJson() => new()
@@ -194,7 +204,7 @@ internal sealed record DecisionTraceDocument(
         ["id"] = Id,
         ["customer_id"] = CustomerId,
         ["scenario"] = Scenario,
-        ["final_response"] = FinalResponse.DeepCloneObject(),
+        ["final_response"] = FinalResponse.ToJson(),
         ["journey_interpretation"] = JourneyInterpretation.ToJson(),
     };
 }
@@ -222,7 +232,7 @@ internal static class JourneyContractAdapter
         payload.OptionalStringProperty("reason_summary"),
         payload.OptionalStringProperty("source"),
         payload.OptionalStringProperty("model_version"),
-        payload["latency_ms"]?.GetValue<long>(),
+        OptionalLong(payload["latency_ms"]),
         payload.OptionalStringProperty("fallback_reason"),
         payload.OptionalStringProperty("detail"));
 
@@ -475,4 +485,19 @@ internal static class JourneyContractAdapter
 
     private static IReadOnlyList<string> Strings(JsonObject payload, string propertyName) =>
         payload.RequireArrayProperty(propertyName).Select(static node => node?.GetValue<string>() ?? string.Empty).ToArray();
+
+    private static long? OptionalLong(JsonNode? value)
+    {
+        if (value is not JsonValue jsonValue)
+        {
+            return null;
+        }
+
+        if (jsonValue.TryGetValue<long>(out var longValue))
+        {
+            return longValue;
+        }
+
+        return jsonValue.TryGetValue<int>(out var intValue) ? intValue : null;
+    }
 }

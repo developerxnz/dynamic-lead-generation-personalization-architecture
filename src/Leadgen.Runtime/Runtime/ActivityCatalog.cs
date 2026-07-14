@@ -47,6 +47,8 @@ internal sealed record ActivityAsset(
     string CtaType,
     string CtaLabel,
     string CtaDeepLink,
+    string? Provider,
+    int Priority,
     JsonObject Raw)
 {
     public static ActivityAsset FromJson(JsonObject json)
@@ -60,6 +62,8 @@ internal sealed record ActivityAsset(
             cta.RequireStringProperty("type"),
             cta.RequireStringProperty("label"),
             cta.RequireStringProperty("deepLink"),
+            json.OptionalStringProperty("provider"),
+            json.RequireProperty("priority").GetValue<int>(),
             json.DeepCloneObject());
     }
 }
