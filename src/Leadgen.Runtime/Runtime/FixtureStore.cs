@@ -57,6 +57,10 @@ internal sealed class FixtureStore
 /// </summary>
 internal sealed record ScenarioInputs(JsonObject? Profile, JsonObject Journeys, JsonObject Session)
 {
+    public IReadOnlyList<JourneyState> JourneyStates => JourneyContractAdapter.JourneyStates(Journeys);
+
+    public SessionContext SessionContext => JourneyContractAdapter.Session(Session);
+
     public string CustomerId =>
         Profile?.OptionalStringProperty("customer_id")
         ?? Session.RequireStringProperty("customer_id");
