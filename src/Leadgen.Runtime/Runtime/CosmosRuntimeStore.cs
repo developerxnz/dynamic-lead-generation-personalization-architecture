@@ -99,25 +99,23 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
     public async Task PersistRuntimeOutputsAsync(
         string scenario,
         string customerId,
-        JsonObject finalResponse,
-        JsonObject analytics,
-        JsonObject journeyInterpretation)
+        FinalResponseEnvelope finalResponse,
+        AnalyticsEnvelope analytics,
+        JourneyInterpretation journeyInterpretation)
     {
         var containers = await EnsureRuntimeContainersAsync();
 
         var traceDocument = new DecisionTraceDocument(
-            $"{scenario}:{finalResponse.RequireStringProperty("session_id")}",
+            $"{scenario}:{finalResponse.SessionId}",
             customerId,
             scenario,
             finalResponse,
-            JourneyContractAdapter.Interpretation(journeyInterpretation));
+            journeyInterpretation);
         await containers.DecisionTraces.UpsertItemAsync(
             ToCosmosDocument(traceDocument.ToJson()),
             new PartitionKey(customerId));
 
-        foreach (var analyticsEvent in analytics.RequireArrayProperty("events")
-            .OfType<JsonObject>()
-            .Select(AnalyticsEvent.FromJson))
+        foreach (var analyticsEvent in analytics.Events)
         {
             var eventDocument = analyticsEvent.ToJson();
             eventDocument["id"] =

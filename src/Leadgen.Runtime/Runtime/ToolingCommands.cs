@@ -334,7 +334,9 @@ internal static class ToolingCommands
         string promptSource)
     {
         var expectedSelection = fixtures.LoadScenarioArtifact(scenario, "04-active-journey-selection.json");
-        var contractMismatches = ValidateJourneyContracts(actualOutputs, expectedSelection);
+        var contractMismatches = ValidateJourneyContracts(actualOutputs, expectedSelection)
+            .Concat(ValidateRuntimeOutputContracts(actualOutputs))
+            .ToArray();
         if (aiMode is "unavailable" or "invalid")
         {
             return contractMismatches
@@ -500,6 +502,90 @@ internal static class ToolingCommands
             || explanation.RequireStringProperty("source") != "deterministic_fallback")
         {
             mismatches.Add("unavailable-ai-fallback");
+        }
+
+        return mismatches;
+    }
+
+    private static IReadOnlyList<string> ValidateRuntimeOutputContracts(
+        IReadOnlyDictionary<string, JsonObject> outputs)
+    {
+        var mismatches = new List<string>();
+        RankingRequest? rankingRequest = null;
+        RankingResponse? rankingResponse = null;
+        FinalResponseEnvelope? finalResponse = null;
+        AnalyticsEnvelope? analytics = null;
+
+        try
+        {
+            rankingRequest = RuntimeOutputContractAdapter.RankingRequest(outputs["06-ranking-request.json"]);
+        }
+        catch (Exception)
+        {
+            mismatches.Add("typed-ranking-request-contract");
+        }
+
+        try
+        {
+            rankingResponse = RuntimeOutputContractAdapter.RankingResponse(outputs["07-ranking-response.json"]);
+        }
+        catch (Exception)
+        {
+            mismatches.Add("typed-ranking-response-contract");
+        }
+
+        try
+        {
+            finalResponse = RuntimeOutputContractAdapter.FinalResponse(outputs["10-final-response.json"]);
+        }
+        catch (Exception)
+        {
+            mismatches.Add("typed-final-response-contract");
+        }
+
+        try
+        {
+            analytics = RuntimeOutputContractAdapter.Analytics(outputs["11-analytics-events.json"]);
+        }
+        catch (Exception)
+        {
+            mismatches.Add("typed-analytics-contract");
+        }
+
+        if (rankingRequest is not null
+            && rankingResponse is not null
+            && (rankingRequest.Scenario != rankingResponse.Scenario
+                || rankingRequest.RankingPolicyVersion != rankingResponse.RankingPolicyVersion
+                || rankingResponse.RankedRecommendations.Any(recommendation =>
+                    !rankingRequest.Candidates.Any(candidate => candidate.ContentId == recommendation.ContentId))))
+        {
+            mismatches.Add("typed-ranking-contract-links");
+        }
+
+        if (rankingRequest is not null
+            && rankingResponse is not null
+            && finalResponse is not null
+            && (finalResponse.Scenario != rankingRequest.Scenario
+                || finalResponse.CustomerId != rankingRequest.CustomerProfile.CustomerId
+                || finalResponse.ActiveJourney.JourneyId != rankingRequest.ActiveJourney.JourneyId
+                || finalResponse.NextBestAction.RankingPolicyVersion != rankingResponse.RankingPolicyVersion
+                || rankingResponse.RankedRecommendations.FirstOrDefault() is not { } topRecommendation
+                || finalResponse.NextBestAction.ContentId != topRecommendation.ContentId
+                || finalResponse.NextBestAction.RankingScore != topRecommendation.Score))
+        {
+            mismatches.Add("typed-final-response-links");
+        }
+
+        if (finalResponse is not null
+            && analytics is not null
+            && (analytics.Scenario != finalResponse.Scenario
+                || analytics.Events.Any(@event =>
+                    @event.CustomerId != finalResponse.CustomerId
+                    || @event.SessionId != finalResponse.SessionId
+                    || string.IsNullOrWhiteSpace(@event.EventType)
+                    || string.IsNullOrWhiteSpace(@event.JourneyId))))
+        {
+            mismatches.Add("typed-analytics-links");
         }
 
         return mismatches;
