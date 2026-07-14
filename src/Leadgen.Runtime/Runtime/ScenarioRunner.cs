@@ -45,13 +45,18 @@ internal sealed class ScenarioRunner
         var selectionResult = DeterministicJourneySelector.Select(journeySummaries, inputs.SessionContext, interpretation);
         var selection = selectionResult.ToJson();
         var interpretationJson = interpretation.ToJson();
-        var retrieval = BuildRetrieval(options.Scenario, inputs.Journeys, inputs.Session, selection, catalog);
+        var retrieval = BuildRetrieval(
+            options.Scenario,
+            inputs.JourneyStates,
+            inputs.SessionContext,
+            selectionResult,
+            catalog);
         var rankingRequest = BuildRankingRequest(
             options.Scenario,
             inputs,
-            inputs.Journeys,
-            inputs.Session,
-            selection,
+            inputs.JourneyStates,
+            inputs.SessionContext,
+            selectionResult,
             retrieval,
             catalog);
         var rankingResponse = BuildRankingResponse(options.Scenario, catalog);
@@ -60,9 +65,9 @@ internal sealed class ScenarioRunner
             ? _ragPromptBuilder.Build(
                 options.Scenario,
                 inputs,
-                inputs.Journeys,
-                inputs.Session,
-                selection,
+                inputs.JourneyStates,
+                inputs.SessionContext,
+                selectionResult,
                 rankingResponse,
                 catalog,
                 promptFixture)
@@ -158,25 +163,18 @@ internal sealed class ScenarioRunner
 
     private JsonObject BuildRetrieval(
         string scenario,
-        JsonObject journeysPayload,
-        JsonObject session,
-        JsonObject selection,
+        IReadOnlyList<JourneyState> journeys,
+        SessionContext session,
+        ActiveJourneySelection selection,
         ActivityCatalog catalog)
     {
         var retrieval = _fixtures.LoadScenarioArtifact(scenario, "05-candidate-retrieval.json").DeepCloneObject();
-        var journeysById = journeysPayload.RequireArrayProperty("journeys")
-            .OfType<JsonObject>()
-            .ToDictionary(
-                static journey => journey.RequireStringProperty("journey_id"),
-                static journey => journey,
-                StringComparer.Ordinal);
-
-        var activeJourney = journeysById[selection.RequireStringProperty("selected_journey_id")];
+        var activeJourney = selection.SelectedJourney;
         var activeJourneyNode = retrieval.RequireObjectProperty("retrieval_query").RequireObjectProperty("active_journey");
-        activeJourneyNode["service_category"] = activeJourney.RequireProperty("service_category").DeepClone();
-        activeJourneyNode["stage"] = activeJourney.RequireProperty("stage").DeepClone();
-        activeJourneyNode["intent"] = activeJourney.RequireProperty("intent").DeepClone();
-        if (activeJourney.OptionalBoolProperty("resume_candidate"))
+        activeJourneyNode["service_category"] = activeJourney.ServiceCategory;
+        activeJourneyNode["stage"] = activeJourney.Stage;
+        activeJourneyNode["intent"] = activeJourney.Intent;
+        if (activeJourney.ResumeCandidate)
         {
             activeJourneyNode["resume_candidate"] = true;
         }
@@ -186,20 +184,20 @@ internal sealed class ScenarioRunner
         }
 
         var contextNode = retrieval.RequireObjectProperty("retrieval_query").RequireObjectProperty("context");
-        contextNode["region"] = session.RequireProperty("region").DeepClone();
-        contextNode["channel"] = session.RequireProperty("channel").DeepClone();
+        contextNode["region"] = session.Region;
+        contextNode["channel"] = session.Channel;
 
         if (retrieval.RequireObjectProperty("retrieval_query")["secondary_journey"] is JsonObject secondaryJourneyNode)
         {
-            var secondaryJourney = journeysById.Values.FirstOrDefault(journey =>
-                journey.RequireStringProperty("journey_id") != activeJourney.RequireStringProperty("journey_id")
-                && journey.RequireStringProperty("service_category") == secondaryJourneyNode.RequireStringProperty("service_category"));
+            var secondaryJourney = journeys.FirstOrDefault(journey =>
+                journey.JourneyId != activeJourney.JourneyId
+                && journey.ServiceCategory == secondaryJourneyNode.RequireStringProperty("service_category"));
 
             if (secondaryJourney is not null)
             {
-                secondaryJourneyNode["service_category"] = secondaryJourney.RequireProperty("service_category").DeepClone();
-                secondaryJourneyNode["stage"] = secondaryJourney.RequireProperty("stage").DeepClone();
-                secondaryJourneyNode["intent"] = secondaryJourney.RequireProperty("intent").DeepClone();
+                secondaryJourneyNode["service_category"] = secondaryJourney.ServiceCategory;
+                secondaryJourneyNode["stage"] = secondaryJourney.Stage;
+                secondaryJourneyNode["intent"] = secondaryJourney.Intent;
             }
         }
 
@@ -211,8 +209,8 @@ internal sealed class ScenarioRunner
                 continue;
             }
 
-            candidate["asset_type"] = asset.RequireProperty("assetType").DeepClone();
-            candidate["service_category"] = asset.RequireProperty("serviceCategory").DeepClone();
+            candidate["asset_type"] = asset.AssetType;
+            candidate["service_category"] = asset.ServiceCategory;
         }
 
         retrieval["total_candidates"] = retrieval.RequireArrayProperty("candidates_returned").Count;
@@ -222,60 +220,61 @@ internal sealed class ScenarioRunner
     private JsonObject BuildRankingRequest(
         string scenario,
         ScenarioInputs inputs,
-        JsonObject journeysPayload,
-        JsonObject session,
-        JsonObject selection,
+        IReadOnlyList<JourneyState> journeys,
+        SessionContext session,
+        ActiveJourneySelection selection,
         JsonObject retrieval,
         ActivityCatalog catalog)
     {
         var request = _fixtures.LoadScenarioArtifact(scenario, "06-ranking-request.json").DeepCloneObject();
-        var activeJourney = journeysPayload.RequireArrayProperty("journeys")
-            .OfType<JsonObject>()
-            .First(journey => journey.RequireStringProperty("journey_id") == selection.RequireStringProperty("selected_journey_id"));
+        var activeJourney = journeys.First(journey => journey.JourneyId == selection.SelectedJourney.JourneyId);
 
         request["scenario"] = scenario;
         request["customer_profile"] = new JsonObject
         {
-            ["customer_id"] = session.RequireProperty("customer_id").DeepClone(),
+            ["customer_id"] = session.CustomerId,
             ["lead_score"] = inputs.RequireCustomerSummary().RequireProperty("lead_score").DeepClone(),
             ["location"] = inputs.RequireAttributes().RequireProperty("location").DeepClone(),
             ["household_type"] = inputs.RequireAttributes().RequireProperty("household_type").DeepClone(),
         };
         request["active_journey"] = new JsonObject
         {
-            ["journey_id"] = activeJourney.RequireProperty("journey_id").DeepClone(),
-            ["service_category"] = activeJourney.RequireProperty("service_category").DeepClone(),
-            ["intent"] = activeJourney.RequireProperty("intent").DeepClone(),
-            ["stage"] = activeJourney.RequireProperty("stage").DeepClone(),
-            ["urgency"] = activeJourney.RequireProperty("urgency").DeepClone(),
-            ["resume_candidate"] = activeJourney.RequireProperty("resume_candidate").DeepClone(),
-            ["qualification_state"] = activeJourney.RequireObjectProperty("qualification_state").DeepCloneObject(),
+            ["journey_id"] = activeJourney.JourneyId,
+            ["service_category"] = activeJourney.ServiceCategory,
+            ["intent"] = activeJourney.Intent,
+            ["stage"] = activeJourney.Stage,
+            ["urgency"] = activeJourney.Urgency,
+            ["resume_candidate"] = activeJourney.ResumeCandidate,
+            ["qualification_state"] = new JsonObject
+            {
+                ["coverage_region_match"] = activeJourney.QualificationState.CoverageRegionMatch,
+                ["serviceability_confirmed"] = activeJourney.QualificationState.ServiceabilityConfirmed,
+                ["hard_exclusions"] = new JsonArray(activeJourney.QualificationState.HardExclusions.Select(static value => (JsonNode)value).ToArray()),
+                ["suppression_flags"] = new JsonArray(activeJourney.QualificationState.SuppressionFlags.Select(static value => (JsonNode)value).ToArray()),
+            },
         };
 
         if (request["ai_context"] is JsonObject aiContext)
         {
-            var interpretation = selection.RequireObjectProperty("ai_interpretation");
-            var suggestedJourneyId = interpretation.OptionalStringProperty("suggested_journey_id");
+            var suggestedJourneyId = selection.Interpretation.SuggestedJourneyId;
             aiContext["suggested_journey_id"] = suggestedJourneyId;
             if (suggestedJourneyId is not null)
             {
-                var suggestedJourney = journeysPayload.RequireArrayProperty("journeys")
-                    .OfType<JsonObject>()
-                    .FirstOrDefault(journey => journey.RequireStringProperty("journey_id") == suggestedJourneyId);
-                aiContext["suggested_service_category"] = suggestedJourney?.RequireProperty("service_category").DeepClone();
+                var suggestedJourney = journeys.FirstOrDefault(journey => journey.JourneyId == suggestedJourneyId);
+                aiContext["suggested_service_category"] = suggestedJourney?.ServiceCategory;
             }
             else
             {
                 aiContext["suggested_service_category"] = null;
             }
-            aiContext["deterministic_override_required"] = selection.OptionalBoolProperty("deterministic_override");
+            aiContext["deterministic_override_required"] = selection.DeterministicOverride;
         }
 
         var context = request.RequireObjectProperty("context").DeepCloneObject();
-        context["channel"] = session.RequireProperty("channel").DeepClone();
-        context["campaign_source"] = session.RequireProperty("entry_point").DeepClone();
-        context["campaign_theme"] = session["campaign_theme"]?.DeepClone();
-        context["session_id"] = session.RequireProperty("session_id").DeepClone();
+        context["channel"] = session.Channel;
+        context["campaign_source"] = session.EntryPoint;
+        context["campaign_theme"] = session.CampaignTheme;
+        context["session_id"] = session.SessionId;
         request["context"] = context;
         var retrievalCandidatesById = retrieval.RequireArrayProperty("candidates_returned")
             .OfType<JsonObject>()
@@ -309,9 +308,9 @@ internal sealed class ScenarioRunner
 
             recommendation["cta"] = new JsonObject
             {
-                ["type"] = asset.RequireObjectProperty("cta").RequireProperty("type").DeepClone(),
-                ["label"] = asset.RequireObjectProperty("cta").RequireProperty("label").DeepClone(),
-                ["deep_link"] = asset.RequireObjectProperty("cta").RequireProperty("deepLink").DeepClone(),
+                ["type"] = asset.CtaType,
+                ["label"] = asset.CtaLabel,
+                ["deep_link"] = asset.CtaDeepLink,
             };
         }
 
@@ -378,6 +377,8 @@ internal sealed class ScenarioRunner
                 ?? throw new InvalidDataException("Missing choices[0].message.content in Ollama response.");
             var responseObject = JsonNode.Parse(raw).RequireObject("ai_response");
             responseObject = PromptUtilities.NormalizeGroundingAssetIds(responseObject, promptInput);
+            var typedResponse = AiExplanationResponse.FromJson(responseObject);
+            responseObject = typedResponse.ToJson();
             var validation = PromptUtilities.ValidateResponse(responseObject, promptInput);
             var aiRecord = new JsonObject
             {
@@ -515,9 +516,7 @@ internal sealed class ScenarioRunner
             ["secondary_journey_prompt"] = BuildSecondaryJourneyPrompt(journeysPayload, selection, retrieval, catalog),
             ["explanation"] = BuildExplanation(topRecommendation, aiRecord, aiResponse),
             ["decision_trace"] = template.RequireObjectProperty("decision_trace").DeepCloneObject(),
-            ["metadata_revision"] = catalog.Assets[topRecommendation.RequireStringProperty("content_id")]
-                .RequireProperty("metadataRevision")
-                .DeepClone(),
+            ["metadata_revision"] = catalog.Assets[topRecommendation.RequireStringProperty("content_id")].MetadataRevision,
             ["response_generated_at"] = AddSeconds(session.RequireStringProperty("timestamp"), 2),
         };
     }
@@ -647,9 +646,9 @@ internal sealed class ScenarioRunner
         {
             ["journey_id"] = secondaryJourney.RequireProperty("journey_id").DeepClone(),
             ["service_category"] = secondaryJourney.RequireProperty("service_category").DeepClone(),
-            ["label"] = asset.RequireObjectProperty("cta").RequireProperty("label").DeepClone(),
-            ["deep_link"] = asset.RequireObjectProperty("cta").RequireProperty("deepLink").DeepClone(),
-            ["content_id"] = asset.RequireProperty("assetId").DeepClone(),
+            ["label"] = asset.CtaLabel,
+            ["deep_link"] = asset.CtaDeepLink,
+            ["content_id"] = asset.AssetId,
         };
     }
 
@@ -659,7 +658,7 @@ internal sealed class ScenarioRunner
         ActivityCatalog catalog)
     {
         var assetId = retrievalCandidate.RequireStringProperty("asset_id");
-        var asset = catalog.Assets[assetId];
+        var asset = catalog.Assets[assetId].Raw;
         var candidate = templateCandidate.DeepCloneObject();
         candidate["content_id"] = asset.RequireProperty("assetId").DeepClone();
         candidate["asset_type"] = asset.RequireProperty("assetType").DeepClone();

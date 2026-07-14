@@ -38,27 +38,18 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
     public async Task SeedScenarioAsync(ScenarioInputs inputs)
     {
         var containers = await EnsureRuntimeContainersAsync();
-        if (inputs.Profile is not null)
+        var profileDocument = JourneyContractAdapter.CustomerProfile(inputs.Profile, inputs.SessionContext);
+        if (profileDocument is not null)
         {
-            var profileDocument = inputs.Profile.DeepCloneObject();
-            profileDocument["id"] = inputs.CustomerId;
-            profileDocument["source_session_id"] = inputs.Session.RequireProperty("session_id").DeepClone();
-
             await containers.Profiles.UpsertItemAsync(
-                ToCosmosDocument(profileDocument),
+                profileDocument,
                 new PartitionKey(inputs.CustomerId));
         }
 
-        foreach (var journey in inputs.Journeys.RequireArrayProperty("journeys").OfType<JsonObject>())
+        foreach (var journey in JourneyContractAdapter.CosmosJourneys(inputs.Journeys, inputs.SessionContext))
         {
-            var document = journey.DeepCloneObject();
-            document["id"] = journey.RequireStringProperty("journey_id");
-            document["scenario"] = inputs.Journeys.RequireProperty("scenario").DeepClone();
-            document["customer_id"] = inputs.Journeys.RequireProperty("customer_id").DeepClone();
-            document["source_session_id"] = inputs.Session.RequireProperty("session_id").DeepClone();
-
             await containers.Journeys.UpsertItemAsync(
-                ToCosmosDocument(document),
+                journey,
                 new PartitionKey(inputs.CustomerId));
         }
     }
@@ -72,9 +63,9 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         JsonObject? profile = null;
         try
         {
-            profile = FromCosmosDocument((await containers.Profiles.ReadItemAsync<JObject>(
+            profile = (await containers.Profiles.ReadItemAsync<CosmosCustomerProfileDocument>(
                 customerId,
-                new PartitionKey(customerId))).Resource);
+                new PartitionKey(customerId))).Resource.ToFixtureJson();
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
@@ -83,7 +74,7 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         var journeyQuery = new QueryDefinition(
             "SELECT * FROM c WHERE c.customer_id = @customer_id ORDER BY c.journey_id")
             .WithParameter("@customer_id", customerId);
-        var iterator = containers.Journeys.GetItemQueryIterator<JObject>(
+        var iterator = containers.Journeys.GetItemQueryIterator<CosmosJourneyDocument>(
             journeyQuery,
             requestOptions: new QueryRequestOptions { PartitionKey = new PartitionKey(customerId) });
 
@@ -91,7 +82,7 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         while (iterator.HasMoreResults)
         {
             var page = await iterator.ReadNextAsync();
-            journeys.AddRange(page.Resource.Where(static item => item is not null).Select(static item => (JsonNode)FromCosmosDocument(item!)));
+            journeys.AddRange(page.Resource.Select(static journey => (JsonNode)journey.ToFixtureJson()));
         }
 
         return new ScenarioInputs(
@@ -114,21 +105,23 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
     {
         var containers = await EnsureRuntimeContainersAsync();
 
-        var traceDocument = new JsonObject
-        {
-            ["id"] = $"{scenario}:{finalResponse.RequireStringProperty("session_id")}",
-            ["customer_id"] = customerId,
-            ["scenario"] = scenario,
-            ["final_response"] = finalResponse.DeepCloneObject(),
-            ["journey_interpretation"] = journeyInterpretation.DeepCloneObject(),
-        };
-        await containers.DecisionTraces.UpsertItemAsync(ToCosmosDocument(traceDocument), new PartitionKey(customerId));
+        var traceDocument = new DecisionTraceDocument(
+            $"{scenario}:{finalResponse.RequireStringProperty("session_id")}",
+            customerId,
+            scenario,
+            finalResponse,
+            JourneyContractAdapter.Interpretation(journeyInterpretation));
+        await containers.DecisionTraces.UpsertItemAsync(
+            ToCosmosDocument(traceDocument.ToJson()),
+            new PartitionKey(customerId));
 
-        foreach (var eventNode in analytics.RequireArrayProperty("events").OfType<JsonObject>())
+        foreach (var analyticsEvent in analytics.RequireArrayProperty("events")
+            .OfType<JsonObject>()
+            .Select(AnalyticsEvent.FromJson))
         {
-            var eventDocument = eventNode.DeepCloneObject();
+            var eventDocument = analyticsEvent.ToJson();
             eventDocument["id"] =
-                $"{scenario}:{eventNode.RequireStringProperty("event_type")}:{eventNode.RequireStringProperty("timestamp")}:{eventNode.RequireStringProperty("session_id")}";
+                $"{scenario}:{analyticsEvent.EventType}:{analyticsEvent.Timestamp:O}:{analyticsEvent.SessionId}";
             eventDocument["scenario"] = scenario;
             await containers.Events.UpsertItemAsync(ToCosmosDocument(eventDocument), new PartitionKey(customerId));
         }
@@ -150,9 +143,9 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         JsonObject? profile = null;
         try
         {
-            profile = FromCosmosDocument((await containers.Profiles.ReadItemAsync<JObject>(
+            profile = (await containers.Profiles.ReadItemAsync<CosmosCustomerProfileDocument>(
                 customerId,
-                new PartitionKey(customerId))).Resource);
+                new PartitionKey(customerId))).Resource.ToFixtureJson();
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
@@ -161,7 +154,7 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         var journeyQuery = new QueryDefinition(
             "SELECT * FROM c WHERE c.customer_id = @customer_id ORDER BY c.journey_id")
             .WithParameter("@customer_id", customerId);
-        var iterator = containers.Journeys.GetItemQueryIterator<JObject>(
+        var iterator = containers.Journeys.GetItemQueryIterator<CosmosJourneyDocument>(
             journeyQuery,
             requestOptions: new QueryRequestOptions { PartitionKey = new PartitionKey(customerId) });
 
@@ -169,7 +162,7 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         while (iterator.HasMoreResults)
         {
             var page = await iterator.ReadNextAsync();
-            journeys.AddRange(page.Resource.Where(static item => item is not null).Select(static item => (JsonNode)FromCosmosDocument(item!)));
+            journeys.AddRange(page.Resource.Select(static journey => (JsonNode)journey.ToFixtureJson()));
         }
 
         return new JsonObject

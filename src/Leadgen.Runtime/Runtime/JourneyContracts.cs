@@ -1,13 +1,72 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Newtonsoft.Json;
 
 namespace Leadgen.Runtime;
 
 internal sealed record QualificationState(
-    bool CoverageRegionMatch,
-    bool ServiceabilityConfirmed,
-    IReadOnlyList<string> HardExclusions,
-    IReadOnlyList<string> SuppressionFlags);
+    [property: JsonProperty("coverage_region_match")] bool CoverageRegionMatch,
+    [property: JsonProperty("serviceability_confirmed")] bool ServiceabilityConfirmed,
+    [property: JsonProperty("hard_exclusions")] IReadOnlyList<string> HardExclusions,
+    [property: JsonProperty("suppression_flags")] IReadOnlyList<string> SuppressionFlags);
+
+internal sealed record CustomerAttributes(
+    [property: JsonProperty("household_type")] string HouseholdType,
+    [property: JsonProperty("employment_type")] string EmploymentType,
+    [property: JsonProperty("location")] string Location,
+    [property: JsonProperty("budget_range")] string BudgetRange,
+    [property: JsonProperty("life_stage")] string LifeStage);
+
+internal sealed record CustomerSummary(
+    [property: JsonProperty("last_meaningful_event_at")] DateTimeOffset? LastMeaningfulEventAt,
+    [property: JsonProperty("repeat_sessions_30d")] int? RepeatSessions30d,
+    [property: JsonProperty("lead_score")] int LeadScore);
+
+internal sealed record JourneyBehaviorSummary(
+    [property: JsonProperty("recent_quote_started")] bool RecentQuoteStarted,
+    [property: JsonProperty("provider_comparisons_7d")] int ProviderComparisons7d,
+    [property: JsonProperty("pages_viewed_7d")] IReadOnlyList<string> PagesViewed7d,
+    [property: JsonProperty("quote_started_at", NullValueHandling = NullValueHandling.Ignore)] DateTimeOffset? QuoteStartedAt,
+    [property: JsonProperty("quote_abandoned_at", NullValueHandling = NullValueHandling.Ignore)] DateTimeOffset? QuoteAbandonedAt,
+    [property: JsonProperty("quote_completion_pct", NullValueHandling = NullValueHandling.Ignore)] int? QuoteCompletionPercentage);
+
+internal sealed record JourneyDecisionSupport(
+    [property: JsonProperty("journey_score")] double JourneyScore,
+    [property: JsonProperty("ai_journey_summary")] string AiJourneySummary);
+
+/// <summary>
+/// Represents the complete customer profile stored in Cosmos, including fields outside the decision-ready summary.
+/// </summary>
+internal sealed record CosmosCustomerProfileDocument(
+    [property: JsonProperty("id")] string Id,
+    [property: JsonProperty("customer_id")] string CustomerId,
+    [property: JsonProperty("scenario")] string Scenario,
+    [property: JsonProperty("description")] string Description,
+    [property: JsonProperty("attributes")] CustomerAttributes Attributes,
+    [property: JsonProperty("customer_summary")] CustomerSummary CustomerSummary,
+    [property: JsonProperty("source_session_id")] string SourceSessionId);
+
+/// <summary>
+/// Represents the complete journey record stored in Cosmos, rather than only its bounded decisioning summary.
+/// </summary>
+internal sealed record CosmosJourneyDocument(
+    [property: JsonProperty("id")] string Id,
+    [property: JsonProperty("scenario")] string Scenario,
+    [property: JsonProperty("customer_id")] string CustomerId,
+    [property: JsonProperty("source_session_id")] string SourceSessionId,
+    [property: JsonProperty("journey_id")] string JourneyId,
+    [property: JsonProperty("service_category")] string ServiceCategory,
+    [property: JsonProperty("status")] string Status,
+    [property: JsonProperty("intent")] string Intent,
+    [property: JsonProperty("stage")] string Stage,
+    [property: JsonProperty("urgency")] string Urgency,
+    [property: JsonProperty("switching_intent")] string SwitchingIntent,
+    [property: JsonProperty("renewal_window_days")] int? RenewalWindowDays,
+    [property: JsonProperty("resume_candidate")] bool ResumeCandidate,
+    [property: JsonProperty("qualification_state")] QualificationState QualificationState,
+    [property: JsonProperty("behavior_summary")] JourneyBehaviorSummary BehaviorSummary,
+    [property: JsonProperty("decision_support")] JourneyDecisionSupport DecisionSupport,
+    [property: JsonProperty("last_meaningful_event_at")] DateTimeOffset LastMeaningfulEventAt);
 
 internal sealed record JourneyState(
     string JourneyId,
@@ -75,6 +134,71 @@ internal sealed record ActiveJourneySelection(
     JourneyInterpretation Interpretation,
     bool DeterministicOverride);
 
+internal sealed record AiExplanationResponse(
+    string Summary,
+    IReadOnlyList<string> KeyPoints,
+    string CtaSupportText,
+    IReadOnlyList<string> GroundingAssetIds)
+{
+    public static AiExplanationResponse FromJson(JsonObject payload) => new(
+        payload.RequireStringProperty("summary"),
+        payload.RequireArrayProperty("key_points").Select(static value => value?.GetValue<string>() ?? string.Empty).ToArray(),
+        payload.RequireStringProperty("cta_support_text"),
+        payload.RequireArrayProperty("grounding_asset_ids").Select(static value => value?.GetValue<string>() ?? string.Empty).ToArray());
+
+    public JsonObject ToJson() => new()
+    {
+        ["summary"] = Summary,
+        ["key_points"] = new JsonArray(KeyPoints.Select(static value => (JsonNode)value).ToArray()),
+        ["cta_support_text"] = CtaSupportText,
+        ["grounding_asset_ids"] = new JsonArray(GroundingAssetIds.Select(static value => (JsonNode)value).ToArray()),
+    };
+}
+
+internal sealed record AnalyticsEvent(
+    string EventType,
+    string CustomerId,
+    string SessionId,
+    string JourneyId,
+    DateTimeOffset Timestamp,
+    JsonObject Metadata)
+{
+    public static AnalyticsEvent FromJson(JsonObject payload) => new(
+        payload.RequireStringProperty("event_type"),
+        payload.RequireStringProperty("customer_id"),
+        payload.RequireStringProperty("session_id"),
+        payload.RequireStringProperty("journey_id"),
+        DateTimeOffset.Parse(payload.RequireStringProperty("timestamp")),
+        payload.RequireObjectProperty("metadata").DeepCloneObject());
+
+    public JsonObject ToJson() => new()
+    {
+        ["event_type"] = EventType,
+        ["customer_id"] = CustomerId,
+        ["session_id"] = SessionId,
+        ["journey_id"] = JourneyId,
+        ["timestamp"] = Timestamp.ToString("O"),
+        ["metadata"] = Metadata.DeepCloneObject(),
+    };
+}
+
+internal sealed record DecisionTraceDocument(
+    string Id,
+    string CustomerId,
+    string Scenario,
+    JsonObject FinalResponse,
+    JourneyInterpretation JourneyInterpretation)
+{
+    public JsonObject ToJson() => new()
+    {
+        ["id"] = Id,
+        ["customer_id"] = CustomerId,
+        ["scenario"] = Scenario,
+        ["final_response"] = FinalResponse.DeepCloneObject(),
+        ["journey_interpretation"] = JourneyInterpretation.ToJson(),
+    };
+}
+
 internal static class JourneyContractAdapter
 {
     public static IReadOnlyList<JourneyState> JourneyStates(JsonObject payload) =>
@@ -101,6 +225,69 @@ internal static class JourneyContractAdapter
         payload["latency_ms"]?.GetValue<long>(),
         payload.OptionalStringProperty("fallback_reason"),
         payload.OptionalStringProperty("detail"));
+
+    public static CosmosCustomerProfileDocument? CustomerProfile(
+        JsonObject? profile,
+        SessionContext session)
+    {
+        if (profile is null)
+        {
+            return null;
+        }
+
+        return new CosmosCustomerProfileDocument(
+            session.CustomerId,
+            profile.RequireStringProperty("customer_id"),
+            profile.RequireStringProperty("scenario"),
+            profile.RequireStringProperty("description"),
+            CustomerAttributes(profile.RequireObjectProperty("attributes")),
+            CustomerSummary(profile.RequireObjectProperty("customer_summary")),
+            session.SessionId);
+    }
+
+    public static IReadOnlyList<CosmosJourneyDocument> CosmosJourneys(
+        JsonObject payload,
+        SessionContext session)
+    {
+        var scenario = payload.RequireStringProperty("scenario");
+        var customerId = payload.RequireStringProperty("customer_id");
+        return payload.RequireArrayProperty("journeys")
+            .OfType<JsonObject>()
+            .Select(journey => CosmosJourney(journey, scenario, customerId, session.SessionId))
+            .ToArray();
+    }
+
+    public static JsonObject ToFixtureJson(this CosmosCustomerProfileDocument profile) => new()
+    {
+        ["id"] = profile.Id,
+        ["customer_id"] = profile.CustomerId,
+        ["scenario"] = profile.Scenario,
+        ["description"] = profile.Description,
+        ["attributes"] = ToJson(profile.Attributes),
+        ["customer_summary"] = ToJson(profile.CustomerSummary),
+        ["source_session_id"] = profile.SourceSessionId,
+    };
+
+    public static JsonObject ToFixtureJson(this CosmosJourneyDocument journey) => new()
+    {
+        ["id"] = journey.Id,
+        ["scenario"] = journey.Scenario,
+        ["customer_id"] = journey.CustomerId,
+        ["source_session_id"] = journey.SourceSessionId,
+        ["journey_id"] = journey.JourneyId,
+        ["service_category"] = journey.ServiceCategory,
+        ["status"] = journey.Status,
+        ["intent"] = journey.Intent,
+        ["stage"] = journey.Stage,
+        ["urgency"] = journey.Urgency,
+        ["switching_intent"] = journey.SwitchingIntent,
+        ["renewal_window_days"] = journey.RenewalWindowDays,
+        ["resume_candidate"] = journey.ResumeCandidate,
+        ["qualification_state"] = ToJson(journey.QualificationState),
+        ["behavior_summary"] = ToJson(journey.BehaviorSummary),
+        ["decision_support"] = ToJson(journey.DecisionSupport),
+        ["last_meaningful_event_at"] = Timestamp(journey.LastMeaningfulEventAt),
+    };
 
     public static JsonObject ToJson(this JourneySummary summary) => new()
     {
@@ -170,6 +357,55 @@ internal static class JourneyContractAdapter
         journey.RequireObjectProperty("decision_support").RequireStringProperty("ai_journey_summary"),
         DateTimeOffset.Parse(journey.RequireStringProperty("last_meaningful_event_at")));
 
+    private static CosmosJourneyDocument CosmosJourney(
+        JsonObject journey,
+        string scenario,
+        string customerId,
+        string sourceSessionId) => new(
+        journey.RequireStringProperty("journey_id"),
+        scenario,
+        customerId,
+        sourceSessionId,
+        journey.RequireStringProperty("journey_id"),
+        journey.RequireStringProperty("service_category"),
+        journey.RequireStringProperty("status"),
+        journey.RequireStringProperty("intent"),
+        journey.RequireStringProperty("stage"),
+        journey.RequireStringProperty("urgency"),
+        journey.RequireStringProperty("switching_intent"),
+        journey["renewal_window_days"]?.GetValue<int>(),
+        journey.OptionalBoolProperty("resume_candidate"),
+        ToQualificationState(journey.RequireObjectProperty("qualification_state")),
+        JourneyBehaviorSummary(journey.RequireObjectProperty("behavior_summary")),
+        JourneyDecisionSupport(journey.RequireObjectProperty("decision_support")),
+        DateTimeOffset.Parse(journey.RequireStringProperty("last_meaningful_event_at")));
+
+    private static CustomerAttributes CustomerAttributes(JsonObject payload) => new(
+        payload.RequireStringProperty("household_type"),
+        payload.RequireStringProperty("employment_type"),
+        payload.RequireStringProperty("location"),
+        payload.RequireStringProperty("budget_range"),
+        payload.RequireStringProperty("life_stage"));
+
+    private static CustomerSummary CustomerSummary(JsonObject payload) => new(
+        payload.OptionalStringProperty("last_meaningful_event_at") is { } lastMeaningfulEventAt
+            ? DateTimeOffset.Parse(lastMeaningfulEventAt)
+            : null,
+        payload["repeat_sessions_30d"]?.GetValue<int>(),
+        payload.RequireProperty("lead_score").GetValue<int>());
+
+    private static JourneyBehaviorSummary JourneyBehaviorSummary(JsonObject payload) => new(
+        payload.OptionalBoolProperty("recent_quote_started"),
+        payload.RequireProperty("provider_comparisons_7d").GetValue<int>(),
+        Strings(payload, "pages_viewed_7d"),
+        OptionalTimestamp(payload, "quote_started_at"),
+        OptionalTimestamp(payload, "quote_abandoned_at"),
+        payload["quote_completion_pct"]?.GetValue<int>());
+
+    private static JourneyDecisionSupport JourneyDecisionSupport(JsonObject payload) => new(
+        payload.RequireProperty("journey_score").GetValue<double>(),
+        payload.RequireStringProperty("ai_journey_summary"));
+
     private static QualificationState ToQualificationState(JsonObject payload) => new(
         payload.OptionalBoolProperty("coverage_region_match"),
         payload.OptionalBoolProperty("serviceability_confirmed"),
@@ -183,6 +419,59 @@ internal static class JourneyContractAdapter
         ["hard_exclusions"] = new JsonArray(state.HardExclusions.Select(static value => (JsonNode)value).ToArray()),
         ["suppression_flags"] = new JsonArray(state.SuppressionFlags.Select(static value => (JsonNode)value).ToArray()),
     };
+
+    private static JsonObject ToJson(CustomerAttributes attributes) => new()
+    {
+        ["household_type"] = attributes.HouseholdType,
+        ["employment_type"] = attributes.EmploymentType,
+        ["location"] = attributes.Location,
+        ["budget_range"] = attributes.BudgetRange,
+        ["life_stage"] = attributes.LifeStage,
+    };
+
+    private static JsonObject ToJson(CustomerSummary summary) => new()
+    {
+        ["last_meaningful_event_at"] = summary.LastMeaningfulEventAt is { } timestamp ? Timestamp(timestamp) : null,
+        ["repeat_sessions_30d"] = summary.RepeatSessions30d,
+        ["lead_score"] = summary.LeadScore,
+    };
+
+    private static JsonObject ToJson(JourneyBehaviorSummary behavior)
+    {
+        var json = new JsonObject
+        {
+            ["recent_quote_started"] = behavior.RecentQuoteStarted,
+            ["provider_comparisons_7d"] = behavior.ProviderComparisons7d,
+            ["pages_viewed_7d"] = new JsonArray(behavior.PagesViewed7d.Select(static value => (JsonNode)value).ToArray()),
+        };
+        if (behavior.QuoteStartedAt is { } startedAt)
+        {
+            json["quote_started_at"] = Timestamp(startedAt);
+        }
+        if (behavior.QuoteAbandonedAt is { } abandonedAt)
+        {
+            json["quote_abandoned_at"] = Timestamp(abandonedAt);
+        }
+        if (behavior.QuoteCompletionPercentage is { } completionPercentage)
+        {
+            json["quote_completion_pct"] = completionPercentage;
+        }
+        return json;
+    }
+
+    private static JsonObject ToJson(JourneyDecisionSupport decisionSupport) => new()
+    {
+        ["journey_score"] = decisionSupport.JourneyScore,
+        ["ai_journey_summary"] = decisionSupport.AiJourneySummary,
+    };
+
+    private static DateTimeOffset? OptionalTimestamp(JsonObject payload, string propertyName) =>
+        payload.OptionalStringProperty(propertyName) is { } timestamp
+            ? DateTimeOffset.Parse(timestamp)
+            : null;
+
+    private static string Timestamp(DateTimeOffset timestamp) =>
+        timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
 
     private static IReadOnlyList<string> Strings(JsonObject payload, string propertyName) =>
         payload.RequireArrayProperty(propertyName).Select(static node => node?.GetValue<string>() ?? string.Empty).ToArray();
