@@ -40,9 +40,11 @@ internal sealed class ScenarioRunner
 
         var inputs = await LoadInputsAsync(options);
         var catalog = ActivityCatalog.Load(_paths);
-        var journeySummaries = JourneySummaryBuilder.Build(inputs.Journeys);
-        var interpretation = await _journeyInterpreter.InterpretAsync(options, inputs, journeySummaries);
-        var selection = DeterministicJourneySelector.Select(journeySummaries, inputs.Session, interpretation);
+        var journeySummaries = JourneySummaryBuilder.Build(inputs.JourneyStates);
+        var interpretation = await _journeyInterpreter.InterpretAsync(options, inputs.SessionContext, journeySummaries);
+        var selectionResult = DeterministicJourneySelector.Select(journeySummaries, inputs.SessionContext, interpretation);
+        var selection = selectionResult.ToJson();
+        var interpretationJson = interpretation.ToJson();
         var retrieval = BuildRetrieval(options.Scenario, inputs.Journeys, inputs.Session, selection, catalog);
         var rankingRequest = BuildRankingRequest(
             options.Scenario,
@@ -95,9 +97,9 @@ internal sealed class ScenarioRunner
         {
             ["02-journey-summaries.json"] = new JsonObject
             {
-                ["journeys"] = journeySummaries.DeepCloneArray(),
+                ["journeys"] = new JsonArray(journeySummaries.Select(static summary => (JsonNode)summary.ToJson()).ToArray()),
             },
-            ["03-ai-journey-interpretation.json"] = interpretation,
+            ["03-ai-journey-interpretation.json"] = interpretationJson,
             ["04-active-journey-selection.json"] = selection,
             ["05-candidate-retrieval.json"] = retrieval,
             ["06-ranking-request.json"] = rankingRequest,
@@ -122,7 +124,7 @@ internal sealed class ScenarioRunner
                 inputs.CustomerId,
                 finalResponse,
                 analytics,
-                interpretation);
+                interpretationJson);
         }
 
         if (printSummary)

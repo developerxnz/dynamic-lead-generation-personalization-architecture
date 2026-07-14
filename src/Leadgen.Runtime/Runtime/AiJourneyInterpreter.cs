@@ -18,17 +18,26 @@ internal sealed class AiJourneyInterpreter
         _fixtures = fixtures;
     }
 
-    public async Task<JsonObject> InterpretAsync(
+    public async Task<JourneyInterpretation> InterpretAsync(
         CliOptions options,
-        ScenarioInputs inputs,
-        JsonArray journeySummaries)
+        SessionContext session,
+        IReadOnlyList<JourneySummary> journeySummaries)
     {
         if (options.AiMode == "expected")
         {
             var expected = _fixtures.LoadScenarioArtifact(options.Scenario, "04-active-journey-selection.json")
                 .RequireObjectProperty("ai_interpretation")
                 .DeepCloneObject();
-            return Accepted(expected, "fixture", "expected", 0);
+            return new JourneyInterpretation(
+                "accepted",
+                expected.RequireStringProperty("suggested_journey_id"),
+                expected.RequireProperty("confidence").GetValue<double>(),
+                expected.RequireStringProperty("reason_summary"),
+                "fixture",
+                "expected",
+                0,
+                null,
+                null);
         }
 
         if (options.AiMode == "unavailable")
@@ -41,12 +50,11 @@ internal sealed class AiJourneyInterpreter
         {
             try
             {
-                Validate(new JsonObject
-                {
-                    ["suggested_journey_id"] = "journey-not-in-candidate-set",
-                    ["confidence"] = 1.2,
-                    ["reason_summary"] = "Synthetic invalid interpretation for validation coverage.",
-                }, journeySummaries);
+                Validate(
+                    "journey-not-in-candidate-set",
+                    1.2,
+                    "Synthetic invalid interpretation for validation coverage.",
+                    journeySummaries);
             }
             catch (InvalidDataException ex)
             {
@@ -54,7 +62,7 @@ internal sealed class AiJourneyInterpreter
             }
         }
 
-        var prompt = BuildPrompt(inputs, journeySummaries);
+        var prompt = BuildPrompt(session, journeySummaries);
         var model = Environment.GetEnvironmentVariable("MODEL")
             ?? Environment.GetEnvironmentVariable("OLLAMA_MODEL")
             ?? "llama3.1:8b";
@@ -100,8 +108,13 @@ internal sealed class AiJourneyInterpreter
                 .RequireStringProperty("content")
                 ?? throw new InvalidDataException("Missing choices[0].message.content in Ollama response.");
             var interpretation = JsonNode.Parse(raw).RequireObject("journey_interpretation");
-            Validate(interpretation, journeySummaries);
-            return Accepted(interpretation, "ollama", model, stopwatch.ElapsedMilliseconds);
+            var suggestedJourneyId = interpretation.RequireStringProperty("suggested_journey_id");
+            var confidence = interpretation.RequireProperty("confidence").GetValue<double>();
+            var reasonSummary = interpretation.RequireStringProperty("reason_summary");
+            Validate(suggestedJourneyId, confidence, reasonSummary, journeySummaries);
+            return new JourneyInterpretation(
+                "accepted", suggestedJourneyId, confidence, reasonSummary,
+                "ollama", model, stopwatch.ElapsedMilliseconds, null, null);
         }
         catch (HttpRequestException ex)
         {
@@ -121,21 +134,21 @@ internal sealed class AiJourneyInterpreter
         }
     }
 
-    private static JsonObject BuildPrompt(ScenarioInputs inputs, JsonArray journeySummaries)
+    private static JsonObject BuildPrompt(SessionContext session, IReadOnlyList<JourneySummary> journeySummaries)
     {
         return new JsonObject
         {
             ["task"] = "Suggest the journey most relevant to this session. Return suggested_journey_id, confidence, and reason_summary.",
             ["session"] = new JsonObject
             {
-                ["query_text"] = inputs.Session["query_text"]?.DeepClone(),
-                ["current_url"] = inputs.Session["current_url"]?.DeepClone(),
-                ["entry_point"] = inputs.Session["entry_point"]?.DeepClone(),
-                ["campaign_theme"] = inputs.Session["campaign_theme"]?.DeepClone(),
-                ["region"] = inputs.Session["region"]?.DeepClone(),
-                ["channel"] = inputs.Session["channel"]?.DeepClone(),
+                ["query_text"] = session.QueryText,
+                ["current_url"] = session.CurrentUrl,
+                ["entry_point"] = session.EntryPoint,
+                ["campaign_theme"] = session.CampaignTheme,
+                ["region"] = session.Region,
+                ["channel"] = session.Channel,
             },
-            ["candidate_journeys"] = journeySummaries.DeepCloneArray(),
+            ["candidate_journeys"] = new JsonArray(journeySummaries.Select(static summary => (JsonNode)summary.ToJson()).ToArray()),
             ["response_contract"] = new JsonObject
             {
                 ["required_fields"] = new JsonArray("suggested_journey_id", "confidence", "reason_summary"),
@@ -145,13 +158,14 @@ internal sealed class AiJourneyInterpreter
         };
     }
 
-    private static void Validate(JsonObject interpretation, JsonArray journeySummaries)
+    private static void Validate(
+        string suggestedJourneyId,
+        double confidence,
+        string reason,
+        IReadOnlyList<JourneySummary> journeySummaries)
     {
-        var suggestedJourneyId = interpretation.RequireStringProperty("suggested_journey_id");
-        var confidence = interpretation.RequireProperty("confidence").GetValue<double>();
-        var reason = interpretation.RequireStringProperty("reason_summary");
-        var validIds = journeySummaries.OfType<JsonObject>()
-            .Select(static journey => journey.RequireStringProperty("journey_id"))
+        var validIds = journeySummaries
+            .Select(static journey => journey.JourneyId)
             .ToHashSet(StringComparer.Ordinal);
 
         if (!validIds.Contains(suggestedJourneyId))
@@ -165,27 +179,6 @@ internal sealed class AiJourneyInterpreter
         }
     }
 
-    private static JsonObject Accepted(JsonObject interpretation, string source, string model, long latencyMilliseconds)
-    {
-        return new JsonObject
-        {
-            ["status"] = "accepted",
-            ["source"] = source,
-            ["model_version"] = model,
-            ["latency_ms"] = latencyMilliseconds,
-            ["suggested_journey_id"] = interpretation.RequireProperty("suggested_journey_id").DeepClone(),
-            ["confidence"] = interpretation.RequireProperty("confidence").DeepClone(),
-            ["reason_summary"] = interpretation.RequireProperty("reason_summary").DeepClone(),
-        };
-    }
-
-    private static JsonObject Unavailable(string reason, string detail)
-    {
-        return new JsonObject
-        {
-            ["status"] = "unavailable",
-            ["fallback_reason"] = reason,
-            ["detail"] = detail,
-        };
-    }
+    private static JourneyInterpretation Unavailable(string reason, string detail) =>
+        new("unavailable", null, null, null, null, null, null, reason, detail);
 }
