@@ -19,7 +19,6 @@ internal sealed record RankingRequest(
 
 internal sealed record RankingCustomerProfile(
     string CustomerId,
-    int LeadScore,
     string Location,
     string HouseholdType);
 
@@ -244,7 +243,6 @@ internal static class RuntimeOutputContractAdapter
 
     private static RankingCustomerProfile RankingCustomerProfile(JsonObject payload) => new(
         payload.RequireStringProperty("customer_id"),
-        payload.RequireProperty("lead_score").GetValue<int>(),
         payload.RequireStringProperty("location"),
         payload.RequireStringProperty("household_type"));
 
@@ -352,7 +350,6 @@ internal static class RuntimeOutputContractAdapter
     private static JsonObject ToJson(RankingCustomerProfile profile) => new()
     {
         ["customer_id"] = profile.CustomerId,
-        ["lead_score"] = profile.LeadScore,
         ["location"] = profile.Location,
         ["household_type"] = profile.HouseholdType,
     };

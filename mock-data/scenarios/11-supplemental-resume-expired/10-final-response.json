@@ -29,16 +29,19 @@
     "ai_response_id": "air-603",
     "summary": "Comparing broadband plans again is the easiest way to pick the right option and move forward confidently.",
     "cta_support_text": "Start with comparison so the next broadband step is straightforward.",
-    "grounding_asset_ids": ["offer-bbd-fast-family-001", "action-bbd-address-check-001"]
+    "grounding_asset_ids": [
+      "offer-bbd-fast-family-001",
+      "action-bbd-address-check-001"
+    ]
   },
   "decision_trace": {
-    "profile_read": "known customer, couple household, VIC, lead score 74",
+    "profile_read": "known customer, couple household, VIC",
     "journey_read": "one journey loaded: broadband quote_in_progress with expired resume window",
-    "active_journey_selected": "broadband — only journey, but resume is no longer valid",
+    "active_journey_selected": "broadband \u2014 only journey, but resume is no longer valid",
     "retrieval": "3 candidates returned; resume action excluded at retrieval",
     "filtering": "expired resume lifecycle rule prevented saved-quote promotion",
     "ranking": "compare plans CTA ranked first (score 30)",
-    "ai_explanation": "accepted — grounded on broadband comparison support assets"
+    "ai_explanation": "accepted \u2014 grounded on broadband comparison support assets"
   },
   "metadata_revision": "action-bbd-compare-plans-001@7",
   "response_generated_at": "2026-07-07T18:20:02Z"

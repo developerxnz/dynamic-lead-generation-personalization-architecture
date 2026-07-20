@@ -42,7 +42,7 @@ The customer is a first-time visitor in VIC looking at health insurance options 
 
 **Expected input:** `01-customer-profile.json`
 
-**What it says in simple terms:** this is a first-time customer in VIC with a single-household profile and a moderate early lead score.
+**What it says in simple terms:** this is a first-time customer in VIC with a single-household profile.
 
 **Expected output:** a basic customer context object.
 

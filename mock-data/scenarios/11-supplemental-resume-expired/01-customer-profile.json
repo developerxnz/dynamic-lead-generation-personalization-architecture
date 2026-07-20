@@ -8,10 +8,5 @@
     "location": "VIC",
     "budget_range": "mid",
     "life_stage": "partnered"
-  },
-  "customer_summary": {
-    "last_meaningful_event_at": "2026-07-07T18:20:00Z",
-    "repeat_sessions_30d": 4,
-    "lead_score": 74
   }
 }

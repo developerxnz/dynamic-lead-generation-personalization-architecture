@@ -8,10 +8,5 @@
     "location": "QLD",
     "budget_range": "mid",
     "life_stage": "couple_no_children"
-  },
-  "customer_summary": {
-    "last_meaningful_event_at": "2026-06-27T16:20:00Z",
-    "repeat_sessions_30d": 2,
-    "lead_score": 71
   }
 }

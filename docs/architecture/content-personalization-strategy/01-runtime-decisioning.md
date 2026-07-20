@@ -18,8 +18,7 @@ Provided by the Customer Profile Service:
 
 - household and employment attributes
 - location and stable customer facts
-- returning-customer summary
-- cross-journey lead score
+- returning-customer signals
 
 ### 2. Journey States
 

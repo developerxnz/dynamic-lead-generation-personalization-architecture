@@ -17,11 +17,6 @@ internal sealed record CustomerAttributes(
     [property: JsonProperty("budget_range")] string BudgetRange,
     [property: JsonProperty("life_stage")] string LifeStage);
 
-internal sealed record CustomerSummary(
-    [property: JsonProperty("last_meaningful_event_at")] DateTimeOffset? LastMeaningfulEventAt,
-    [property: JsonProperty("repeat_sessions_30d")] int? RepeatSessions30d,
-    [property: JsonProperty("lead_score")] int LeadScore);
-
 internal sealed record JourneyBehaviorSummary(
     [property: JsonProperty("recent_quote_started")] bool RecentQuoteStarted,
     [property: JsonProperty("provider_comparisons_7d")] int ProviderComparisons7d,
@@ -35,7 +30,7 @@ internal sealed record JourneyDecisionSupport(
     [property: JsonProperty("ai_journey_summary")] string AiJourneySummary);
 
 /// <summary>
-/// Represents the complete customer profile stored in Cosmos, including fields outside the decision-ready summary.
+/// Represents the durable customer profile stored in Cosmos.
 /// </summary>
 internal sealed record CosmosCustomerProfileDocument(
     [property: JsonProperty("id")] string Id,
@@ -43,7 +38,6 @@ internal sealed record CosmosCustomerProfileDocument(
     [property: JsonProperty("scenario")] string Scenario,
     [property: JsonProperty("description")] string Description,
     [property: JsonProperty("attributes")] CustomerAttributes Attributes,
-    [property: JsonProperty("customer_summary")] CustomerSummary CustomerSummary,
     [property: JsonProperty("source_session_id")] string SourceSessionId);
 
 /// <summary>
@@ -251,7 +245,6 @@ internal static class JourneyContractAdapter
             profile.RequireStringProperty("scenario"),
             profile.RequireStringProperty("description"),
             CustomerAttributes(profile.RequireObjectProperty("attributes")),
-            CustomerSummary(profile.RequireObjectProperty("customer_summary")),
             session.SessionId);
     }
 
@@ -274,7 +267,6 @@ internal static class JourneyContractAdapter
         ["scenario"] = profile.Scenario,
         ["description"] = profile.Description,
         ["attributes"] = ToJson(profile.Attributes),
-        ["customer_summary"] = ToJson(profile.CustomerSummary),
         ["source_session_id"] = profile.SourceSessionId,
     };
 
@@ -397,13 +389,6 @@ internal static class JourneyContractAdapter
         payload.RequireStringProperty("budget_range"),
         payload.RequireStringProperty("life_stage"));
 
-    private static CustomerSummary CustomerSummary(JsonObject payload) => new(
-        payload.OptionalStringProperty("last_meaningful_event_at") is { } lastMeaningfulEventAt
-            ? DateTimeOffset.Parse(lastMeaningfulEventAt)
-            : null,
-        payload["repeat_sessions_30d"]?.GetValue<int>(),
-        payload.RequireProperty("lead_score").GetValue<int>());
-
     private static JourneyBehaviorSummary JourneyBehaviorSummary(JsonObject payload) => new(
         payload.OptionalBoolProperty("recent_quote_started"),
         payload.RequireProperty("provider_comparisons_7d").GetValue<int>(),
@@ -437,13 +422,6 @@ internal static class JourneyContractAdapter
         ["location"] = attributes.Location,
         ["budget_range"] = attributes.BudgetRange,
         ["life_stage"] = attributes.LifeStage,
-    };
-
-    private static JsonObject ToJson(CustomerSummary summary) => new()
-    {
-        ["last_meaningful_event_at"] = summary.LastMeaningfulEventAt is { } timestamp ? Timestamp(timestamp) : null,
-        ["repeat_sessions_30d"] = summary.RepeatSessions30d,
-        ["lead_score"] = summary.LeadScore,
     };
 
     private static JsonObject ToJson(JourneyBehaviorSummary behavior)

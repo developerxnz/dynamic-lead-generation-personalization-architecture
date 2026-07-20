@@ -16,7 +16,6 @@ A concrete request shape helps make the ranking boundary implementable.
 {
   "customerProfile": {
     "customerId": "12345",
-    "leadScore": 78,
     "location": "NSW"
   },
   "activeJourney": {

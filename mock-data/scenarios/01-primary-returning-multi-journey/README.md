@@ -26,7 +26,7 @@ The customer comes back through a broadband moving-home search. Even though they
 
 | File | What goes in | What comes out | Why it matters |
 |---|---|---|---|
-| `01-customer-profile.json` | Known-customer facts like household, location, and lead score | A reusable customer context record | Gives the platform stable customer facts before it reacts to this session |
+| `01-customer-profile.json` | Known-customer facts like household and location | A reusable customer context record | Gives the platform stable customer facts before it reacts to this session |
 | `02-journey-states.json` | Two existing journeys: health compare and broadband moving home | Journey-level intent, stage, urgency, and qualification state | Shows that one customer can have multiple concurrent journeys |
 | `03-session-request.json` | Current visit signals such as URL, search theme, region, and query text | The live session context | Tells the platform what the customer appears to want right now |
 | `04-active-journey-selection.json` | Profile + journeys + session signals | Broadband selected as the active journey | Prevents the system from mixing health and broadband into one confused experience |
@@ -46,7 +46,7 @@ The customer comes back through a broadband moving-home search. Even though they
 
 **Expected input:** `01-customer-profile.json`
 
-**What it says in simple terms:** this is a known returning customer in NSW with a family household and a strong lead score.
+**What it says in simple terms:** this is a known returning customer in NSW with a family household.
 
 **Expected output:** a customer context object that downstream services can reuse.
 

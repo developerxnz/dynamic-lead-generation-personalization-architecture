@@ -109,7 +109,7 @@ Recommended outputs:
 - journey-level scores
 - journey recency
 - resume indicators
-- cross-journey return summary
+- cross-journey return signals
 
 This allows live decisioning to pick the best journey for the current session without losing visibility of parallel journeys.
 
@@ -126,9 +126,6 @@ This allows live decisioning to pick the best journey for the current session wi
     "householdType": "family",
     "employmentType": "full_time",
     "location": "QLD"
-  },
-  "customerSummary": {
-    "leadScore": 78
   }
 }
 ```
@@ -211,12 +208,6 @@ Maintain derived views such as:
 
 ```http
 GET /customers/{customerId}
-```
-
-#### Get Summary
-
-```http
-GET /customers/{customerId}/summary
 ```
 
 #### Get Journeys

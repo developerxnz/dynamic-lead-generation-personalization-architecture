@@ -60,11 +60,6 @@ The platform should:
     "employment_type": "full_time",
     "location": "NSW",
     "move_window_days": 18
-  },
-  "customer_summary": {
-    "repeat_sessions_30d": 4,
-    "lead_score": 81,
-    "last_meaningful_event_at": "2026-05-16T19:10:00Z"
   }
 }
 ```
@@ -123,7 +118,7 @@ The live request arrives with session context that strongly suggests broadband i
 
 The orchestration layer now combines:
 
-- customer summary
+- customer profile
 - journey summaries
 - current session context
 

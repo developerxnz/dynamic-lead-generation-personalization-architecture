@@ -3,7 +3,6 @@
   "description": "Ranking engine request for the eligibility-failure scenario. The active broadband journey is valid, but deterministic eligibility must block quote-ready promotion after a failed serviceability result.",
   "customer_profile": {
     "customer_id": "cust-88011",
-    "lead_score": 63,
     "location": "NSW",
     "household_type": "family"
   },
@@ -17,8 +16,12 @@
     "qualification_state": {
       "coverage_region_match": true,
       "serviceability_confirmed": false,
-      "hard_exclusions": ["address_not_serviceable"],
-      "suppression_flags": ["eligibility_serviceability_failure"]
+      "hard_exclusions": [
+        "address_not_serviceable"
+      ],
+      "suppression_flags": [
+        "eligibility_serviceability_failure"
+      ]
     }
   },
   "context": {

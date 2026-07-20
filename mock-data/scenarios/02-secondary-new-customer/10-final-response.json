@@ -29,16 +29,19 @@
     "ai_response_id": "air-202",
     "summary": "Comparing health cover options side by side is the easiest way to find what suits you without committing to anything.",
     "cta_support_text": "Start comparing to see which options suit a singles policy in VIC.",
-    "grounding_asset_ids": ["action-health-compare-001", "offer-health-singles-001"]
+    "grounding_asset_ids": [
+      "action-health-compare-001",
+      "offer-health-singles-001"
+    ]
   },
   "decision_trace": {
-    "profile_read": "new customer, single household, VIC, lead score 42",
+    "profile_read": "new customer, single household, VIC",
     "journey_read": "one journey loaded: health insurance discovery",
-    "active_journey_selected": "health insurance — only journey, no ambiguity",
+    "active_journey_selected": "health insurance \u2014 only journey, no ambiguity",
     "retrieval": "4 candidates returned; family guide excluded at retrieval",
     "filtering": "family guide suppressed at ranking (household mismatch)",
     "ranking": "comparison CTA ranked first (score 29)",
-    "ai_explanation": "accepted — grounded on comparison and singles cover assets"
+    "ai_explanation": "accepted \u2014 grounded on comparison and singles cover assets"
   },
   "metadata_revision": "action-health-compare-001@6",
   "response_generated_at": "2026-07-03T14:05:02Z"

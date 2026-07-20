@@ -22,7 +22,7 @@ The customer comes back directly to the broadband section six days after leaving
 
 | File | What goes in | What comes out | Why it matters |
 |---|---|---|---|
-| `01-customer-profile.json` | Returning-customer facts such as household type, region, and lead score | Durable customer context | Keeps the experience tied to a known customer rather than a blank slate |
+| `01-customer-profile.json` | Returning-customer facts such as household type and region | Durable customer context | Keeps the experience tied to a known customer rather than a blank slate |
 | `02-journey-states.json` | One broadband journey with `resume_candidate` true | In-progress journey state | Shows that the customer already did meaningful work in a prior session |
 | `03-session-request.json` | Direct return visit to the broadband section | Live session context | Confirms the customer is back to continue a broadband task |
 | `04-active-journey-selection.json` | Stored journey + current session | Broadband resume journey selected | Confirms the right path is continuation, not rediscovery |

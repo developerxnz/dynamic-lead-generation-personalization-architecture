@@ -241,7 +241,6 @@ internal sealed class ScenarioRunner
             Scenario = scenario,
             CustomerProfile = new RankingCustomerProfile(
                 session.CustomerId,
-                inputs.RequireCustomerSummary().RequireProperty("lead_score").GetValue<int>(),
                 inputs.RequireAttributes().RequireStringProperty("location"),
                 inputs.RequireAttributes().RequireStringProperty("household_type")),
             ActiveJourney = new RankingJourney(
@@ -606,8 +605,6 @@ internal sealed class ScenarioRunner
             ServiceCategory = asset.ServiceCategory,
             CtaType = asset.CtaType,
             CtaDeepLink = asset.CtaDeepLink,
-            Provider = asset.Provider,
-            Priority = asset.Priority,
             FunnelStage = retrievalCandidate.RequireStringProperty("funnel_stage_match"),
             RetrievalSource = retrievalCandidate.RequireStringProperty("retrieval_source"),
         };

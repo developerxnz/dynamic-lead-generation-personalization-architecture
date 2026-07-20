@@ -70,21 +70,6 @@ internal static class JsonExtensions
         throw new InvalidDataException("Missing attributes in customer profile or session request.");
     }
 
-    public static JsonObject RequireCustomerSummary(this ScenarioInputs inputs)
-    {
-        if (inputs.Profile?["customer_summary"] is JsonObject summary)
-        {
-            return summary;
-        }
-
-        if (inputs.Session["customer_summary"] is JsonObject sessionSummary)
-        {
-            return sessionSummary;
-        }
-
-        throw new InvalidDataException("Missing customer_summary in customer profile or session request.");
-    }
-
     public static JsonArray RequireArrayProperty(this JsonObject node, string name)
     {
         return node.RequireProperty(name).RequireArray(name);

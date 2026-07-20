@@ -3,7 +3,6 @@
   "description": "Ranking engine request for stage 4 of the progression. Returning couple-household customer in Tasmania comparing health insurance after the move.",
   "customer_profile": {
     "customer_id": "cust-77120",
-    "lead_score": 72,
     "location": "TAS",
     "household_type": "couple"
   },
