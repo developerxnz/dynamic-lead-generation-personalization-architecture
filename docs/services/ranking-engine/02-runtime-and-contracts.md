@@ -50,8 +50,8 @@ for each candidate:
   normalize raw inputs
   apply hard suppression and suitability checks
   compute active-journey fit
-  compute intent, funnel, CTA, and behavioral features
-  apply configurable weights
+  compute intent, funnel, CTA, and deterministic policy features
+  apply the versioned ranking policy
   record explanation reasons
 
 apply diversity and slot rules
@@ -75,10 +75,10 @@ Standardize all inputs:
 
 Before ranking, remove or suppress candidates that fail:
 
-- region availability
-- product or provider suitability
+- primary active-journey context
+- household-fit checks
 - compliance requirements
-- hard eligibility rules
+- serviceability and saved-quote lifecycle rules
 
 The suitability screen should be driven primarily by the active journey's qualification state.
 
@@ -86,10 +86,10 @@ The suitability screen should be driven primarily by the active journey's qualif
 
 Convert raw inputs into:
 
-- relevance scores
-- qualification confidence
-- conversion likelihood indicators
-- active-journey fit
+- active-journey and service-category fit
+- intent, CTA, and funnel-stage alignment
+- qualification, serviceability, and lifecycle fit
+- household, urgency, and campaign relevance
 
 #### Step 4: Weighted Aggregation
 
@@ -103,12 +103,13 @@ Order content by:
 Highest score -> Lowest score
 ```
 
-Apply tie-breakers such as:
+Apply stable tie-breakers:
 
-- freshness
-- campaign priority
-- provider diversity
-- secondary-journey suppression
+- CTA precedence
+- `content_id` ordinal order
+
+Secondary-journey candidates are suppressed before sorting, rather than being
+allowed to displace the active journey.
 
 ---
 
@@ -178,6 +179,10 @@ Each ranked item should return:
 ```
 
 Returning suppressed candidates is useful for traceability, debugging, and optimization analysis.
+
+The runtime verifies that every ranking-request candidate is accounted for
+exactly once as either a recommendation or a suppression, and that promoted
+candidates include at least one explanation reason.
 
 Returned CTA payloads should include the deep link that the channel will execute, so the final step is explicit and traceable rather than inferred from CTA type alone.
 
