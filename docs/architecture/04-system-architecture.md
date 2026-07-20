@@ -23,7 +23,7 @@ Responsibilities:
 - maintain the durable customer profile
 - aggregate behavioral and declared data
 - maintain multiple journey states
-- calculate customer-level and journey-level scores
+- calculate journey-level scores
 - expose profile, journey, intent, and qualification views
 
 Suggested technology:
@@ -163,8 +163,7 @@ Owns:
 
 - customer identity linkage
 - stable customer facts
-- customer-level lead score
-- customer-level return behavior summaries
+- customer-level return behavior signals
 
 ### Journey Domain
 

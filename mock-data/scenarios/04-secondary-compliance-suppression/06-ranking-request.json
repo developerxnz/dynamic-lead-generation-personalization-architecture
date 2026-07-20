@@ -3,7 +3,6 @@
   "description": "Ranking engine request for a returning couple-household customer in Tasmania comparing health insurance options. Compliance flags must be enforced deterministically.",
   "customer_profile": {
     "customer_id": "cust-66140",
-    "lead_score": 63,
     "location": "TAS",
     "household_type": "couple"
   },

@@ -116,7 +116,6 @@ internal sealed class RagPromptBuilder
         var selectedActionId = selectedAction.RequireStringProperty("content_id");
         var queryText = QueryText(session, activeJourney, selectedAction);
         var queryTokens = Tokenize(queryText);
-        var region = session.Region;
         var serviceCategory = activeJourney.ServiceCategory;
 
         var scored = new List<ScoredSnippet>();
@@ -134,7 +133,7 @@ internal sealed class RagPromptBuilder
                 .Select(static asset => asset!.Raw)
                 .ToList();
 
-            if (linkedAssets.Count == 0 || !linkedAssets.Any(asset => RegionMatches(asset, region)))
+            if (linkedAssets.Count == 0)
             {
                 continue;
             }
@@ -146,8 +145,7 @@ internal sealed class RagPromptBuilder
                 selectedActionId,
                 rankedAssetIds,
                 activeJourney,
-                inputs,
-                region);
+                inputs);
 
             scored.Add(new ScoredSnippet(
                 snippet.Raw,
@@ -220,8 +218,7 @@ internal sealed class RagPromptBuilder
         string selectedActionId,
         IReadOnlyList<string> rankedAssetIds,
         JourneyState activeJourney,
-        ScenarioInputs inputs,
-        string? region)
+        ScenarioInputs inputs)
     {
         var score = 0;
         var reasons = new List<string>();
@@ -249,12 +246,6 @@ internal sealed class RagPromptBuilder
         {
             score += 12;
             reasons.Add("Matches active journey stage");
-        }
-
-        if (linkedAssets.Any(asset => RegionMatches(asset, region)))
-        {
-            score += 8;
-            reasons.Add("Available in session region");
         }
 
         var householdType = inputs.RequireAttributes().OptionalStringProperty("household_type");
@@ -337,7 +328,6 @@ internal sealed class RagPromptBuilder
             fields.Add(aiFields.OptionalStringProperty("plainLanguageSummary"));
             fields.Add(aiFields.OptionalStringProperty("approvedExplainerText"));
             fields.Add(string.Join(" ", aiFields.RequireArrayProperty("retrievalTags").Select(static tag => tag?.GetValue<string>() ?? string.Empty)));
-            fields.Add(asset.OptionalStringProperty("subtype"));
             fields.Add(asset.OptionalStringProperty("conversionGoal"));
         }
 
@@ -374,18 +364,6 @@ internal sealed class RagPromptBuilder
             .Select(static node => node?.GetValue<string>())
             .Where(static candidate => !string.IsNullOrWhiteSpace(candidate))
             .Any(candidate => equivalents.Contains(candidate!));
-    }
-
-    private static bool RegionMatches(JsonObject asset, string? region)
-    {
-        if (region is null)
-        {
-            return true;
-        }
-
-        return asset.RequireArrayProperty("region")
-            .Select(static node => node?.GetValue<string>())
-            .Any(candidate => candidate == region);
     }
 
     private static bool HouseholdMatches(JsonObject asset, string? householdType)

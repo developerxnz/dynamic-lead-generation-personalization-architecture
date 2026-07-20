@@ -29,16 +29,18 @@
     "ai_response_id": "air-503",
     "summary": "Your broadband quote is still saved, so you can pick up where you left off without starting over.",
     "cta_support_text": "Your quote is ready to resume whenever you're ready.",
-    "grounding_asset_ids": ["action-bbd-resume-quote-001"]
+    "grounding_asset_ids": [
+      "action-bbd-resume-quote-001"
+    ]
   },
   "decision_trace": {
-    "profile_read": "known customer, couple household, VIC, lead score 76",
+    "profile_read": "known customer, couple household, VIC",
     "journey_read": "one journey loaded: broadband quote_in_progress, resume_candidate true",
-    "active_journey_selected": "broadband — only journey, high resume signal",
+    "active_journey_selected": "broadband \u2014 only journey, high resume signal",
     "retrieval": "3 candidates returned; moving-home guide excluded (stage mismatch)",
     "filtering": "no suppressions at ranking",
     "ranking": "resume CTA ranked first (score 42, resume bias applied)",
-    "ai_explanation": "accepted — grounded on resume quote asset"
+    "ai_explanation": "accepted \u2014 grounded on resume quote asset"
   },
   "metadata_revision": "action-bbd-resume-quote-001@3",
   "response_generated_at": "2026-06-25T09:45:02Z"

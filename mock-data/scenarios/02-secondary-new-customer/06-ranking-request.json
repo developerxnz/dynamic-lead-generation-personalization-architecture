@@ -3,7 +3,6 @@
   "description": "Ranking engine request for a new single-household customer in health insurance discovery.",
   "customer_profile": {
     "customer_id": "cust-99001",
-    "lead_score": 42,
     "location": "VIC",
     "household_type": "single"
   },

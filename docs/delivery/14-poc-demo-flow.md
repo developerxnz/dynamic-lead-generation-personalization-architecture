@@ -58,10 +58,6 @@ Before the live request, the customer profile service already contains:
     "householdType": "family",
     "employmentType": "full_time",
     "location": "NSW"
-  },
-  "customerSummary": {
-    "leadScore": 81,
-    "repeatSessions30d": 4
   }
 }
 ```
@@ -115,7 +111,7 @@ The channel sends one request that includes customer identity plus current-sessi
 
 The orchestrator combines:
 
-- customer summary
+- customer profile
 - journey summaries
 - campaign and page context
 - current-session signals
@@ -182,7 +178,7 @@ The content adapter or retrieval layer returns a broad candidate set for the act
 
 ## Step 4: Deterministic Filtering And Ranking
 
-The ranking engine receives the active journey, profile summary, and candidate set.
+The ranking engine receives the active journey, profile, and candidate set.
 
 ### Example Ranking Request
 
@@ -190,7 +186,6 @@ The ranking engine receives the active journey, profile summary, and candidate s
 {
   "customerProfile": {
     "customerId": "cust-20481",
-    "leadScore": 81,
     "location": "NSW"
   },
   "activeJourney": {

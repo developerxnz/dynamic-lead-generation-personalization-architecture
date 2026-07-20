@@ -3,7 +3,6 @@
   "description": "Ranking engine request for stage 2 of the progression. Returning couple household with competing health and broadband journeys.",
   "customer_profile": {
     "customer_id": "cust-77120",
-    "lead_score": 68,
     "location": "VIC",
     "household_type": "couple"
   },

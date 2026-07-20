@@ -3,7 +3,6 @@
   "description": "Ranking engine request for the three-concurrent-journeys scenario. Broadband must lead, but secondary journey context is still available for continuity.",
   "customer_profile": {
     "customer_id": "cust-88022",
-    "lead_score": 81,
     "location": "VIC",
     "household_type": "family"
   },

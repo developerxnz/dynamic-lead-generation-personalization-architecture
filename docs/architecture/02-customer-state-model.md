@@ -54,11 +54,6 @@ The customer profile should contain durable facts and cross-journey signals.
     "location": "NSW",
     "budget_range": "mid",
     "life_stage": "young_family"
-  },
-  "customer_summary": {
-    "last_meaningful_event_at": "2026-05-14T08:20:00Z",
-    "repeat_sessions_30d": 3,
-    "lead_score": 78
   }
 }
 ```
@@ -191,7 +186,7 @@ The platform can therefore maintain multiple journeys while still keeping sessio
 
 | Model | What it should contain | What it should avoid |
 |---|---|---|
-| Customer profile | durable attributes, household, employment, location, cross-journey summaries, global lead score | volatile per-service stage and intent detail |
+| Customer profile | durable attributes, household, employment, location | volatile per-service stage and intent detail |
 | Journey state | service category, intent, stage, urgency, resume status, qualification state, journey-level score | unrelated customer-wide facts |
 
 This separation keeps the data model cleaner and more scalable.
@@ -265,7 +260,7 @@ profile facts and journey projections.
 
 ## Scoring Approach
 
-The model should support both a **customer-level score** for broad opportunity and a **journey-level score** for service-specific prioritization.
+The model should support a **journey-level score** for service-specific prioritization.
 
 Journey-level scoring matters most when customers are active in more than one service path. AI can contribute supporting relevance signals or summaries, but authoritative scores should remain deterministic, explainable, and reproducible.
 

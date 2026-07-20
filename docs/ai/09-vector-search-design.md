@@ -30,7 +30,7 @@ At a high level, managed offers and content are embedded into a vector index, qu
 
 The recommended pattern is:
 
-1. apply deterministic filters such as service category, region, provider availability, and compliance status
+1. apply deterministic filters such as service category, provider availability, and compliance status
 2. run vector similarity across the filtered set
 3. pass the candidate set to deterministic ranking for final ordering
 
@@ -42,7 +42,7 @@ Vector retrieval should incorporate:
 - customer attributes
 - intent signals
 - funnel stage
-- region or provider constraints
+- provider constraints
 - secondary-journey hints where useful
 
 Example:

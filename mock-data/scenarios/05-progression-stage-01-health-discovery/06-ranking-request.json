@@ -3,7 +3,6 @@
   "description": "Ranking engine request for stage 1 of the progression. New couple-household customer in VIC exploring health cover.",
   "customer_profile": {
     "customer_id": "cust-77120",
-    "lead_score": 36,
     "location": "VIC",
     "household_type": "couple"
   },

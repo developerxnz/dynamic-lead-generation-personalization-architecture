@@ -3,7 +3,6 @@
   "description": "Ranking engine request for a returning customer with a saved broadband quote. Resume bias should be applied.",
   "customer_profile": {
     "customer_id": "cust-55312",
-    "lead_score": 71,
     "location": "QLD",
     "household_type": "couple"
   },

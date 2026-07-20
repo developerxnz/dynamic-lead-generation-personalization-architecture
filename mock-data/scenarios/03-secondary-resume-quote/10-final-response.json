@@ -28,17 +28,19 @@
     "source": "ai_assisted",
     "ai_response_id": "air-303",
     "summary": "Your broadband quote is still saved. Pick up right where you left off and complete your application in just a few minutes.",
-    "cta_support_text": "Your quote is ready and waiting — just pick up where you stopped.",
-    "grounding_asset_ids": ["action-bbd-resume-quote-001"]
+    "cta_support_text": "Your quote is ready and waiting \u2014 just pick up where you stopped.",
+    "grounding_asset_ids": [
+      "action-bbd-resume-quote-001"
+    ]
   },
   "decision_trace": {
-    "profile_read": "known customer, couple household, QLD, lead score 71",
+    "profile_read": "known customer, couple household, QLD",
     "journey_read": "one journey loaded: broadband quote_in_progress, resume_candidate true",
-    "active_journey_selected": "broadband — only journey, high resume signal",
+    "active_journey_selected": "broadband \u2014 only journey, high resume signal",
     "retrieval": "3 candidates returned; moving-home guide excluded (stage mismatch)",
     "filtering": "no suppressions at ranking",
     "ranking": "resume CTA ranked first (score 41, resume bias applied)",
-    "ai_explanation": "accepted — grounded on resume quote asset"
+    "ai_explanation": "accepted \u2014 grounded on resume quote asset"
   },
   "metadata_revision": "action-bbd-resume-quote-001@3",
   "response_generated_at": "2026-07-03T09:15:02Z"

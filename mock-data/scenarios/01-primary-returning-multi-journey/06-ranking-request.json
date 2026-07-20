@@ -1,9 +1,8 @@
 {
   "scenario": "01-primary-returning-multi-journey",
-  "description": "Full request to the ranking engine. Includes customer profile summary, active journey, session context, and candidate set.",
+  "description": "Full request to the ranking engine. Includes customer profile, active journey, session context, and candidate set.",
   "customer_profile": {
     "customer_id": "cust-20481",
-    "lead_score": 81,
     "location": "NSW",
     "household_type": "family"
   },

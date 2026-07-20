@@ -23,7 +23,7 @@ The customer is actively comparing health insurance and appears open to switchin
 
 | File | What goes in | What comes out | Why it matters |
 |---|---|---|---|
-| `01-customer-profile.json` | Known-customer facts such as household, location, and lead score | Reusable customer context | Provides the stable customer facts used by downstream decisions |
+| `01-customer-profile.json` | Known-customer facts such as household and location | Reusable customer context | Provides the stable customer facts used by downstream decisions |
 | `02-journey-states.json` | One active health comparison journey | Compare-stage journey state | Shows the customer is already evaluating options rather than discovering the category |
 | `03-session-request.json` | Current compare-page visit in TAS | Live session context | Confirms this session is about active health comparison |
 | `04-active-journey-selection.json` | Customer context plus the single journey | Health insurance selected as active journey | Records the active-session driver even though there is no journey ambiguity |

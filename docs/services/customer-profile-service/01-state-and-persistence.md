@@ -23,8 +23,7 @@ Maintain a durable profile including:
 
 - durable customer attributes
 - household and employment attributes
-- cross-journey behavioral summaries
-- overall lead score
+- customer-level return behavior signals
 
 ### 2. Journey State Management
 
@@ -66,11 +65,11 @@ Examples:
 - renewal-switching
 - returning-to-resume
 
-Intent should be maintained primarily at the journey level, with customer-level summaries where useful.
+Intent should be maintained primarily at the journey level, with customer-level return signals where useful.
 
-### 5. Lead Scoring
+### 5. Journey Scoring
 
-Compute both customer-level and journey-level scores based on:
+Compute journey-level scores based on:
 
 - engagement quality
 - service-category fit
@@ -109,9 +108,6 @@ flowchart TD
     "employmentType": "full_time",
     "location": "QLD"
   },
-  "customerSummary": {
-    "leadScore": 78
-  },
   "journeys": [
     {
       "serviceCategory": "health_insurance",
@@ -137,7 +133,7 @@ A concrete persistence split makes the service easier to reason about.
 
 | Entity | Suggested key | Purpose |
 |---|---|---|
-| customer profile | `customerId` | durable customer-wide facts and summaries |
+| customer profile | `customerId` | durable customer-wide facts |
 | journey state | `customerId + journeyId` | service-specific live decision state |
 | processed-event marker | `eventId` | idempotency and replay safety |
 | projection checkpoint | `customerId` | operational rebuild and replay coordination |

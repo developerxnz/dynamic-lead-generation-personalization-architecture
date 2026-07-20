@@ -19,7 +19,6 @@ Each activity exposed to decisioning should include universal metadata.
 | service_category | Lead vertical such as novated leasing, health insurance, or broadband |
 | subtype | More specific classification inside a vertical |
 | provider | Provider or partner association |
-| region | Geographic availability |
 | funnel_stage | Research, compare, quote, apply, renew, or resume |
 | conversion_goal | Intended business outcome |
 | cta_type | Quote, callback, compare, check eligibility, apply, resume |

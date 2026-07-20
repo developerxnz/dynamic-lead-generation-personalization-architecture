@@ -16,7 +16,6 @@ From the Customer Profile Service:
 
 - household and employment attributes
 - engagement level
-- customer-level lead score
 - active journey stage
 - active journey intent
 - urgency and renewal window

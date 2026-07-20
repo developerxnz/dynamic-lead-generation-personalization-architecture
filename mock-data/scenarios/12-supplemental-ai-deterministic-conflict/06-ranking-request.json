@@ -3,7 +3,6 @@
   "description": "Ranking engine request for the AI-vs-deterministic-control scenario. Health leads because deterministic session-alignment protected the current customer intent.",
   "customer_profile": {
     "customer_id": "cust-88044",
-    "lead_score": 79,
     "location": "VIC",
     "household_type": "couple"
   },

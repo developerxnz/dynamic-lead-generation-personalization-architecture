@@ -21,7 +21,6 @@ Recommended fields:
 | `serviceCategory` | deterministic filtering |
 | `provider` | provider-level filtering and reporting |
 | `funnelStage` | stage-aware retrieval |
-| `region` | regional eligibility filtering |
 | `ctaType` | next-step alignment |
 | `metadataRevision` | traceability back to the activity metadata state |
 | `embeddingModelVersion` | embedding refresh and experiment governance |
@@ -70,8 +69,10 @@ A concrete retrieval contract helps make the search boundary easier to implement
     "serviceCategory": "health_insurance",
     "stage": "quote_ready"
   },
+  "context": {
+    "sessionRegion": "NSW"
+  },
   "filters": {
-    "region": "NSW",
     "provider": null
   },
   "retrievalOptions": {
@@ -128,7 +129,7 @@ Typical pattern:
 Recommended cache boundaries:
 
 - cache query embeddings briefly for repeated same-session requests
-- cache retrieval results only when journey, region, and metadata revision inputs have not changed
+- cache retrieval results only when journey, metadata revision, and retrieval inputs have not changed
 - avoid long-lived caches for volatile quote-ready or urgency-sensitive journeys
 
 This reduces repeated embedding and search cost without allowing stale retrieval context to dominate live decisions.

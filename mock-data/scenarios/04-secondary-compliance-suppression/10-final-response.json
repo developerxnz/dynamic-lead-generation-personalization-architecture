@@ -29,16 +29,19 @@
     "ai_response_id": "air-404",
     "summary": "Comparing health cover options first makes it easier to see what fits before you commit to switching.",
     "cta_support_text": "Compare options side by side before you start a Tasmania quote.",
-    "grounding_asset_ids": ["action-health-compare-001", "guide-health-switching-001"]
+    "grounding_asset_ids": [
+      "action-health-compare-001",
+      "guide-health-switching-001"
+    ]
   },
   "decision_trace": {
-    "profile_read": "known customer, couple household, TAS, lead score 63",
+    "profile_read": "known customer, couple household, TAS",
     "journey_read": "one journey loaded: health insurance compare, switching intent active",
-    "active_journey_selected": "health insurance — only journey, no ambiguity",
+    "active_journey_selected": "health insurance \u2014 only journey, no ambiguity",
     "retrieval": "3 candidates returned; Provider K bundle retained for policy evaluation despite broad retrieval",
     "filtering": "Provider K bundle suppressed at ranking due to state restriction in TAS",
     "ranking": "comparison CTA ranked first (score 31)",
-    "ai_explanation": "accepted — grounded on comparison and switching guide assets"
+    "ai_explanation": "accepted \u2014 grounded on comparison and switching guide assets"
   },
   "metadata_revision": "action-health-compare-001@6",
   "response_generated_at": "2026-07-03T15:45:02Z"

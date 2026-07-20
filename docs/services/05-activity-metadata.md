@@ -24,8 +24,7 @@ Activity metadata is most valuable when it makes existing activities retrievable
 It should enable teams to manage:
 
 - offers and offer variants
-- provider-specific activity definitions
-- disclosures and supporting guidance
+- activity definitions and supporting guidance
 - CTAs and deep links
 - educational or comparison activities
 - campaign-aware variants where needed
@@ -39,45 +38,35 @@ while the platform handles:
 
 ---
 
-## Recommended Activity Metadata Model
+## Minimal Activity Metadata Shape
 
-### Universal Metadata Fields
-
-Every activity should carry a common metadata backbone.
+The normalized catalog uses a deliberately small shape. A catalog document contains only `serviceCategory` and `assets`; every asset carries the fields below. Approval, lifecycle, disclosure, provider, and ranking policy remain outside this catalog and are enforced by the relevant backend services.
 
 | Field | Purpose |
 |---|---|
-| service_category | Which journey or vertical the asset belongs to |
-| subtype | More specific classification inside the category |
-| provider | Provider or partner association |
-| region | Geographic availability |
-| funnel_stage | Discover, research, compare, quote, apply, renew, or resume |
-| conversion_goal | Intended business outcome |
-| cta_type | Quote, callback, compare, check eligibility, apply, resume |
-| cta_deep_link | Deep-link destination or route template used when the CTA is rendered |
-| compliance_flags | Approval and disclosure requirements |
-| freshness | Recency and validity relevance |
-| priority | Explicit business control |
-| lifecycle_status | Draft, approved, active, expired, withdrawn |
-| metadata_revision | Traceable version of the activity metadata used in decisions |
-| campaign_owner | Operational accountability |
+| `assetId` | Canonical asset identifier |
+| `assetType` | Normalized domain type, such as `OfferCandidate`, `ActionDefinition`, or `GuidanceAsset` |
+| `serviceCategory` | Journey or vertical the asset belongs to |
+| `funnelStages` | Journey stages the asset supports |
+| `conversionGoal` | Intended qualified-conversion outcome |
+| `cta` | Renderable `type`, `label`, and `deepLink` |
+| `retrievalSummary` | Retrieval-friendly asset summary |
+| `serviceSpecific.householdFit` | Household types the asset fits |
+| `aiSupportFields` | Approved `plainLanguageSummary`, `approvedExplainerText`, and `retrievalTags` |
+| `metadataRevision` | Traceable version used in decisions |
 
-### Service-Specific Extensions
+### Optional Service-Specific Extensions
 
-Examples:
+`householdFit` is the shared service-specific field used by local retrieval. Categories can add narrowly scoped descriptive attributes when needed, but those attributes must not encode eligibility, suitability, ranking, lifecycle, or compliance policy.
 
-- **Novated leasing:** employer requirement, vehicle type, tax-benefit theme
-- **Health insurance:** cover tier, household fit, extras focus
-- **Broadband:** speed tier, access technology, contract length
+Examples include vehicle type for novated leasing and access technology for broadband.
 
 ### AI Support Fields
 
-To support AI-assisted experiences well, the model should also allow:
+Approved AI grounding uses:
 
 - short plain-language summary
 - approved explainer text
-- FAQ fragments
-- structured objections or reassurance points
 - retrieval tags or semantic hints
 
 These fields improve AI grounding without moving control away from approved activity definitions.
@@ -123,19 +112,10 @@ This avoids making downstream services understand raw activity-source shapes dir
 The activity query layer should support broad candidate retrieval based on:
 
 - service-category alignment
-- region and provider availability
 - funnel stage fit
 - campaign context
-- lifecycle and approval state
 
-Avoid encoding business rules directly in activity queries beyond hard constraints such as:
-
-- inactive activities
-- expired offers
-- missing compliance approval
-- withdrawn provider assets
-
-This keeps activity metadata responsible for availability and description, while backend services remain responsible for decision logic.
+This keeps activity metadata responsible for description, while backend services remain responsible for decision logic and constraints.
 
 ---
 
@@ -144,11 +124,9 @@ This keeps activity metadata responsible for availability and description, while
 The adapter should transform activities into stable domain models that include:
 
 - normalized identifiers
-- provider and service taxonomy
+- service taxonomy
 - structured CTA definitions
 - deep-link targets or route templates for CTA execution
-- references to disclosures and eligibility rules
-- metadata and expiry timestamps
 - retrieval-friendly summaries
 - asset version or metadata revision
 
@@ -161,7 +139,6 @@ Normalization is important because the ranking and AI layers should consume a pr
   "assetId": "offer-health-family-001",
   "assetType": "OfferCandidate",
   "serviceCategory": "health_insurance",
-  "provider": "Provider A",
   "funnelStages": ["compare", "quote"],
   "conversionGoal": "start_quote",
   "cta": {
@@ -169,12 +146,14 @@ Normalization is important because the ranking and AI layers should consume a pr
     "label": "Get a family cover quote",
     "deepLink": "/quote/health-insurance?family=true"
   },
-  "disclosures": ["disc-health-001"],
   "retrievalSummary": "Family cover with extras and quote-ready positioning",
-  "lifecycle": {
-    "status": "active",
-    "metadataUpdatedAt": "2026-05-10T08:00:00Z",
-    "expiresAt": "2026-06-30T23:59:59Z"
+  "serviceSpecific": {
+    "householdFit": ["family", "couple_with_children"]
+  },
+  "aiSupportFields": {
+    "plainLanguageSummary": "Family health cover with hospital and extras benefits.",
+    "approvedExplainerText": "A quote-ready family cover option for households comparing health insurance.",
+    "retrievalTags": ["family health", "hospital cover", "extras"]
   },
   "metadataRevision": "offer-health-family-001@17"
 }
@@ -197,7 +176,6 @@ The adapter layer should isolate:
 
 - activity-source schema details
 - query logic
-- metadata-state handling
 - cache invalidation behavior
 
 from the rest of the platform.
@@ -242,7 +220,7 @@ Recommended cache boundaries:
 
 - cache raw source responses only inside the adapter
 - cache normalized assets for downstream retrieval
-- treat metadata updates, expiry, and approval changes as invalidation triggers
+- treat metadata revision changes as invalidation triggers
 - keep AI grounding and vector-index refresh decoupled from live retrieval where possible
 
 This reduces source-system load without allowing stale or non-compliant activities to remain in circulation.
@@ -260,14 +238,7 @@ The activity metadata model should support collaboration across:
 - product
 - engineering
 
-That requires explicit fields for:
-
-- approvals
-- expiry
-- disclosures
-- campaign ownership
-- provider ownership
-- content stewardship
+That requires upstream governance processes for approvals, expiry, disclosures, campaign ownership, provider ownership, and content stewardship. These concerns are intentionally not fields in the minimal activity catalog.
 
 Recommended governance questions:
 
@@ -286,7 +257,6 @@ Avoid:
 - storing ranking rules in activity metadata
 - making the activity source the source of truth for suitability
 - using freeform content fields where structured fields are needed
-- under-modeling approval and lifecycle state
 - treating AI grounding content as uncontrolled editorial text
 
 ---
