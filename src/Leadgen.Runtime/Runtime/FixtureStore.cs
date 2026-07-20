@@ -29,10 +29,17 @@ internal sealed class FixtureStore
     {
         var directory = GetScenarioDirectory(scenario);
         var profilePath = Path.Combine(directory, "01-customer-profile.json");
-        return new ScenarioInputs(
-            File.Exists(profilePath) ? JsonExtensions.LoadJsonObject(profilePath) : null,
-            JsonExtensions.LoadJsonObject(Path.Combine(directory, "02-journey-states.json")),
+        var session = JourneyContractAdapter.Session(
             JsonExtensions.LoadJsonObject(Path.Combine(directory, "03-session-request.json")));
+        var profile = File.Exists(profilePath)
+            ? JourneyContractAdapter.CustomerProfile(JsonExtensions.LoadJsonObject(profilePath), session)
+            : null;
+        return new ScenarioInputs(
+            scenario,
+            profile,
+            JourneyContractAdapter.JourneyStates(
+                JsonExtensions.LoadJsonObject(Path.Combine(directory, "02-journey-states.json"))),
+            session);
     }
 
     public JsonObject LoadScenarioArtifact(string scenario, string fileName)
@@ -55,13 +62,16 @@ internal sealed class FixtureStore
 /// <summary>
 /// Bundles the core fixture inputs needed to run a scenario.
 /// </summary>
-internal sealed record ScenarioInputs(JsonObject? Profile, JsonObject Journeys, JsonObject Session)
+internal sealed record ScenarioInputs(
+    string Scenario,
+    CosmosCustomerProfileDocument? Profile,
+    IReadOnlyList<JourneyState> JourneyStates,
+    SessionContext SessionContext)
 {
-    public IReadOnlyList<JourneyState> JourneyStates => JourneyContractAdapter.JourneyStates(Journeys);
+    public CustomerAttributes Attributes =>
+        Profile?.Attributes
+        ?? SessionContext.Attributes
+        ?? throw new InvalidDataException("Missing customer profile attributes.");
 
-    public SessionContext SessionContext => JourneyContractAdapter.Session(Session);
-
-    public string CustomerId =>
-        Profile?.OptionalStringProperty("customer_id")
-        ?? Session.RequireStringProperty("customer_id");
+    public string CustomerId => Profile?.CustomerId ?? SessionContext.CustomerId;
 }

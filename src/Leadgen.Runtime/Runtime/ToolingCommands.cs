@@ -373,6 +373,11 @@ internal static class ToolingCommands
                 expected = NormalizeRankingRequest(expected, aiMode);
                 actual = NormalizeRankingRequest(actual, aiMode);
             }
+            else if (artifact == "07")
+            {
+                expected = NormalizeRankingResponse(expected);
+                actual = NormalizeRankingResponse(actual);
+            }
             else if (artifact == "10")
             {
                 expected = NormalizeFinalResponse(expected, aiMode);
@@ -564,6 +569,27 @@ internal static class ToolingCommands
 
         if (rankingRequest is not null
             && rankingResponse is not null
+            && (!rankingRequest.Candidates.All(candidate =>
+                    rankingResponse.RankedRecommendations.Any(recommendation =>
+                        recommendation.ContentId == candidate.ContentId)
+                    || rankingResponse.SuppressedCandidates.Any(suppressed =>
+                        suppressed.ContentId == candidate.ContentId))
+                || rankingResponse.RankedRecommendations
+                    .Select(static recommendation => recommendation.ContentId)
+                    .Concat(rankingResponse.SuppressedCandidates.Select(static candidate => candidate.ContentId))
+                    .GroupBy(static contentId => contentId, StringComparer.Ordinal)
+                    .Any(static group => group.Count() > 1)
+                || rankingResponse.RankedRecommendations.Any(recommendation =>
+                    recommendation.Reasons.Count == 0
+                    || recommendation.Score < 0)
+                || rankingResponse.SuppressedCandidates.Any(candidate =>
+                    string.IsNullOrWhiteSpace(candidate.Reason))))
+        {
+            mismatches.Add("ranking-decision-invariants");
+        }
+
+        if (rankingRequest is not null
+            && rankingResponse is not null
             && finalResponse is not null
             && (finalResponse.Scenario != rankingRequest.Scenario
                 || finalResponse.CustomerId != rankingRequest.CustomerProfile.CustomerId
@@ -594,6 +620,7 @@ internal static class ToolingCommands
     private static JsonObject NormalizeFinalResponse(JsonObject payload, string aiMode)
     {
         var normalized = payload.DeepCloneObject();
+        normalized.RequireObjectProperty("next_best_action")["ranking_score"] = "__generated__";
         if (aiMode == "ollama")
         {
             var explanation = normalized.RequireObjectProperty("explanation");
@@ -616,6 +643,23 @@ internal static class ToolingCommands
             aiContext["deterministic_override_required"] = "__dynamic__";
         }
 
+        return normalized;
+    }
+
+    private static JsonObject NormalizeRankingResponse(JsonObject payload)
+    {
+        var normalized = payload.DeepCloneObject();
+        normalized["description"] = "__generated__";
+        normalized["ranking_duration_ms"] = "__dynamic__";
+        foreach (var recommendation in normalized.RequireArrayProperty("ranked_recommendations").OfType<JsonObject>())
+        {
+            recommendation["score"] = "__generated__";
+            recommendation["reasons"] = "__generated__";
+        }
+        foreach (var suppressed in normalized.RequireArrayProperty("suppressed_candidates").OfType<JsonObject>())
+        {
+            suppressed["reason"] = "__generated__";
+        }
         return normalized;
     }
 

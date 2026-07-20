@@ -71,7 +71,7 @@ internal sealed record JourneyState(
     string Urgency,
     bool ResumeCandidate,
     QualificationState QualificationState,
-    JsonObject BehaviorSummary,
+    JourneyBehaviorSummary BehaviorSummary,
     double JourneyScore,
     string AiJourneySummary,
     DateTimeOffset LastMeaningfulEventAt);
@@ -85,7 +85,8 @@ internal sealed record SessionContext(
     string? CurrentUrl,
     string? QueryText,
     string Region,
-    DateTimeOffset Timestamp);
+    DateTimeOffset Timestamp,
+    CustomerAttributes? Attributes);
 
 internal sealed record JourneySummary(
     string JourneyId,
@@ -94,7 +95,7 @@ internal sealed record JourneySummary(
     string Stage,
     bool ResumeCandidate,
     QualificationState QualificationState,
-    JsonObject BehaviorSummary,
+    JourneyBehaviorSummary BehaviorSummary,
     double JourneyScore,
     DateTimeOffset LastMeaningfulEventAt,
     string AiJourneySummary);
@@ -217,7 +218,8 @@ internal static class JourneyContractAdapter
         payload.OptionalStringProperty("current_url"),
         payload.OptionalStringProperty("query_text"),
         payload.RequireStringProperty("region"),
-        DateTimeOffset.Parse(payload.RequireStringProperty("timestamp")));
+        DateTimeOffset.Parse(payload.RequireStringProperty("timestamp")),
+        payload["attributes"] is JsonObject attributes ? CustomerAttributes(attributes) : null);
 
     public static JourneyInterpretation Interpretation(JsonObject payload) => new(
         payload.RequireStringProperty("status"),
@@ -299,7 +301,7 @@ internal static class JourneyContractAdapter
         ["stage"] = summary.Stage,
         ["resume_candidate"] = summary.ResumeCandidate,
         ["qualification_state"] = ToJson(summary.QualificationState),
-        ["behavior_summary"] = summary.BehaviorSummary.DeepCloneObject(),
+        ["behavior_summary"] = ToJson(summary.BehaviorSummary),
         ["journey_score"] = summary.JourneyScore,
         ["last_meaningful_event_at"] = summary.LastMeaningfulEventAt.ToString("O"),
         ["ai_journey_summary"] = summary.AiJourneySummary,
@@ -345,6 +347,42 @@ internal static class JourneyContractAdapter
         ["deterministic_override"] = selection.DeterministicOverride,
     };
 
+    public static CosmosJourneyDocument ToCosmosDocument(
+        this JourneyState journey,
+        string scenario,
+        string sourceSessionId) => new(
+        journey.JourneyId,
+        scenario,
+        journey.CustomerId,
+        sourceSessionId,
+        journey.JourneyId,
+        journey.ServiceCategory,
+        "active",
+        journey.Intent,
+        journey.Stage,
+        journey.Urgency,
+        string.Empty,
+        null,
+        journey.ResumeCandidate,
+        journey.QualificationState,
+        journey.BehaviorSummary,
+        new JourneyDecisionSupport(journey.JourneyScore, journey.AiJourneySummary),
+        journey.LastMeaningfulEventAt);
+
+    public static JourneyState ToJourneyState(this CosmosJourneyDocument journey) => new(
+        journey.JourneyId,
+        journey.CustomerId,
+        journey.ServiceCategory,
+        journey.Intent,
+        journey.Stage,
+        journey.Urgency,
+        journey.ResumeCandidate,
+        journey.QualificationState,
+        journey.BehaviorSummary,
+        journey.DecisionSupport.JourneyScore,
+        journey.DecisionSupport.AiJourneySummary,
+        journey.LastMeaningfulEventAt);
+
     private static JourneyState ToJourneyState(JsonObject journey) => new(
         journey.RequireStringProperty("journey_id"),
         journey.RequireStringProperty("customer_id"),
@@ -354,7 +392,7 @@ internal static class JourneyContractAdapter
         journey.RequireStringProperty("urgency"),
         journey.OptionalBoolProperty("resume_candidate"),
         ToQualificationState(journey.RequireObjectProperty("qualification_state")),
-        journey.RequireObjectProperty("behavior_summary").DeepCloneObject(),
+        JourneyBehaviorSummary(journey.RequireObjectProperty("behavior_summary")),
         journey.RequireObjectProperty("decision_support").RequireProperty("journey_score").GetValue<double>(),
         journey.RequireObjectProperty("decision_support").RequireStringProperty("ai_journey_summary"),
         DateTimeOffset.Parse(journey.RequireStringProperty("last_meaningful_event_at")));
@@ -424,7 +462,7 @@ internal static class JourneyContractAdapter
         ["life_stage"] = attributes.LifeStage,
     };
 
-    private static JsonObject ToJson(JourneyBehaviorSummary behavior)
+    public static JsonObject ToJson(this JourneyBehaviorSummary behavior)
     {
         var json = new JsonObject
         {

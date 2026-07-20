@@ -27,26 +27,21 @@ From the Customer Profile Service:
 From metadata attached to existing activities:
 
 - service_category
-- subtype
-- provider
-- region
 - conversion_goal
 - cta_type
-- compliance_flags
-- freshness
-- priority
+- funnel stage
+- household fit
+- metadata revision for traceability
 
 ### 3. Behavioral Signals
 
-From analytics systems:
+From the selected active journey:
 
-- clicks
-- impressions
-- quote starts
-- quote completion
-- callback requests
-- content interactions
-- provider handoff outcomes
+- saved-quote/resume state
+- serviceability and qualification state
+- journey score
+- urgency
+- active versus secondary journey status
 
 ### 4. Context Signals
 
@@ -73,7 +68,10 @@ These inputs should improve ranking quality, but they should remain subordinate 
 
 ### Example Weighted Model
 
-Each candidate is scored using weighted signals:
+`broadband-v1` and `health-v1` use a deterministic score policy. Each
+candidate receives named contributions for active-journey fit, intent and CTA
+alignment, funnel-stage fit, qualification, household fit, urgency, campaign
+context, resume state, and policy priority.
 
 ```text
 Total Score =
@@ -146,7 +144,8 @@ Scoring should be configurable via:
 - database-driven rules
 - feature flags
 
-Avoid hardcoding weights.
+The local runtime selects policy by `ranking_policy_version`. Candidate metadata
+remains descriptive; it must not become a container for hidden ranking policy.
 
 ### Example Config Shape
 
@@ -201,8 +200,8 @@ To avoid repetitive results:
 ### Business Rules Examples
 
 - prioritize high-value campaigns when relevance remains acceptable
-- exclude expired or withdrawn offers
-- suppress providers with temporary operational issues
+- exclude expired saved-quote resume paths
+- suppress state-restricted assets when compliance is enforced
 - boost renewal or churn-save content during renewal windows
 - allow carefully positioned secondary-journey prompts without displacing the active journey
 

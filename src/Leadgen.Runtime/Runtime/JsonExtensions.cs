@@ -35,41 +35,6 @@ internal static class JsonExtensions
         return node.RequireProperty(name).RequireObject(name);
     }
 
-    public static JsonObject RequireCustomerAttributes(this JsonObject customerProfile)
-    {
-        if (customerProfile["attributes"] is JsonObject attributes)
-        {
-            return attributes;
-        }
-
-        if (customerProfile["Attributes"] is JsonObject legacyAttributes)
-        {
-            return legacyAttributes;
-        }
-
-        if (customerProfile["profile"] is JsonObject legacyProfile)
-        {
-            return legacyProfile;
-        }
-
-        throw new InvalidDataException("Missing customer attributes object: attributes");
-    }
-
-    public static JsonObject RequireAttributes(this ScenarioInputs inputs)
-    {
-        if (inputs.Profile is not null)
-        {
-            return inputs.Profile.RequireCustomerAttributes();
-        }
-
-        if (inputs.Session["attributes"] is JsonObject attributes)
-        {
-            return attributes;
-        }
-
-        throw new InvalidDataException("Missing attributes in customer profile or session request.");
-    }
-
     public static JsonArray RequireArrayProperty(this JsonObject node, string name)
     {
         return node.RequireProperty(name).RequireArray(name);

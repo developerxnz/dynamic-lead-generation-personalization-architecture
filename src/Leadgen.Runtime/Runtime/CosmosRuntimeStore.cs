@@ -38,15 +38,15 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
     public async Task SeedScenarioAsync(ScenarioInputs inputs)
     {
         var containers = await EnsureRuntimeContainersAsync();
-        var profileDocument = JourneyContractAdapter.CustomerProfile(inputs.Profile, inputs.SessionContext);
-        if (profileDocument is not null)
+        if (inputs.Profile is not null)
         {
             await containers.Profiles.UpsertItemAsync(
-                profileDocument,
+                inputs.Profile,
                 new PartitionKey(inputs.CustomerId));
         }
 
-        foreach (var journey in JourneyContractAdapter.CosmosJourneys(inputs.Journeys, inputs.SessionContext))
+        foreach (var journey in inputs.JourneyStates.Select(
+                     journey => journey.ToCosmosDocument(inputs.Scenario, inputs.SessionContext.SessionId)))
         {
             await containers.Journeys.UpsertItemAsync(
                 journey,
@@ -60,12 +60,12 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
         var customerId = fixtureInputs.CustomerId;
         var containers = await EnsureRuntimeContainersAsync();
 
-        JsonObject? profile = null;
+        CosmosCustomerProfileDocument? profile = null;
         try
         {
             profile = (await containers.Profiles.ReadItemAsync<CosmosCustomerProfileDocument>(
                 customerId,
-                new PartitionKey(customerId))).Resource.ToFixtureJson();
+                new PartitionKey(customerId))).Resource;
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
@@ -78,22 +78,18 @@ internal sealed class CosmosRuntimeStore : IAsyncDisposable
             journeyQuery,
             requestOptions: new QueryRequestOptions { PartitionKey = new PartitionKey(customerId) });
 
-        var journeys = new List<JsonNode>();
+        var journeys = new List<JourneyState>();
         while (iterator.HasMoreResults)
         {
             var page = await iterator.ReadNextAsync();
-            journeys.AddRange(page.Resource.Select(static journey => (JsonNode)journey.ToFixtureJson()));
+            journeys.AddRange(page.Resource.Select(static journey => journey.ToJourneyState()));
         }
 
         return new ScenarioInputs(
+            scenario,
             profile,
-            new JsonObject
-            {
-                ["scenario"] = scenario,
-                ["customer_id"] = customerId,
-                ["journeys"] = new JsonArray(journeys.ToArray()),
-            },
-            fixtureInputs.Session.DeepCloneObject());
+            journeys,
+            fixtureInputs.SessionContext);
     }
 
     public async Task PersistRuntimeOutputsAsync(

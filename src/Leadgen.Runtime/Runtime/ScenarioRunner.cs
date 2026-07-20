@@ -59,7 +59,7 @@ internal sealed class ScenarioRunner
             selectionResult,
             retrieval,
             catalog);
-        var rankingResponse = BuildRankingResponse(options.Scenario, catalog);
+        var rankingResponse = RankingEngine.Rank(rankingRequest, selectionResult, catalog);
         var promptFixture = _fixtures.LoadScenarioArtifact(options.Scenario, "08-ai-prompt-input.json");
         var promptInput = options.PromptSource == "rag"
             ? _ragPromptBuilder.Build(
@@ -68,7 +68,7 @@ internal sealed class ScenarioRunner
                 inputs.JourneyStates,
                 inputs.SessionContext,
                 selectionResult,
-                rankingResponse.ToJson(),
+                rankingResponse,
                 catalog,
                 promptFixture)
             : promptFixture.DeepCloneObject();
@@ -100,7 +100,7 @@ internal sealed class ScenarioRunner
             },
             ["03-ai-journey-interpretation.json"] = interpretationJson,
             ["04-active-journey-selection.json"] = selection,
-            ["05-candidate-retrieval.json"] = retrieval,
+            ["05-candidate-retrieval.json"] = retrieval.ToJson(),
             ["06-ranking-request.json"] = rankingRequest.ToJson(),
             ["07-ranking-response.json"] = rankingResponse.ToJson(),
             ["08-ai-prompt-input.json"] = promptInput,
@@ -155,60 +155,47 @@ internal sealed class ScenarioRunner
         return await store.LoadScenarioInputsAsync(options.Scenario, _fixtures);
     }
 
-    private JsonObject BuildRetrieval(
+    private CandidateRetrieval BuildRetrieval(
         string scenario,
         IReadOnlyList<JourneyState> journeys,
         SessionContext session,
         ActiveJourneySelection selection,
         ActivityCatalog catalog)
     {
-        var retrieval = _fixtures.LoadScenarioArtifact(scenario, "05-candidate-retrieval.json").DeepCloneObject();
+        var retrieval = RetrievalContractAdapter.FromJson(
+            _fixtures.LoadScenarioArtifact(scenario, "05-candidate-retrieval.json"));
         var activeJourney = selection.SelectedJourney;
-        var activeJourneyNode = retrieval.RequireObjectProperty("retrieval_query").RequireObjectProperty("active_journey");
-        activeJourneyNode["service_category"] = activeJourney.ServiceCategory;
-        activeJourneyNode["stage"] = activeJourney.Stage;
-        activeJourneyNode["intent"] = activeJourney.Intent;
-        if (activeJourney.ResumeCandidate)
-        {
-            activeJourneyNode["resume_candidate"] = true;
-        }
-        else
-        {
-            activeJourneyNode.Remove("resume_candidate");
-        }
-
-        var contextNode = retrieval.RequireObjectProperty("retrieval_query").RequireObjectProperty("context");
-        contextNode["region"] = session.Region;
-        contextNode["channel"] = session.Channel;
-
-        if (retrieval.RequireObjectProperty("retrieval_query")["secondary_journey"] is JsonObject secondaryJourneyNode)
-        {
-            var secondaryJourney = journeys.FirstOrDefault(journey =>
+        var secondaryJourney = retrieval.Query.SecondaryJourney is null
+            ? null
+            : journeys.FirstOrDefault(journey =>
                 journey.JourneyId != activeJourney.JourneyId
-                && journey.ServiceCategory == secondaryJourneyNode.RequireStringProperty("service_category"));
+                && journey.ServiceCategory == retrieval.Query.SecondaryJourney.ServiceCategory);
 
-            if (secondaryJourney is not null)
-            {
-                secondaryJourneyNode["service_category"] = secondaryJourney.ServiceCategory;
-                secondaryJourneyNode["stage"] = secondaryJourney.Stage;
-                secondaryJourneyNode["intent"] = secondaryJourney.Intent;
-            }
-        }
-
-        foreach (var candidate in retrieval.RequireArrayProperty("candidates_returned").OfType<JsonObject>())
+        return retrieval with
         {
-            var assetId = candidate.RequireStringProperty("asset_id");
-            if (!catalog.Assets.TryGetValue(assetId, out var asset))
+            Query = retrieval.Query with
             {
-                continue;
-            }
-
-            candidate["asset_type"] = asset.AssetType;
-            candidate["service_category"] = asset.ServiceCategory;
-        }
-
-        retrieval["total_candidates"] = retrieval.RequireArrayProperty("candidates_returned").Count;
-        return retrieval;
+                ActiveJourney = new RetrievalJourney(
+                    activeJourney.ServiceCategory,
+                    activeJourney.Stage,
+                    activeJourney.Intent,
+                    activeJourney.ResumeCandidate,
+                    null),
+                SecondaryJourney = secondaryJourney is null || retrieval.Query.SecondaryJourney is null
+                    ? retrieval.Query.SecondaryJourney
+                    : retrieval.Query.SecondaryJourney with
+                    {
+                        ServiceCategory = secondaryJourney.ServiceCategory,
+                        Stage = secondaryJourney.Stage,
+                        Intent = secondaryJourney.Intent,
+                    },
+                Context = retrieval.Query.Context with { Region = session.Region, Channel = session.Channel },
+            },
+            Candidates = retrieval.Candidates.Select(candidate =>
+                catalog.Assets.TryGetValue(candidate.AssetId, out var asset)
+                    ? candidate with { AssetType = asset.AssetType, ServiceCategory = asset.ServiceCategory }
+                    : candidate).ToArray(),
+        };
     }
 
     private RankingRequest BuildRankingRequest(
@@ -217,7 +204,7 @@ internal sealed class ScenarioRunner
         IReadOnlyList<JourneyState> journeys,
         SessionContext session,
         ActiveJourneySelection selection,
-        JsonObject retrieval,
+        CandidateRetrieval retrieval,
         ActivityCatalog catalog)
     {
         var template = RuntimeOutputContractAdapter.RankingRequest(
@@ -230,19 +217,16 @@ internal sealed class ScenarioRunner
                 suggestedJourneyId,
                 journeys.FirstOrDefault(journey => journey.JourneyId == suggestedJourneyId)?.ServiceCategory,
                 selection.DeterministicOverride);
-        var retrievalCandidatesById = retrieval.RequireArrayProperty("candidates_returned")
-            .OfType<JsonObject>()
-            .ToDictionary(
-                static candidate => candidate.RequireStringProperty("asset_id"),
-                static candidate => candidate,
-                StringComparer.Ordinal);
+        var retrievalCandidatesById = retrieval.Candidates.ToDictionary(
+            static candidate => candidate.AssetId,
+            StringComparer.Ordinal);
         return template with
         {
             Scenario = scenario,
             CustomerProfile = new RankingCustomerProfile(
                 session.CustomerId,
-                inputs.RequireAttributes().RequireStringProperty("location"),
-                inputs.RequireAttributes().RequireStringProperty("household_type")),
+                inputs.Attributes.Location,
+                inputs.Attributes.HouseholdType),
             ActiveJourney = new RankingJourney(
                 activeJourney.JourneyId,
                 activeJourney.ServiceCategory,
@@ -264,23 +248,6 @@ internal sealed class ScenarioRunner
                     candidate,
                     retrievalCandidatesById[candidate.ContentId],
                     catalog))
-                .ToArray(),
-        };
-    }
-
-    private RankingResponse BuildRankingResponse(string scenario, ActivityCatalog catalog)
-    {
-        var response = RuntimeOutputContractAdapter.RankingResponse(
-            _fixtures.LoadScenarioArtifact(scenario, "07-ranking-response.json"));
-        return response with
-        {
-            RankedRecommendations = response.RankedRecommendations
-                .Select(recommendation => catalog.Assets.TryGetValue(recommendation.ContentId, out var asset)
-                    ? recommendation with
-                    {
-                        Cta = new RecommendationCta(asset.CtaType, asset.CtaLabel, asset.CtaDeepLink),
-                    }
-                    : recommendation)
                 .ToArray(),
         };
     }
@@ -432,7 +399,7 @@ internal sealed class ScenarioRunner
         IReadOnlyList<JourneyState> journeys,
         SessionContext session,
         ActiveJourneySelection selection,
-        JsonObject retrieval,
+        CandidateRetrieval retrieval,
         RankingResponse rankingResponse,
         JsonObject aiRecord,
         JsonObject aiResponse,
@@ -556,25 +523,24 @@ internal sealed class ScenarioRunner
     private static SecondaryJourneyPrompt? BuildSecondaryJourneyPrompt(
         IReadOnlyList<JourneyState> journeys,
         ActiveJourneySelection selection,
-        JsonObject retrieval,
+        CandidateRetrieval retrieval,
         ActivityCatalog catalog)
     {
-        var secondaryCandidate = retrieval.RequireArrayProperty("candidates_returned")
-            .OfType<JsonObject>()
-            .FirstOrDefault(candidate => candidate.RequireStringProperty("retrieval_source") == "secondary_journey");
+        var secondaryCandidate = retrieval.Candidates
+            .FirstOrDefault(candidate => candidate.RetrievalSource == "secondary_journey");
         if (secondaryCandidate is null)
         {
             return null;
         }
 
-        var assetId = secondaryCandidate.RequireStringProperty("asset_id");
+        var assetId = secondaryCandidate.AssetId;
         if (!catalog.Assets.TryGetValue(assetId, out var asset))
         {
             return null;
         }
 
         var selectedJourneyId = selection.SelectedJourney.JourneyId;
-        var serviceCategory = secondaryCandidate.RequireStringProperty("service_category");
+        var serviceCategory = secondaryCandidate.ServiceCategory;
         var secondaryJourney = journeys.FirstOrDefault(journey =>
             journey.JourneyId != selectedJourneyId
             && journey.ServiceCategory == serviceCategory);
@@ -593,10 +559,10 @@ internal sealed class ScenarioRunner
 
     private static RankingCandidate BuildRankingCandidate(
         RankingCandidate templateCandidate,
-        JsonObject retrievalCandidate,
+        RetrievedCandidate retrievalCandidate,
         ActivityCatalog catalog)
     {
-        var assetId = retrievalCandidate.RequireStringProperty("asset_id");
+        var assetId = retrievalCandidate.AssetId;
         var asset = catalog.Assets[assetId];
         return templateCandidate with
         {
@@ -605,8 +571,8 @@ internal sealed class ScenarioRunner
             ServiceCategory = asset.ServiceCategory,
             CtaType = asset.CtaType,
             CtaDeepLink = asset.CtaDeepLink,
-            FunnelStage = retrievalCandidate.RequireStringProperty("funnel_stage_match"),
-            RetrievalSource = retrievalCandidate.RequireStringProperty("retrieval_source"),
+            FunnelStage = retrievalCandidate.FunnelStageMatch,
+            RetrievalSource = retrievalCandidate.RetrievalSource,
         };
     }
 }
